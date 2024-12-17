@@ -9,7 +9,7 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private int projectID;
+    private Integer projectID;
 
     @Column
     private String title;
@@ -46,7 +46,7 @@ public class Project {
 
     }
 
-    public int getProjectID() {
+    public Integer getProjectID() {
         return projectID;
     }
 
