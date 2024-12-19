@@ -6,11 +6,12 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
 
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     public ProjectService( ProjectRepository projectRepository ) {
         this.projectRepository = projectRepository;
@@ -24,4 +25,9 @@ public class ProjectService {
 
     // etc...
 
+    @Transactional
+    public Project getProjectById(int id){
+        Optional<Project> project = projectRepository.findById (id);
+        return project.orElse(null);
+    }
 }
