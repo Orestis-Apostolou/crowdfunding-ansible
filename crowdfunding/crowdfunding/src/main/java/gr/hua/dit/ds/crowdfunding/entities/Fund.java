@@ -21,6 +21,10 @@ public class Fund {
     @Column
     private String message;
 
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "projectID")
+    private Project project;
+
     public Fund( float amount, LocalDateTime dateOfTransaction, String message ) {
         this.amount = amount;
         this.dateOfTransaction = dateOfTransaction;
@@ -60,6 +64,14 @@ public class Fund {
 
     public void setMessage( String message ) {
         this.message = message;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject( Project project ) {
+        this.project = project;
     }
 
     @Override

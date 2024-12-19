@@ -21,6 +21,10 @@ public class Report {
     @Column
     private LocalDateTime dateOfReport;
 
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "projectID")
+    private Project project;
+
     public Report( String title, String description, LocalDateTime dateOfReport ) {
         this.title = title;
         this.description = description;
@@ -60,6 +64,14 @@ public class Report {
 
     public void setDateOfReport( LocalDateTime dateOfReport ) {
         this.dateOfReport = dateOfReport;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject( Project project ) {
+        this.project = project;
     }
 
     @Override

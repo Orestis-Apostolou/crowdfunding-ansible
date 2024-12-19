@@ -1,6 +1,8 @@
 package gr.hua.dit.ds.crowdfunding.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -31,6 +33,12 @@ public class Project {
 
     @Column
     private LocalDateTime deadlineForGoal;
+
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Fund> funds;
+
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Report> reports;
 
     public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
         this.title = title;
@@ -108,6 +116,26 @@ public class Project {
 
     public void setDeadlineForGoal( LocalDateTime deadlineForGoal ) {
         this.deadlineForGoal = deadlineForGoal;
+    }
+
+    public void setProjectID( Integer projectID ) {
+        this.projectID = projectID;
+    }
+
+    public List<Fund> getFunds() {
+        return funds;
+    }
+
+    public void setFunds( List<Fund> funds ) {
+        this.funds = funds;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports( List<Report> reports ) {
+        this.reports = reports;
     }
 
     @Override
