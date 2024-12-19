@@ -16,12 +16,12 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    // select * from project;
+    // SELECT * FROM PROJECT;
     @Transactional
     public List<Project> getProjects(){
         return projectRepository.findAll ();
     }
 
-    // Further discussing to create the methods for the funds
+    // etc...
 
 }
