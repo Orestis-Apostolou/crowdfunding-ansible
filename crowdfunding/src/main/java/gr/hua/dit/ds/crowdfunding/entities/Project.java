@@ -1,12 +1,15 @@
 package gr.hua.dit.ds.crowdfunding.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Project {
+public class  Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,6 +37,7 @@ public class Project {
     @Column
     private LocalDateTime deadlineForGoal;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Fund> funds;
 
@@ -48,6 +52,8 @@ public class Project {
         this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
         this.deadlineForGoal = deadlineForGoal;
+        this.funds = new ArrayList<Fund>();
+        this.reports = new ArrayList<Report>();
     }
 
     public Project(){
@@ -149,6 +155,8 @@ public class Project {
                 ", currentAmount=" + currentAmount +
                 ", dateOfCreation=" + dateOfCreation +
                 ", deadlineForGoal=" + deadlineForGoal +
+                ", funds=" + funds +
+                ", reports=" + reports +
                 '}';
     }
 }
