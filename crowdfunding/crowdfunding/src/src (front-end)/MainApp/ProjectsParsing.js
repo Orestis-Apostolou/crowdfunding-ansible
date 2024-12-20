@@ -6,7 +6,7 @@ const dummyprojects = [
         image: "../img/favicon.png",
         link: "#",
         goal: 5000,
-        collected: 2500
+        collected: 8730
     },
     { 
         id: 2, 
@@ -51,7 +51,7 @@ const dummyprojects = [
         image: "../img/favicon.png", 
         link: "#",
         goal: 7000,
-        collected: 4133
+        collected: 14570
     },
     {
         id: 7,
@@ -78,7 +78,7 @@ const dummyprojects = [
         image: "../img/favicon.png", 
         link: "#",
         goal: 12500,
-        collected: 12499
+        collected: 12490
     }
 ];
 
@@ -116,7 +116,7 @@ function displayProjects() {
                                         <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                     
-                                    <p class="text-center mt-2 progress-text">${Math.round(progressPercentage)}% Funded</p>
+                                    <p class="text-center mt-2 progress-text">${progressPercentage.toFixed(1)}% Funded</p>
                                 </div>
 
                                 <button class="btn btn-primary w-100" onclick="handleSupport('${dummyproject.title}')">Check Project</button>
@@ -196,7 +196,7 @@ function goToPage(page) {
 }
 
 function redirectToLoginPage() {
-    console.log(window.location.href);
+    // console.log(window.location.href);
     window.location.href = "../LoginRegister/loginRegisterPage.html";
 }
 
