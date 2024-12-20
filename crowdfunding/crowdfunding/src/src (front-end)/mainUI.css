@@ -11,6 +11,9 @@
     --input-border-color: #4b5a6d;
     --input-focus-color: #28a745;
     --card-bg-color: #2a2f3d;
+    --progress-bg-color: #e9ecef;
+    --disabled-bg-color: #f8f9fa;
+    --disabled-text-color: #6c757d;
 }
 
 html, body {
