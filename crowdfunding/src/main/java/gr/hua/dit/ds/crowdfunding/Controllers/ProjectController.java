@@ -1,8 +1,8 @@
 package gr.hua.dit.ds.crowdfunding.Controllers;
 
-import gr.hua.dit.ds.crowdfunding.entities.Fund;
-import gr.hua.dit.ds.crowdfunding.entities.Project;
-import gr.hua.dit.ds.crowdfunding.service.ProjectService;
+import gr.hua.dit.ds.crowdfunding.Entities.Fund;
+import gr.hua.dit.ds.crowdfunding.Entities.Project;
+import gr.hua.dit.ds.crowdfunding.Service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 

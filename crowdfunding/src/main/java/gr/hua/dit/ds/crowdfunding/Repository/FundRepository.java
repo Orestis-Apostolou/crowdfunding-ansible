@@ -1,6 +1,6 @@
-package gr.hua.dit.ds.crowdfunding.repository;
+package gr.hua.dit.ds.crowdfunding.Repository;
 
-import gr.hua.dit.ds.crowdfunding.entities.Fund;
+import gr.hua.dit.ds.crowdfunding.Entities.Fund;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

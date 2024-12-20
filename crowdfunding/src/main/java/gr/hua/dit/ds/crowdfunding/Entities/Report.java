@@ -1,4 +1,4 @@
-package gr.hua.dit.ds.crowdfunding.entities;
+package gr.hua.dit.ds.crowdfunding.Entities;
 
 import jakarta.persistence.*;
 
@@ -25,10 +25,11 @@ public class Report {
     @JoinColumn(name = "projectID")
     private Project project;
 
-    public Report( String title, String description, LocalDateTime dateOfReport ) {
+    public Report( String title, String description, LocalDateTime dateOfReport, Project project ) {
         this.title = title;
         this.description = description;
         this.dateOfReport = dateOfReport;
+        this.project = project;
     }
 
     public Report(){
@@ -81,6 +82,7 @@ public class Report {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", dateOfReport=" + dateOfReport +
+                ", project=" + project +
                 '}';
     }
 }

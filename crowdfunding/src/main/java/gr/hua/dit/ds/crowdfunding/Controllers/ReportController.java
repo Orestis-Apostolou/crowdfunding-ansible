@@ -1,7 +1,7 @@
 package gr.hua.dit.ds.crowdfunding.Controllers;
 
-import gr.hua.dit.ds.crowdfunding.entities.Report;
-import gr.hua.dit.ds.crowdfunding.service.ReportService;
+import gr.hua.dit.ds.crowdfunding.Entities.Report;
+import gr.hua.dit.ds.crowdfunding.Service.ReportService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

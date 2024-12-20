@@ -1,4 +1,4 @@
-package gr.hua.dit.ds.crowdfunding.entities;
+package gr.hua.dit.ds.crowdfunding.Entities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class  Project {
@@ -44,7 +43,7 @@ public class  Project {
     @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Report> reports;
 
-    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
+    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal, List<Fund> funds, List<Report> reports ) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -52,8 +51,8 @@ public class  Project {
         this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
         this.deadlineForGoal = deadlineForGoal;
-        this.funds = new ArrayList<Fund>();
-        this.reports = new ArrayList<Report>();
+        this.funds = funds;
+        this.reports = reports;
     }
 
     public Project(){
