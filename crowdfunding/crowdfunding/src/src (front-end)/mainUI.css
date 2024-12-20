@@ -20,6 +20,7 @@ html, body {
     color: var(--text-color);
 }
 
+
 ::selection {
     background-color: var(--primary-color);
     color: var(--background-color);
