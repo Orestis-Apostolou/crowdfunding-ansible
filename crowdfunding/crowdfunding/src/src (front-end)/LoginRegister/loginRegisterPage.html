@@ -10,16 +10,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="./mainUI.css">
+    <link rel="stylesheet" href="../mainUI.css">
+    <link rel="stylesheet" href="./register_page.css">
     
 </head>
 <body>
-
-    <div class="text-center mb-0">
-        <h1 class="site-title">CrowdFunding Application</h1>
-    </div>
     
     <div class="container vh-100 d-flex justify-content-center align-items-center">
+        <div class="text-center mb-0">
+            <h1 class="site-title">CrowdFunding Application</h1>
+            <p class="site-description">Boost creators by supporting them to reach their goals. Join us now!</p>
+        </div>
+        
         <div class="card-container">
             <div class="card-flip">
 
@@ -28,14 +30,14 @@
                     <h2 class="text-center mb-4">Login</h2>
                     <form id="loginForm">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email address</label>
+                            <label for="email" class="form-label" style="color: var(--text-color);">Email address</label>
                             <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label" style="color: var(--text-color);">Password</label>
                             <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <button type="submit" class="btn btn-primary w-100" style="background-color: var(--primary-color);">Login</button>
                     </form>
                     <hr class="my-4">
                     <div class="text-center">
@@ -49,18 +51,18 @@
                     <h2 class="text-center mb-4">Register</h2>
                     <form id="registerForm">
                         <div class="mb-3">
-                            <label for="regName" class="form-label">Full Name</label>
+                            <label for="regName" class="form-label" style="color: var(--text-color);">Full Name</label>
                             <input type="text" class="form-control" id="regName" placeholder="Enter your name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="regEmail" class="form-label">Email address</label>
+                            <label for="regEmail" class="form-label" style="color: var(--text-color);">Email address</label>
                             <input type="email" class="form-control" id="regEmail" placeholder="Enter your email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="regPassword" class="form-label">Password</label>
+                            <label for="regPassword" class="form-label" style="color: var(--text-color);">Password</label>
                             <input type="password" class="form-control" id="regPassword" placeholder="Create a password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                        <button type="submit" class="btn btn-primary w-100" style="background-color: var(--primary-color);">Register</button>
                     </form>
                     <hr class="my-4">
                     <div class="text-center">
@@ -72,7 +74,7 @@
     </div>
     
     <!-- Boostrap JS -->
-    <script type="text/javascript" src="./front-end(parsing).js"></script>
+    <script type="text/javascript" src="./DataParsingPosting.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
