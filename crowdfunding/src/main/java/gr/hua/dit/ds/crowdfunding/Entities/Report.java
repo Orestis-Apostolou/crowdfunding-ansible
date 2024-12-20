@@ -1,5 +1,6 @@
 package gr.hua.dit.ds.crowdfunding.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class Report {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "projectID")
+    @JsonIgnore
     private Project project;
 
     public Report( String title, String description, LocalDateTime dateOfReport, Project project ) {

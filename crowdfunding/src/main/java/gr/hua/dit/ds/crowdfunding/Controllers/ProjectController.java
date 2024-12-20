@@ -34,7 +34,7 @@ public class ProjectController {
 
     @PostMapping("/new")
     public void addNewProject(@Valid @RequestBody Project project) {
-
+        projectService.saveProject ( project );
     }
 
     @PostMapping("/{id}/fund")

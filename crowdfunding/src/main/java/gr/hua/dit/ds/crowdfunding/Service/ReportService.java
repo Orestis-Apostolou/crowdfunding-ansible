@@ -2,6 +2,7 @@ package gr.hua.dit.ds.crowdfunding.Service;
 
 import gr.hua.dit.ds.crowdfunding.Entities.Project;
 import gr.hua.dit.ds.crowdfunding.Entities.Report;
+import gr.hua.dit.ds.crowdfunding.Repository.ProjectRepository;
 import gr.hua.dit.ds.crowdfunding.Repository.ReportRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,11 @@ import java.util.List;
 public class ReportService {
 
     private ReportRepository reportRepository;
+    private ProjectRepository projectRepository;
 
-    public ReportService (ReportRepository reportRepository){
+    public ReportService( ReportRepository reportRepository, ProjectRepository projectRepository ) {
         this.reportRepository = reportRepository;
+        this.projectRepository = projectRepository;
     }
 
     // SELECT * FROM REPORT;
@@ -65,6 +68,12 @@ public class ReportService {
         Report report = getReportByID ( reportID );
         report.setProject ( null );
         saveReport ( report );
+    }
+
+    @Transactional
+    public List<Report> findByProjectID(Integer projectID){
+        Project project = projectRepository.findById ( projectID ).get ();
+        return project.getReports ();
     }
 
 }

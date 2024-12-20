@@ -1,7 +1,9 @@
 package gr.hua.dit.ds.crowdfunding.Controllers;
 
 import gr.hua.dit.ds.crowdfunding.Entities.Report;
+import gr.hua.dit.ds.crowdfunding.Service.ProjectService;
 import gr.hua.dit.ds.crowdfunding.Service.ReportService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,19 +12,21 @@ import java.util.List;
 @RequestMapping("/api/reports")
 public class ReportController {
     ReportService reportService;
+    ProjectService projectService;
 
-    ReportController(ReportService reportService) {
+    public ReportController( ReportService reportService, ProjectService projectService ) {
         this.reportService = reportService;
+        this.projectService = projectService;
     }
 
     @PostMapping("/{pid}/new")
-    public void reportProject(@PathVariable int pid){
-
+    public void reportProject( @PathVariable int pid, @Valid @RequestBody Report report){
+        report.setProject ( projectService.getProjectById ( pid ) );
+        reportService.saveReport ( report );
     }
 
     @GetMapping("/{pid}/all")
     public List<Report> getProjectReports(@PathVariable int pid){
-        //return reportService.findByProject(pid);
-        return null;
+        return reportService.findByProjectID ( pid );
     }
 }
