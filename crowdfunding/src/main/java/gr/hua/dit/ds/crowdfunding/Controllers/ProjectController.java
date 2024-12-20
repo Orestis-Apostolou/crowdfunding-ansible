@@ -29,7 +29,7 @@ public class ProjectController {
 
     @DeleteMapping("/{id}")
     public void deleteProjectById(@PathVariable int id) {
-
+        projectService.deleteProject ( id );
     }
 
     @PostMapping("/new")

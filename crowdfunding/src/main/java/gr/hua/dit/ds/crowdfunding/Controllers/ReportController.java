@@ -19,6 +19,7 @@ public class ReportController {
         this.projectService = projectService;
     }
 
+    // Check here reportService methods
     @PostMapping("/{pid}/new")
     public void reportProject( @PathVariable int pid, @Valid @RequestBody Report report){
         report.setProject ( projectService.getProjectById ( pid ) );
