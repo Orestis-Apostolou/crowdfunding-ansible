@@ -40,11 +40,10 @@ public class Fund {
 
     // ------------------- Methods -----------------------------------
 
-    public Fund( float amount, LocalDateTime dateOfTransaction, String message, Project project ) {
+    public Fund( float amount, LocalDateTime dateOfTransaction, String message) {
         this.amount = amount;
         this.dateOfTransaction = dateOfTransaction;
         this.message = message;
-        this.project = project;
     }
 
     public Fund( ) {
