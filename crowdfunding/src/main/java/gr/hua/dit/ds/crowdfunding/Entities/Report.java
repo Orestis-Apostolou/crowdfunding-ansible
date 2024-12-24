@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 @Entity
 public class Report {
 
+    // ------------------- Attributes ------------------------------
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -25,15 +28,26 @@ public class Report {
     @Column
     private LocalDateTime dateOfReport = LocalDateTime.now ();
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+
+    // ------------------- Relationships ------------------------------
+
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "userID")
+    private User user;
+
+    @JsonIgnore
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "projectID")
     private Project project;
 
-    public Report( String title, String description, LocalDateTime dateOfReport, Project project ) {
+    // ------------------- Methods -----------------------------------
+
+    public Report( String title, String description, LocalDateTime dateOfReport) {
         this.title = title;
         this.description = description;
         this.dateOfReport = dateOfReport;
-        this.project = project;
     }
 
     public Report(){
@@ -77,6 +91,14 @@ public class Report {
 
     public void setProject( Project project ) {
         this.project = project;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser( User user ) {
+        this.user = user;
     }
 
     @Override

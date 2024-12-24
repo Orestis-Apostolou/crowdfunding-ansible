@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Entity
 public class Fund {
 
+    // ------------------- Attributes ------------------------------
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -24,10 +26,19 @@ public class Fund {
     @Size(max = 150)
     private String message;
 
+    // ------------------- Relationships ------------------------------
+
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "userID")
+    private User user;
+
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "projectID")
-    @JsonIgnore
     private Project project;
+
+    // ------------------- Methods -----------------------------------
 
     public Fund( float amount, LocalDateTime dateOfTransaction, String message, Project project ) {
         this.amount = amount;
@@ -77,6 +88,14 @@ public class Fund {
 
     public void setProject( Project project ) {
         this.project = project;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser( User user ) {
+        this.user = user;
     }
 
     @Override

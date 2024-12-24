@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +16,9 @@ import java.util.Set;
         @UniqueConstraint ( columnNames = "email")
         })
 public class User {
+
+    // ------------------- Attributes ------------------------------
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -53,11 +57,25 @@ public class User {
     @Size(max = 150)
     private String bio;
 
+    // ------------------- Relationships ------------------------------
+
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
+    private List<Project> projects;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Report> reports;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Fund> funds;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable( name = "user_roles",
             joinColumns = @JoinColumn(name = "userID"),
             inverseJoinColumns = @JoinColumn(name = "roleID"))
     private Set<Role> roles = new HashSet<> ();
+
+    // ------------------- Methods -----------------------------------
+
 
     public User( String username, String firstName, String lastName, String email, String password, LocalDateTime dateOfRegistration, String bio ) {
         this.username = username;
@@ -142,6 +160,30 @@ public class User {
 
     public void setRoles( Set<Role> roles ) {
         this.roles = roles;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects( List<Project> projects ) {
+        this.projects = projects;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports( List<Report> reports ) {
+        this.reports = reports;
+    }
+
+    public List<Fund> getFunds() {
+        return funds;
+    }
+
+    public void setFunds( List<Fund> funds ) {
+        this.funds = funds;
     }
 
     @Override
