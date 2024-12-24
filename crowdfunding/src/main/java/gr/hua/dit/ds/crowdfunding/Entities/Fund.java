@@ -1,6 +1,8 @@
 package gr.hua.dit.ds.crowdfunding.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -16,13 +18,15 @@ public class Fund {
     private float amount;
 
     @Column
-    private LocalDateTime dateOfTransaction;
+    private LocalDateTime dateOfTransaction = LocalDateTime.now ();
 
-    @Column
+    @Column(length = 150)
+    @Size(max = 150)
     private String message;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "projectID")
+    @JsonIgnore
     private Project project;
 
     public Fund( float amount, LocalDateTime dateOfTransaction, String message, Project project ) {
@@ -82,7 +86,7 @@ public class Fund {
                 ", amount=" + amount +
                 ", dateOfTransaction=" + dateOfTransaction +
                 ", message='" + message + '\'' +
-                ", project=" + project +
+                ", project=" + project.getProjectID () +
                 '}';
     }
 }

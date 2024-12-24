@@ -37,10 +37,11 @@ public class  Project {
     private LocalDateTime deadlineForGoal;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Fund> funds;
 
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Report> reports;
 
     public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal, List<Fund> funds, List<Report> reports ) {

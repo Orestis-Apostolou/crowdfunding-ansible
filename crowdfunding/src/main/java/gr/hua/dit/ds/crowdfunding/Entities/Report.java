@@ -2,6 +2,7 @@ package gr.hua.dit.ds.crowdfunding.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -13,18 +14,19 @@ public class Report {
     @Column
     private Integer reportID;
 
-    @Column
+    @Column(length = 60)
+    @Size(max = 60)
     private String title;
 
-    @Column
+    @Column(length = 200)
+    @Size(max = 200)
     private String description;
 
     @Column
-    private LocalDateTime dateOfReport;
+    private LocalDateTime dateOfReport = LocalDateTime.now ();
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "projectID")
-    @JsonIgnore
     private Project project;
 
     public Report( String title, String description, LocalDateTime dateOfReport, Project project ) {
@@ -84,7 +86,7 @@ public class Report {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", dateOfReport=" + dateOfReport +
-                ", project=" + project +
+                ", project=" + project.getProjectID () +
                 '}';
     }
 }
