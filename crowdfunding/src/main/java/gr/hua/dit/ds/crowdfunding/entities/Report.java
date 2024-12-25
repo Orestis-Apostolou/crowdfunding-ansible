@@ -1,4 +1,4 @@
-package gr.hua.dit.ds.crowdfunding.Entities;
+package gr.hua.dit.ds.crowdfunding.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

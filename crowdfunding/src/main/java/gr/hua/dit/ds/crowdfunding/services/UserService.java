@@ -1,4 +1,4 @@
-package gr.hua.dit.ds.crowdfunding.Service;
+package gr.hua.dit.ds.crowdfunding.services;
 
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
-package gr.hua.dit.ds.crowdfunding.Service;
+package gr.hua.dit.ds.crowdfunding.services;
 
-import gr.hua.dit.ds.crowdfunding.Entities.Project;
-import gr.hua.dit.ds.crowdfunding.Entities.Report;
-import gr.hua.dit.ds.crowdfunding.Repository.ProjectRepository;
-import gr.hua.dit.ds.crowdfunding.Repository.ReportRepository;
+import gr.hua.dit.ds.crowdfunding.entities.Project;
+import gr.hua.dit.ds.crowdfunding.entities.Report;
+import gr.hua.dit.ds.crowdfunding.repositories.ProjectRepository;
+import gr.hua.dit.ds.crowdfunding.repositories.ReportRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

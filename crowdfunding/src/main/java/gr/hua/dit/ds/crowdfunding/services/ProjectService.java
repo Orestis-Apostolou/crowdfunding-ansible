@@ -1,12 +1,11 @@
-package gr.hua.dit.ds.crowdfunding.Service;
+package gr.hua.dit.ds.crowdfunding.services;
 
-import gr.hua.dit.ds.crowdfunding.Entities.Project;
-import gr.hua.dit.ds.crowdfunding.Entities.Status;
-import gr.hua.dit.ds.crowdfunding.Repository.ProjectRepository;
+import gr.hua.dit.ds.crowdfunding.entities.Project;
+import gr.hua.dit.ds.crowdfunding.entities.Status;
+import gr.hua.dit.ds.crowdfunding.repositories.ProjectRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,9 +1,8 @@
 package gr.hua.dit.ds.crowdfunding.controllers;
 
-import gr.hua.dit.ds.crowdfunding.Entities.Project;
-import gr.hua.dit.ds.crowdfunding.Entities.Report;
-import gr.hua.dit.ds.crowdfunding.Service.ProjectService;
-import gr.hua.dit.ds.crowdfunding.Service.ReportService;
+import gr.hua.dit.ds.crowdfunding.entities.Report;
+import gr.hua.dit.ds.crowdfunding.services.ProjectService;
+import gr.hua.dit.ds.crowdfunding.services.ReportService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

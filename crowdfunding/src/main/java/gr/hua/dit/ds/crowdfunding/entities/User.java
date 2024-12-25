@@ -1,4 +1,4 @@
-package gr.hua.dit.ds.crowdfunding.Entities;
+package gr.hua.dit.ds.crowdfunding.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

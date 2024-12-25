@@ -1,12 +1,10 @@
-package gr.hua.dit.ds.crowdfunding.Service;
+package gr.hua.dit.ds.crowdfunding.services;
 
-import gr.hua.dit.ds.crowdfunding.Entities.Fund;
-import gr.hua.dit.ds.crowdfunding.Entities.Project;
-import gr.hua.dit.ds.crowdfunding.Repository.FundRepository;
+import gr.hua.dit.ds.crowdfunding.entities.Fund;
+import gr.hua.dit.ds.crowdfunding.entities.Project;
+import gr.hua.dit.ds.crowdfunding.repositories.FundRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class FundService {
@@ -59,13 +57,13 @@ public class FundService {
         saveFund ( fund );
     }
 
-    // Unassigned a Project to the Fund Table
-    @Transactional
-    public void unassignProjectFromFund(Integer fundID){
-        Fund fund = getFundByID ( fundID );
-        fund.setProject ( null );
-        saveFund ( fund );
-    }
+//    // Unassigned a Project to the Fund Table
+//    @Transactional
+//    public void unassignProjectFromFund(Integer fundID){
+//        Fund fund = getFundByID ( fundID );
+//        fund.setProject ( null );
+//        saveFund ( fund );
+//    }
 
 
 }
