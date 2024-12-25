@@ -1,7 +1,8 @@
-package gr.hua.dit.ds.crowdfunding.Controllers;
+package gr.hua.dit.ds.crowdfunding.controllers;
 
 import gr.hua.dit.ds.crowdfunding.entities.Fund;
 import gr.hua.dit.ds.crowdfunding.entities.Project;
+import gr.hua.dit.ds.crowdfunding.service.FundService;
 import gr.hua.dit.ds.crowdfunding.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.List;
 @RequestMapping("/api/project")
 public class ProjectController {
     ProjectService projectService;
+    FundService fundService;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, FundService fundService) {
         this.projectService = projectService;
+        this.fundService = fundService;
     }
 
     @GetMapping("/all")
@@ -23,23 +26,24 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public Project getProjectById(@PathVariable int id) {
+    public Project getProject(@PathVariable int id) {
         return projectService.getProjectById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProjectById(@PathVariable int id) {
-
+    public void deleteProject(@PathVariable int id) {
+        //projectService.deleteProjectById(id);
     }
 
     @PostMapping("/new")
     public void addNewProject(@Valid @RequestBody Project project) {
-
+        //projectService.addProject(project);
     }
 
     @PostMapping("/{id}/fund")
-    public void addFund(@PathVariable int id, @Valid @RequestBody Fund fund) {
-
+    public void fundProject(@PathVariable int id, @Valid @RequestBody Fund fund) {
+        
     }
+
 
 }
