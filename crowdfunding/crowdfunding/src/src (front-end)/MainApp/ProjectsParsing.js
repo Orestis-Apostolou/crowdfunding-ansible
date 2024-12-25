@@ -106,11 +106,9 @@ function displayProjects() {
                             <img src="${dummyproject.image}" class="card-img-top" alt="${dummyproject.title}">
                             <div class="card-body">
                                 <h5 class="card-title">${dummyproject.title}</h5>
-                                <p class="card-text">${dummyproject.description}</p>
 
                                 <!-- Goal / Progress Bar -->
                                 <div class="mt-3">
-                                    <p class="collected-info"><strong>Collected: $${dummyproject.collected} / $${dummyproject.goal}</strong></p>
                                     
                                     <div class="progress" style="height: 15px;">
                                         <div class="progress-bar" role="progressbar" style="width: ${progressPercentage}%" aria-valuenow="${progressPercentage}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -119,7 +117,7 @@ function displayProjects() {
                                     <p class="text-center mt-2 progress-text">${progressPercentage.toFixed(1)}% Funded</p>
                                 </div>
 
-                                <button class="btn btn-primary w-100" onclick="handleSupport('${dummyproject.title}')">Check Project</button>
+                                <button class="btn btn-primary w-100" onclick="handleSupport('${dummyproject.id}')">Check Project</button>
                             </div>
                         </div>
                     </div>`;
@@ -204,9 +202,14 @@ function redirectToLoginPage() {
     window.location.href = "../LoginRegister/loginRegister.html";
 }
 
-function handleSupport(projectTitle) {
-    alert(`Please login or register to support "${projectTitle}".`);
-    redirectToLoginPage();
+function redirectToHomePage() {
+    // console.log(window.location.href);
+    window.location.href = "../MainApp/index.html";
+}
+
+function handleSupport(projectID) {
+    // alert(`Please login or register to support "${projectTitle}".`);
+    window.location.href = `../ProjectDisplay/ProjectDisplay.html?id=${projectID}`;
 }
 
 //Displaying all the projects parsed from db

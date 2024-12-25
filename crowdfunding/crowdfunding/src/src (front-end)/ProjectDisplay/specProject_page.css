@@ -1,0 +1,70 @@
+span {
+    color: var(--text-color);
+}
+
+.card {
+    max-width: 600px; /* Limit the width for better readability */
+    margin: 20px auto; /* Center the card horizontally */
+    background-color: var(--card-bg-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.card img {
+    border-bottom: 3px solid var(--primary-color);
+    max-height: 250px; /* Optional */
+    object-fit: cover; /* Ensure the image fills the area */
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+}
+
+.card-body h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.card-body span {
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    transition: width 0.4s ease-in-out;
+}
+
+.progress {
+    background-color: var(--progress-bg-color);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 20px; /* Adjust height for better visibility */
+    width: 100%; /* Match the card width */
+}
+
+button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: var(--input-focus-color);
+    transform: scale(1.05);
+}
