@@ -2,10 +2,12 @@ package gr.hua.dit.ds.crowdfunding.controllers;
 
 import gr.hua.dit.ds.crowdfunding.Entities.Fund;
 import gr.hua.dit.ds.crowdfunding.Entities.Project;
+import gr.hua.dit.ds.crowdfunding.Entities.Status;
 import gr.hua.dit.ds.crowdfunding.Service.FundService;
 import gr.hua.dit.ds.crowdfunding.Service.ProjectService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +37,25 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProjectById(@PathVariable int id) {
-        projectService.deleteProject(id);
+    public ResponseEntity<String> deleteProjectById(@PathVariable int id) {
+        if(projectService.deleteProject(id)) {
+            return ResponseEntity.ok("Project deleted");
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+        }
     }
 
     @PostMapping("/new")
     public void addNewProject(@Valid @RequestBody Project project) {
         projectService.saveProject(project);
+    }
+
+    @PostMapping("/{id}/update-status")
+    public ResponseEntity<String> updateStatus(@PathVariable int id, @Valid @RequestBody Status status) {
+        if(projectService.updateStatus(id, status)){
+            return ResponseEntity.ok("Project status updated");
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
 }

@@ -6,6 +6,7 @@ import gr.hua.dit.ds.crowdfunding.Repository.ProjectRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,15 +50,16 @@ public class ProjectService {
     }
 
     @Transactional
-    public void updateStatus(Integer projectID, Status status){
+    public boolean updateStatus(Integer projectID, Status status){
 
         if (!projectRepository.existsById (projectID)) {
-            System.out.println ( "Project with ID: " + projectID + " doesn't exist!" );
-            return;
+            System.out.println ( "Project with ID: " + projectID + " doesn't exist" );
+            return false;
         }
-        Project project = getProjectById ( projectID );
-        project.setStatus ( status );
 
+        Project project = getProjectById(projectID).get();
+        project.setStatus(status);
+        return true;
     }
 
 }

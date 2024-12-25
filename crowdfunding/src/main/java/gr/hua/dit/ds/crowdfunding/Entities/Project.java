@@ -22,7 +22,7 @@ public class Project {
     @Column
     private String description;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Status status = Status.ACTIVE;
 
     @Column
@@ -45,11 +45,9 @@ public class Project {
     @JoinColumn(name = "userID")
     private User organizer;
 
-    //@JsonIgnore
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Fund> funds;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Report> reports;
 

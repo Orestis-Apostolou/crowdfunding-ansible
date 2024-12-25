@@ -17,12 +17,12 @@ public class FundService {
         this.fundRepository = fundRepository;
     }
 
-    // SELECT * FROM FUND;
-    @Transactional
-    public List<Fund> getFunds(){
-        return fundRepository.findAll ();
-    }
-
+//    // SELECT * FROM FUND;
+//    @Transactional
+//    public List<Fund> getFunds(){
+//        return fundRepository.findAll ();
+//    }
+//
     // SELECT * FROM FUND WHERE FUNDID = <fundID>;
     @Transactional
     public Fund getFundByID(Integer fundID){

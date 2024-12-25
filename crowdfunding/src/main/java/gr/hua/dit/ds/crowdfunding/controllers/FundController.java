@@ -30,7 +30,7 @@ public class FundController {
             fundService.assignProjectToFund(fund.getFundID(), projectService.getProjectById(id).get());
             return ResponseEntity.ok("Fund added successfully to project");
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body("Failed to add fund, project not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to add fund, project not found");
         }
     }
 
@@ -41,7 +41,11 @@ public class FundController {
     }
 
     @DeleteMapping("/delete/{fid}")
-    public void deleteFund(@PathVariable int fid) {
-
+    public ResponseEntity<String> deleteFund(@PathVariable int fid) {
+        if(fundService.deleteFund(fid)) {
+            return ResponseEntity.ok("Fund deleted successfully");
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to delete fund");
+        }
     }
 }
