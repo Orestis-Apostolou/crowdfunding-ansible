@@ -201,7 +201,7 @@ function goToPage(page) {
 
 function redirectToLoginPage() {
     // console.log(window.location.href);
-    window.location.href = "../LoginRegister/loginRegisterPage.html";
+    window.location.href = "../LoginRegister/loginRegister.html";
 }
 
 function handleSupport(projectTitle) {
