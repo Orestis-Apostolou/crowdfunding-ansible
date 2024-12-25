@@ -2,36 +2,52 @@ package gr.hua.dit.ds.crowdfunding.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
 @Entity
 public class Report {
 
+    // ------------------- Attributes ------------------------------
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Integer reportID;
 
-    @Column
+    @Column(length = 60)
+    @Size(max = 60)
     private String title;
 
-    @Column
+    @Column(length = 200)
+    @Size(max = 200)
     private String description;
 
     @Column
-    private LocalDateTime dateOfReport;
+    private LocalDateTime dateOfReport = LocalDateTime.now ();
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "projectID")
+
+    // ------------------- Relationships ------------------------------
+
     @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "userID")
+    private User user;
+
+    @JsonIgnore
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "projectID")
     private Project project;
 
-    public Report( String title, String description, LocalDateTime dateOfReport, Project project ) {
+    // ------------------- Methods -----------------------------------
+
+    public Report( String title, String description, LocalDateTime dateOfReport) {
         this.title = title;
         this.description = description;
         this.dateOfReport = dateOfReport;
-        this.project = project;
     }
 
     public Report(){
@@ -77,6 +93,14 @@ public class Report {
         this.project = project;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser( User user ) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Report{" +
@@ -84,7 +108,7 @@ public class Report {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", dateOfReport=" + dateOfReport +
-                ", project=" + project +
+                ", project=" + project.getProjectID () +
                 '}';
     }
 }

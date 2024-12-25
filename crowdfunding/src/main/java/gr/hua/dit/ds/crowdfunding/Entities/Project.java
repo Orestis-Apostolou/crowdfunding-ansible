@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 @Entity
 public class  Project {
 
+    // ------------------- Attributes ------------------------------
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -36,14 +38,24 @@ public class  Project {
     @Column
     private LocalDateTime deadlineForGoal;
 
+    // ------------------- Relationships ------------------------------
+
     @JsonIgnore
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "userID")
+    private User organizer;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Fund> funds;
 
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Report> reports;
 
-    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal, List<Fund> funds, List<Report> reports ) {
+    // ------------------- Methods -----------------------------------
+
+    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -51,8 +63,6 @@ public class  Project {
         this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
         this.deadlineForGoal = deadlineForGoal;
-        this.funds = funds;
-        this.reports = reports;
     }
 
 
@@ -142,6 +152,14 @@ public class  Project {
 
     public void setReports( List<Report> reports ) {
         this.reports = reports;
+    }
+
+    public User getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer( User organizer ) {
+        this.organizer = organizer;
     }
 
     @Override

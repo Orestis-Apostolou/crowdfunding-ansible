@@ -1,5 +1,6 @@
 package gr.hua.dit.ds.crowdfunding.Controllers;
 
+import gr.hua.dit.ds.crowdfunding.Entities.Project;
 import gr.hua.dit.ds.crowdfunding.Entities.Report;
 import gr.hua.dit.ds.crowdfunding.Service.ProjectService;
 import gr.hua.dit.ds.crowdfunding.Service.ReportService;
@@ -22,8 +23,11 @@ public class ReportController {
     // Check here reportService methods
     @PostMapping("/{pid}/new")
     public void reportProject( @PathVariable int pid, @Valid @RequestBody Report report){
-        report.setProject ( projectService.getProjectById ( pid ) );
-        reportService.saveReport ( report );
+        reportService.saveReport(report);
+
+        Project project = projectService.getProjectById(pid);
+
+        reportService.assignProjectToReport(report.getReportID(), project);
     }
 
     @GetMapping("/{pid}/all")
