@@ -1,4 +1,4 @@
-package gr.hua.dit.ds.crowdfunding.entities;
+package gr.hua.dit.ds.crowdfunding.Entities;
 
 import jakarta.persistence.*;
 
@@ -21,10 +21,15 @@ public class Fund {
     @Column
     private String message;
 
-    public Fund( float amount, LocalDateTime dateOfTransaction, String message ) {
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "projectID")
+    private Project project;
+
+    public Fund( float amount, LocalDateTime dateOfTransaction, String message, Project project ) {
         this.amount = amount;
         this.dateOfTransaction = dateOfTransaction;
         this.message = message;
+        this.project = project;
     }
 
     public Fund( ) {
@@ -62,6 +67,14 @@ public class Fund {
         this.message = message;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject( Project project ) {
+        this.project = project;
+    }
+
     @Override
     public String toString() {
         return "Fund{" +
@@ -69,6 +82,7 @@ public class Fund {
                 ", amount=" + amount +
                 ", dateOfTransaction=" + dateOfTransaction +
                 ", message='" + message + '\'' +
+                ", project=" + project +
                 '}';
     }
 }

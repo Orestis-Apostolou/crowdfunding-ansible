@@ -1,5 +1,6 @@
-package gr.hua.dit.ds.crowdfunding.entities;
+package gr.hua.dit.ds.crowdfunding.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,16 @@ public class Report {
     @Column
     private LocalDateTime dateOfReport;
 
-    public Report( String title, String description, LocalDateTime dateOfReport ) {
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "projectID")
+    @JsonIgnore
+    private Project project;
+
+    public Report( String title, String description, LocalDateTime dateOfReport, Project project ) {
         this.title = title;
         this.description = description;
         this.dateOfReport = dateOfReport;
+        this.project = project;
     }
 
     public Report(){
@@ -62,6 +69,14 @@ public class Report {
         this.dateOfReport = dateOfReport;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject( Project project ) {
+        this.project = project;
+    }
+
     @Override
     public String toString() {
         return "Report{" +
@@ -69,6 +84,7 @@ public class Report {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", dateOfReport=" + dateOfReport +
+                ", project=" + project +
                 '}';
     }
 }

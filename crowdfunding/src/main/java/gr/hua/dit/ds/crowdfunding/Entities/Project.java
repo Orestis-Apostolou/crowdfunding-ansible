@@ -1,10 +1,14 @@
-package gr.hua.dit.ds.crowdfunding.entities;
+package gr.hua.dit.ds.crowdfunding.Entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class Project {
+public class  Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +36,14 @@ public class Project {
     @Column
     private LocalDateTime deadlineForGoal;
 
-    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Fund> funds;
+
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Report> reports;
+
+    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal, List<Fund> funds, List<Report> reports ) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -40,7 +51,10 @@ public class Project {
         this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
         this.deadlineForGoal = deadlineForGoal;
+        this.funds = funds;
+        this.reports = reports;
     }
+
 
     public Project(){
 
@@ -110,6 +124,26 @@ public class Project {
         this.deadlineForGoal = deadlineForGoal;
     }
 
+    public void setProjectID( Integer projectID ) {
+        this.projectID = projectID;
+    }
+
+    public List<Fund> getFunds() {
+        return funds;
+    }
+
+    public void setFunds( List<Fund> funds ) {
+        this.funds = funds;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports( List<Report> reports ) {
+        this.reports = reports;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
@@ -121,6 +155,8 @@ public class Project {
                 ", currentAmount=" + currentAmount +
                 ", dateOfCreation=" + dateOfCreation +
                 ", deadlineForGoal=" + deadlineForGoal +
+                ", funds=" + funds +
+                ", reports=" + reports +
                 '}';
     }
 }
