@@ -39,16 +39,16 @@ public class ReportService {
     }
 
     @Transactional
-    public void deleteReportByID(Integer reportID){
+    public boolean deleteReportByID(Integer reportID){
 
         if (!reportRepository.existsById ( reportID )){
             System.out.println ("Report with ID: " + reportID + " doesn't exist!");
-            return;
+            return false;
         }
 
         reportRepository.deleteById ( reportID );
         System.out.println ("Report with ID: " + reportID + " deleted!");
-
+        return true;
     }
 
     // Assigning a Project to the Report Table

@@ -1,6 +1,7 @@
 package gr.hua.dit.ds.crowdfunding.Service;
 
 import gr.hua.dit.ds.crowdfunding.Entities.Project;
+import gr.hua.dit.ds.crowdfunding.Entities.Status;
 import gr.hua.dit.ds.crowdfunding.Repository.ProjectRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -35,15 +36,27 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProject(Integer projectID){
+    public boolean deleteProject(Integer projectID){
 
         if (!projectRepository.existsById ( projectID )){
             System.out.println ("Project with ID: " + projectID + " doesn't exist!");
-            return;
+            return false;
         }
 
         projectRepository.deleteById ( projectID );
-        System.out.println ("Project with ID: " + projectID + " deleted!");
+        return true;
+    }
+
+    @Transactional
+    public void updateStatus(Integer projectID, Status status){
+
+        if (!projectRepository.existsById (projectID)) {
+            System.out.println ( "Project with ID: " + projectID + " doesn't exist!" );
+            return;
+        }
+        Project project = getProjectById ( projectID );
+        project.setStatus ( status );
+
     }
 
 }
