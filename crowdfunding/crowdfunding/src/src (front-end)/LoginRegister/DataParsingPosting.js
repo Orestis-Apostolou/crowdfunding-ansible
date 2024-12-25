@@ -4,8 +4,3 @@ document.querySelectorAll('.flip-button').forEach(button => {
         cardFlip.classList.toggle('flipped');
     });
 });
-
-function redirectToHomePage() {
-    console.log(window.location.href);
-    window.location.href = "../MainApp/index.html";
-}
