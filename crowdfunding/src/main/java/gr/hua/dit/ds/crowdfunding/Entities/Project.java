@@ -45,7 +45,7 @@ public class  Project {
     @JoinColumn(name = "userID")
     private User organizer;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Fund> funds;
 

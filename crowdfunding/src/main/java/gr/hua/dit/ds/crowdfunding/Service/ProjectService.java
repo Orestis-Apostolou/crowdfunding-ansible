@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -24,8 +25,8 @@ public class ProjectService {
 
     // SELECT * FROM PROJECT WHERE PROJECTID = <projectID>;
     @Transactional
-    public Project getProjectById(Integer projectID){
-        return projectRepository.findById ( projectID ).get ();
+    public Optional<Project> getProjectById(Integer projectID) {
+        return projectRepository.findById(projectID);
     }
 
     @Transactional
