@@ -15,7 +15,7 @@
 .header {
     position: relative;
     text-align: center;
-    padding: 10px 15px;
+    padding: 30px 10px;
     margin-bottom: 0px;
     background-color: var(--card-bg-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -32,9 +32,8 @@
 
 .home-btn {
     position: absolute;
-    top: 50%;
+    top: 15%;
     left: 20px;
-    transform: translateY(-50%);
     background-color: var(--button-bg-color);
     color: var(--text-color);
     border: none;
@@ -43,13 +42,14 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 .home-btn:hover {
     background-color: var(--button-hover-bg-color);
     color: var(--button-hover-color);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.6);
+    transform: scale(1.02);
 }
 
 input, select, textarea {

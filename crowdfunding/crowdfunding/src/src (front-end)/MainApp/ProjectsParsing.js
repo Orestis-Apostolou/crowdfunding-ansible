@@ -126,6 +126,10 @@ function displayProjects() {
         container.innerHTML += card;
     });
 
+    paginationInitialization(pagination);
+}
+
+function paginationInitialization(pagination) {
     // Calculating the total number of pages exist
     const totalPages = Math.ceil(dummyprojects.length / projectsPerPage);
 
@@ -133,7 +137,7 @@ function displayProjects() {
     const ul = document.createElement("ul");
     ul.classList.add("pagination");
 
-    // Previous button
+    // Previous button {Logic}
     const prevItem = document.createElement("li");
     prevItem.classList.add("page-item");
     if (currPage === 1) {
@@ -166,7 +170,7 @@ function displayProjects() {
         ul.appendChild(pageItem);
     }
 
-    // Next button
+    // Next button {Logic}
     const nextItem = document.createElement("li");
     nextItem.classList.add("page-item");
     if (currPage === totalPages) {
