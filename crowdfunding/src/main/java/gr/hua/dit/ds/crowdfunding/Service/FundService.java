@@ -36,15 +36,16 @@ public class FundService {
     }
 
     @Transactional
-    public void deleteFund(Integer fundID){
+    public boolean deleteFund(Integer fundID){
 
         if (!fundRepository.existsById ( fundID )){
             System.out.println ("Fund with ID: " + fundID + " doesn't exist!");
-            return;
+            return false;
         }
 
         fundRepository.deleteById ( fundID );
         System.out.println ("Fund with ID: " + fundID + " deleted!");
+        return true;
     }
 
     // Assigning a Project to the Fund Table

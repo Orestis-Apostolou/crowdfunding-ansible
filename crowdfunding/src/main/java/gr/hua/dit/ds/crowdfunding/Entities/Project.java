@@ -1,14 +1,13 @@
 package gr.hua.dit.ds.crowdfunding.Entities;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class  Project {
+public class Project {
 
     // ------------------- Attributes ------------------------------
 
@@ -23,8 +22,8 @@ public class  Project {
     @Column
     private String description;
 
-    @Column
-    private String status;
+    @Enumerated
+    private Status status = Status.ACTIVE;
 
     @Column
     private float goalAmount;
@@ -37,6 +36,7 @@ public class  Project {
 
     @Column
     private LocalDateTime deadlineForGoal;
+
 
     // ------------------- Relationships ------------------------------
 
@@ -55,10 +55,9 @@ public class  Project {
 
     // ------------------- Methods -----------------------------------
 
-    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
+    public Project( String title, String description, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
         this.title = title;
         this.description = description;
-        this.status = status;
         this.goalAmount = goalAmount;
         this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
@@ -92,14 +91,6 @@ public class  Project {
 
     public void setDescription( String description ) {
         this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus( String status ) {
-        this.status = status;
     }
 
     public float getGoalAmount() {
@@ -160,6 +151,14 @@ public class  Project {
 
     public void setOrganizer( User organizer ) {
         this.organizer = organizer;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus( Status status ) {
+        this.status = status;
     }
 
     @Override
