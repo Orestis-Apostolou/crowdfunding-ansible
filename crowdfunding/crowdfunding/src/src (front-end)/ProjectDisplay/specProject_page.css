@@ -3,8 +3,8 @@ span {
 }
 
 .card {
-    max-width: 600px; /* Limit the width for better readability */
-    margin: 20px auto; /* Center the card horizontally */
+    max-width: 600px;
+    margin: 20px auto;
     background-color: var(--card-bg-color);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -13,15 +13,15 @@ span {
 
 .card img {
     border-bottom: 3px solid var(--primary-color);
-    max-height: 250px; /* Optional */
-    object-fit: cover; /* Ensure the image fills the area */
+    max-height: 250px;
+    object-fit: cover;
 }
 
 .card-body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center content horizontally */
+    align-items: center;
 }
 
 .card-body h1 {
@@ -49,8 +49,8 @@ span {
     background-color: var(--progress-bg-color);
     border-radius: 10px;
     overflow: hidden;
-    height: 20px; /* Adjust height for better visibility */
-    width: 100%; /* Match the card width */
+    height: 20px;
+    width: 100%;
 }
 
 button {
