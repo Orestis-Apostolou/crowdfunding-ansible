@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReportService {
@@ -28,8 +29,8 @@ public class ReportService {
 
     // SELECT * FROM REPORT WHERE REPORTID = <reportID>;
     @Transactional
-    public Report getReportByID(Integer reportID){
-        return reportRepository.findById ( reportID ).get ();
+    public Optional<Report> getReportByID( Integer reportID){
+        return reportRepository.findById ( reportID );
     }
 
     @Transactional
@@ -53,26 +54,42 @@ public class ReportService {
 
     // Assigning a Project to the Report Table
     @Transactional
-    public void assignProjectToReport(Integer reportID, Project project){
-        Report report = getReportByID ( reportID );
+    public boolean assignProjectToReport(Integer reportID, Project project){
+        Optional<Report> report = getReportByID ( reportID );
+
+        if (report.isEmpty ()){
+            return false;
+        }
+
+        Report existingReport = report.get ();
+        existingReport.setProject ( project );
+        saveReport ( existingReport );
+
+        return true;
 //        System.out.println (report);
 //        System.out.println (report.getProject ());
-        report.setProject ( project );
+//        report.setProject ( project );
 //        System.out.println (report.getProject ());
-        saveReport ( report );
+//        saveReport ( report );
+    }
+
+    @Transactional
+    public Optional<List<Report>> findByProjectID(Integer projectID){
+        Optional<Project> project = projectRepository.findById(projectID);
+
+        if (project.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Project existingProject = project.get();
+        return Optional.ofNullable(existingProject.getReports());
     }
 
     // Unassigned a Project to the Fund Table
-    @Transactional
-    public void unassignProjectFromReport(Integer reportID){
-        Report report = getReportByID ( reportID );
-        report.setProject ( null );
-        saveReport ( report );
-    }
-
-    @Transactional
-    public List<Report> findByProjectID(Integer projectID){
-        Project project = projectRepository.findById ( projectID ).get ();
-        return project.getReports ();
-    }
+//    @Transactional
+//    public void unassignProjectFromReport(Integer reportID){
+//        Report report = getReportByID ( reportID );
+//        report.setProject ( null );
+//        saveReport ( report );
+//    }
 }
