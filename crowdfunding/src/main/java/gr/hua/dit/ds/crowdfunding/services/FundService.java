@@ -6,6 +6,8 @@ import gr.hua.dit.ds.crowdfunding.repositories.FundRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class FundService {
 
@@ -23,8 +25,8 @@ public class FundService {
 //
     // SELECT * FROM FUND WHERE FUNDID = <fundID>;
     @Transactional
-    public Fund getFundByID(Integer fundID){
-        return fundRepository.findById ( fundID ).get ();
+    public Optional<Fund> getFundByID( Integer fundID){
+        return fundRepository.findById ( fundID );
     }
 
     @Transactional
@@ -48,13 +50,25 @@ public class FundService {
 
     // Assigning a Project to the Fund Table
     @Transactional
-    public void assignProjectToFund(Integer fundID, Project project){
-        Fund fund = getFundByID ( fundID );
+    public boolean assignProjectToFund(Integer fundID, Project project){
+
+        Optional<Fund> fund = getFundByID ( fundID );
+
+        if ( fund.isEmpty () ){
+            return false;
+        }
+
+        Fund existingFund = fund.get ();
+        existingFund.setProject ( project );
+        saveFund ( existingFund );
+
+        return true;
+
 //        System.out.println (fund);
 //        System.out.println (fund.getProject ());
-        fund.setProject ( project );
+//        fund.setProject ( project );
 //        System.out.println (fund.getProject ());
-        saveFund ( fund );
+//        saveFund ( fund );
     }
 
 //    // Unassigned a Project to the Fund Table
