@@ -34,8 +34,8 @@ public class ReportController {
     }
 
     //TODO add response entity
-    @GetMapping("/{id}/all")
-    public List<Report> getProjectReports(@PathVariable int id){
-        return reportService.findByProjectID ( id );
-    }
+//    @GetMapping("/{id}/all")
+//    public List<Report> getProjectReports(@PathVariable int id){
+//        return reportService.findByProjectID ( id );
+//    }
 }
