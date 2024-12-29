@@ -27,6 +27,34 @@
         </div>
     </nav>
 
+    <!-- New project -->
+    <button id="addNewButton" class="custom-button mt-4">
+        <i class="fas fa-plus"></i> Upload Project
+    </button>
+
+    <!-- Popup Form -->
+    <div id="addNewPopup" class="popup hidden">
+        <div class="popup-content">
+            <button id="closePopupButton" class="btn btn-close">&times;</button>
+            <h2>Add New Project</h2>
+            <form id="addNewForm">
+                <div class="mb-3">
+                    <label for="projectTitle" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="projectTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label for="projectDescription" class="form-label">Description</label>
+                    <textarea class="form-control" id="projectDescription" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="projectGoal" class="form-label">Goal</label>
+                    <input type="text" class="form-control" id="projectGoal" required>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Projects display area -->
     <div class="container my-5">
         <h1 class="text-center mb-4">Active Projects</h1>
@@ -54,6 +82,7 @@
         </div>
     </template>
 
+    
     <div id="pagination" class="d-flex justify-content-center mt-4">
         <ul class="pagination">
             <!-- Pagination of projects -->

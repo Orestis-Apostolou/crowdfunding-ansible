@@ -10,9 +10,40 @@ const dummyprojects = [
     { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "../img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia" }
 ];
 
+const dummyUsers = {
+    admin: { username: "Admin", email: "admin@localhost.com", password: "admin123@", role: "admin" },
+    user: { username: "User", email: "user@localhost.com", password: "user123@", role: "user"}
+};
+
+// let currUser = JSON.parse(sessionStorage.getItem('currUser')) || null;
 let currPage = 1;
 const projectsPerPage = 3;
 
+// Function to check login credentials and log the user in
+// function checkLoginCredentials(event) {
+//     event.preventDefault();
+
+//     const email = document.getElementById('email').value;
+//     const password = document.getElementById('password').value;
+
+//     // Check if the credentials match any of the existing profiles
+//     const user = Object.values(dummyUsers).find(user => user.email === email && user.password === password);
+
+//     if (user) {
+//         // Store user data in sessionStorage for persistent login   
+//         sessionStorage.setItem('currUser', JSON.stringify(user));
+//         currUser = user;
+
+//         window.location.href = "../MainApp/index.html";
+//     } else {
+//         // If login fails, show an error message
+//         alert("Invalid email or password. Please try again.");
+//     }
+// }
+
+// document.getElementById('loginForm').addEventListener('submit', checkLoginCredentials);
+
+// Function to display all the projects that are currently hosted on DS_crowdfunding app
 function displayProjects() {
     const container = document.getElementById("projectsContainer");
     const pagination = document.getElementById("pagination");
@@ -129,7 +160,7 @@ function goToPage(page) {
     }
 
     currPage = page;
-    console.log("Navigation to page: ", currPage);
+    // console.log("Navigation to page: ", currPage);
     displayProjects();
 }
 
@@ -145,8 +176,51 @@ function redirectToHomePage() {
 
 function handleSupport(projectID) {
     // alert(`Please login or register to support "${projectTitle}".`);
+    // if(!currUser) {
+    //     alert("Please login to check this project's information.");
+    //     return;
+    // }
     window.location.href = `../ProjectDisplay/ProjectDisplay.html?id=${projectID}`;
 }
 
+// // Function to logout the current user from session
+// function logout() {
+//     sessionStorage.removeItem('currUser');
+//     currUser = null;
+//     window.location.href = "../MainApp/index.html";
+// }
+
+// // Function for admin to check projects
+// function manageProjects() {
+//     alert("Admin Panel: Manage your projects.");
+// }
+
 //Displaying all the projects parsed from db
 displayProjects();
+
+
+// Listeners for upload new project
+document.getElementById('addNewButton').addEventListener('click', () => {
+    const popup = document.getElementById('addNewPopup');
+    popup.classList.add('visible');
+});
+
+document.getElementById('closePopupButton').addEventListener('click', () => {
+    const popup = document.getElementById('addNewPopup');
+    popup.classList.remove('visible');
+});
+
+// Form submission logic
+document.getElementById('addNewForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('projectTitle').value;
+    const description = document.getElementById('projectDescription').value;
+    const goal = document.getElementById('projectGoal').value;
+
+    console.log({ title, description, goal });
+    alert('Project added successfully!');
+
+    // Close popup and clear form
+    document.getElementById('addNewPopup').classList.remove('visible');
+    document.getElementById('addNewForm').reset();
+});
