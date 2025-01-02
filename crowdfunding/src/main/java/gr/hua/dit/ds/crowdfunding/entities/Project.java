@@ -1,14 +1,15 @@
-package gr.hua.dit.ds.crowdfunding.Entities;
+package gr.hua.dit.ds.crowdfunding.entities;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class  Project {
+public class Project {
+
+    // ------------------- Attributes ------------------------------
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,8 +22,8 @@ public class  Project {
     @Column
     private String description;
 
-    @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ACTIVE;
 
     @Column
     private float goalAmount;
@@ -36,23 +37,29 @@ public class  Project {
     @Column
     private LocalDateTime deadlineForGoal;
 
+
+    // ------------------- Relationships ------------------------------
+
     @JsonIgnore
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "userID")
+    private User organizer;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Fund> funds;
 
-    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Report> reports;
 
-    public Project( String title, String description, String status, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal, List<Fund> funds, List<Report> reports ) {
+    // ------------------- Methods -----------------------------------
+
+    public Project( String title, String description, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
         this.title = title;
         this.description = description;
-        this.status = status;
         this.goalAmount = goalAmount;
         this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
         this.deadlineForGoal = deadlineForGoal;
-        this.funds = funds;
-        this.reports = reports;
     }
 
 
@@ -82,14 +89,6 @@ public class  Project {
 
     public void setDescription( String description ) {
         this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus( String status ) {
-        this.status = status;
     }
 
     public float getGoalAmount() {
@@ -142,6 +141,22 @@ public class  Project {
 
     public void setReports( List<Report> reports ) {
         this.reports = reports;
+    }
+
+    public User getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer( User organizer ) {
+        this.organizer = organizer;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus( Status status ) {
+        this.status = status;
     }
 
     @Override

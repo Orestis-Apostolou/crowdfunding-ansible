@@ -1,11 +1,13 @@
-package gr.hua.dit.ds.crowdfunding.Service;
+package gr.hua.dit.ds.crowdfunding.services;
 
-import gr.hua.dit.ds.crowdfunding.Entities.Project;
-import gr.hua.dit.ds.crowdfunding.Repository.ProjectRepository;
+import gr.hua.dit.ds.crowdfunding.entities.Project;
+import gr.hua.dit.ds.crowdfunding.entities.Status;
+import gr.hua.dit.ds.crowdfunding.repositories.ProjectRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -24,8 +26,8 @@ public class ProjectService {
 
     // SELECT * FROM PROJECT WHERE PROJECTID = <projectID>;
     @Transactional
-    public Project getProjectById(Integer projectID){
-        return projectRepository.findById ( projectID ).get ();
+    public Optional<Project> getProjectById(Integer projectID) {
+        return projectRepository.findById(projectID);
     }
 
     @Transactional
@@ -35,15 +37,28 @@ public class ProjectService {
     }
 
     @Transactional
-    public void deleteProject(Integer projectID){
+    public boolean deleteProject(Integer projectID){
 
         if (!projectRepository.existsById ( projectID )){
             System.out.println ("Project with ID: " + projectID + " doesn't exist!");
-            return;
+            return false;
         }
 
         projectRepository.deleteById ( projectID );
-        System.out.println ("Project with ID: " + projectID + " deleted!");
+        return true;
+    }
+
+    @Transactional
+    public boolean updateStatus(Integer projectID, Status status){
+
+        if (!projectRepository.existsById (projectID)) {
+            System.out.println ( "Project with ID: " + projectID + " doesn't exist" );
+            return false;
+        }
+
+        Project project = getProjectById(projectID).get();
+        project.setStatus(status);
+        return true;
     }
 
 }
