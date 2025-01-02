@@ -66,7 +66,10 @@
 
 /* Pagination customization */
 #pagination {
-    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .pagination {
@@ -209,6 +212,54 @@
     margin-bottom: 1rem;
 }
 
+/* Filter Button */
+.custom-filter-btn {
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.custom-filter-btn:hover {
+    background-color: var(--button-hover-bg-color);
+    color: var(--buton-hover-color);
+    transform: scale(1.05);
+}
+
+.custom-filter-btn:focus {
+    box-shadow: 0 0 5px var(--primary-color);
+    outline: none;
+}
+
+/* Dropdown Menu */
+.custom-dropdown-menu {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-dropdown-menu .dropdown-item {
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-dropdown-menu .dropdown-item:hover {
+    background-color: var(--button-hover-bg-color);
+    color: var(--buton-hover-color);
+}
+
+.custom-dropdown-menu .dropdown-item.active {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    font-weight: bold;
+}
+
 /* Form Styling */
 #addNewForm {
     display: flex;
@@ -264,12 +315,6 @@
 }
 
 .custom-button {
-    position: fixed;
-    top: 80px;
-    right: 315px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
     padding: 10px 20px;
     border: 2px solid var(--primary-color);
     background-color: transparent;
