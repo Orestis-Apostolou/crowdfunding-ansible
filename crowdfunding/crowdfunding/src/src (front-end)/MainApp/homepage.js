@@ -196,7 +196,7 @@ function handleSupport(projectID) {
     //     alert("Please login to check this project's information.");
     //     return;
     // }
-    window.location.href = `../ProjectDisplay/ProjectDisplay.html?id=${projectID}`;
+    window.location.href = `../ProjectDisplay/project_display.html?id=${projectID}`;
 }
 
 // // Function to logout the current user from session
