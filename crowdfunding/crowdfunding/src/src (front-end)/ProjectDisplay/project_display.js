@@ -37,4 +37,19 @@ function displayProjectInfo() {
 document.addEventListener('DOMContentLoaded', () => {
     // console.log("All good with DOM and parsed.");
     displayProjectInfo();
+
+    // Report Issue Form Submission
+    const reportForm = document.getElementById('reportIssueForm');
+    reportForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const issueTitle = document.getElementById('issueTitle').value;
+        const issueDescription = document.getElementById('issueDescription').value;
+
+        alert(`Issue Reported:\n\nTitle: ${issueTitle}\nDescription: ${issueDescription}`);
+
+        // Closing modal after submission
+        const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
+        modal.hide();
+    });
 });
