@@ -39,13 +39,4 @@ public class FundController {
         Optional<Project> project = projectService.getProjectById(id);
         return project.map(p -> ResponseEntity.ok(p.getFunds())).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    @DeleteMapping("/delete/{fid}")
-    public ResponseEntity<String> deleteFund(@PathVariable int fid) {
-        if(fundService.deleteFund(fid)) {
-            return ResponseEntity.ok("Fund deleted successfully");
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to delete fund");
-        }
-    }
 }

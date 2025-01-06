@@ -24,8 +24,8 @@ public class ProjectController {
     }
 
     @GetMapping("/all")
-    public List<Project> getAllProjects() {
-        return projectService.getProjects();
+    public ResponseEntity<List<Project>> getAllProjects() {
+        return ResponseEntity.ok(projectService.getProjects());
     }
 
     @GetMapping("/{id}")
