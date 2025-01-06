@@ -44,7 +44,11 @@
                 <span class="mt-2" id="createdBy-Box"><strong>Created by:</strong> <span id="project-creator"></span></span>
             </div>
         </div>
-        <button id="reportIssueBtn" class="d-flex justify-content-center btn-warning mt-4" data-bs-toggle="modal" data-bs-target="#reportIssueModal">Report an Issue</button>
+        <div class="d-flex justify-content-center mt-4">
+            <button id="reportIssueBtn" class="btn btn-danger d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
+                Report Issue&nbsp;<i class="fa-solid fa-flag"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Report Issue Modal -->
@@ -53,16 +57,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="reportIssueModalLabel">Report an Issue</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="modal-body">
                     <form id="reportIssueForm">
                         <div class="mb-3">
-                            <label for="issueTitle" class="form-label">Issue Title</label>
+                            <label for="issueTitle" class="form-label">Issue Summary</label>
                             <input type="text" class="form-control" id="issueTitle" required>
                         </div>
                         <div class="mb-3">
-                            <label for="issueDescription" class="form-label">Description</label>
+                            <label for="issueDescription" class="form-label">Issue Description</label>
                             <textarea class="form-control" id="issueDescription" rows="3" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-danger">Submit</button>
