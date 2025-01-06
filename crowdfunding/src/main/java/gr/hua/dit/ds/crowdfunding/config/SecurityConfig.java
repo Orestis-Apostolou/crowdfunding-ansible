@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/actuator/health/**").permitAll()
+                        .requestMatchers("/api/auth/**","/actuator/health/**", "/api/project/all").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/v2/api-docs/**",
@@ -60,7 +60,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
                         .requestMatchers("/api/fund/**").hasRole("USER")
-                        .requestMatchers("/api/report/all").hasRole("ADMIN")
+                        .requestMatchers("/api/report/{id}/all").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

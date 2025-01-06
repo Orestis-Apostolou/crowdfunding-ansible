@@ -38,17 +38,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<User> opt = userRepository.findByUsername(username);
 
         if(opt.isEmpty())
-            throw new UsernameNotFoundException("User with username: " +username +" not found !");
+            throw new UsernameNotFoundException("User with username: " + username +" not found");
         else {
             User user = opt.get();
-            return new org.springframework.security.core.userdetails.User(
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getRoles()
-                            .stream()
-                            .map(role-> new SimpleGrantedAuthority (role.toString()))
-                            .collect( Collectors.toSet())
-            );
+            return UserDetailsImpl.build(user);
         }
     }
 
@@ -58,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(passwd);
         user.setPassword(encodedPassword);
 
-        Role role = roleRepository.findByRoleName("USER")
+        Role role = roleRepository.findByRoleName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         Set<Role> roles = new HashSet<> ();
         roles.add(role);
@@ -79,8 +72,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Object getUser(Long userId) {
-        return userRepository.findById(userId).get();
+    public Object getUser(Integer userId) {
+        return userRepository.findByUserID(userId).get();
     }
 
     @Transactional
