@@ -34,21 +34,12 @@ public class ProjectController {
         return project.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProjectById(@PathVariable int id) {
-        if(projectService.deleteProject(id)) {
-            return ResponseEntity.ok("Project deleted");
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
-        }
-    }
-
     @PostMapping("/new")
     public void addNewProject(@Valid @RequestBody Project project) {
         projectService.saveProject(project);
     }
 
-    @PostMapping("/{id}/update-status")
+    @PutMapping("/{id}/update-status")
     public ResponseEntity<String> updateStatus(@PathVariable int id, @Valid @RequestBody Status status) {
         if(projectService.updateStatus(id, status)){
             return ResponseEntity.ok("Project status updated");
@@ -56,4 +47,13 @@ public class ProjectController {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
+
+//TODO: status specific project search
+//
+//    @GetMapping("/pending")
+//    public ResponseEntity<List<Project>> getPendingProjects() {
+//        return ResponseEntity.ok(projectService.getProjectsByStatus(Status.PENDING));
+//    }
+
+
 }

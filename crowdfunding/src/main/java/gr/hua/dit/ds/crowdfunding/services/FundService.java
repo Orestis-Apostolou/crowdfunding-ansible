@@ -11,10 +11,12 @@ import java.util.Optional;
 @Service
 public class FundService {
 
+    private final ProjectService projectService;
     private FundRepository fundRepository;
 
-    public FundService( FundRepository fundRepository) {
+    public FundService(FundRepository fundRepository, ProjectService projectService) {
         this.fundRepository = fundRepository;
+        this.projectService = projectService;
     }
 
 //    // SELECT * FROM FUND;
@@ -51,7 +53,6 @@ public class FundService {
     // Assigning a Project to the Fund Table
     @Transactional
     public boolean assignProjectToFund(Integer fundID, Project project){
-
         Optional<Fund> fund = getFundByID ( fundID );
 
         if ( fund.isEmpty () ){
@@ -60,6 +61,10 @@ public class FundService {
 
         Fund existingFund = fund.get ();
         existingFund.setProject ( project );
+
+        //Add the pledge to the project's current goal
+        project.setCurrentAmount(project.getCurrentAmount() + existingFund.getAmount());
+
         saveFund ( existingFund );
 
         return true;
@@ -70,14 +75,4 @@ public class FundService {
 //        System.out.println (fund.getProject ());
 //        saveFund ( fund );
     }
-
-//    // Unassigned a Project to the Fund Table
-//    @Transactional
-//    public void unassignProjectFromFund(Integer fundID){
-//        Fund fund = getFundByID ( fundID );
-//        fund.setProject ( null );
-//        saveFund ( fund );
-//    }
-
-
 }

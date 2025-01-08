@@ -2,6 +2,7 @@ package gr.hua.dit.ds.crowdfunding.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -51,16 +52,27 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/actuator/health/**", "/api/project/all").permitAll()
                         .requestMatchers(
+                                "/api/auth/**",
+                                "/api/project/all",
+                                "/actuator/health/**",
                                 "/v3/api-docs/**",
                                 "/v2/api-docs/**",
                                 "/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers("/api/fund/**").hasRole("USER")
-                        .requestMatchers("/api/report/{id}/all").hasRole("ADMIN")
+                        .requestMatchers(
+                                "/api/fund/**",
+                                "/api/project/new",
+                                "/api/report/{id}/new"
+                        ).hasRole("USER")
+                        .requestMatchers(
+                                "/api/report/{id}/all",
+                                "/api/project/{id}/update-status"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/project/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/project/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

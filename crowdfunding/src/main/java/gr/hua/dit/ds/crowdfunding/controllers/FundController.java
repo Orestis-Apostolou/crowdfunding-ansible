@@ -7,6 +7,7 @@ import gr.hua.dit.ds.crowdfunding.services.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +24,15 @@ public class FundController {
         this.fundService = fundService;
     }
 
+    @Transactional
     @PostMapping("/{id}/new")
     public ResponseEntity<String> addFund(@PathVariable int id, @Valid @RequestBody Fund fund) {
-        fundService.saveFund(fund);
-        if(projectService.getProjectById(id).isPresent()) {
-            fundService.assignProjectToFund(fund.getFundID(), projectService.getProjectById(id).get());
-            return ResponseEntity.ok("Fund added successfully to project");
+        Optional<Project> project = projectService.getProjectById(id);
+
+        if(project.isPresent()) {
+            fundService.saveFund(fund);
+            fundService.assignProjectToFund(fund.getFundID(), project.get());
+            return ResponseEntity.ok("Fund successfully added to project");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to add fund, project not found");
         }
