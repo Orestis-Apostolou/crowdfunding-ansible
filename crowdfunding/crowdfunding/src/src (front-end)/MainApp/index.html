@@ -41,9 +41,38 @@
         </div>
 
         <!-- New project -->
-        <button id="addNewButton" class="custom-button">
+        <button id="addNewButton" class="custom-button" data-bs-toggle="modal" data-bs-target="#addNewModal">
             <i class="fas fa-plus"></i> Upload Project
         </button>
+
+        <!-- Add new project Modal -->
+        <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addNewModalLabel">Add a new project</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addNewForm">
+                            <div class="mb-0">
+                                <label for="projectTitle" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="projectTitle" placeholder="E.g., CrowdFunding Application" required>
+                            </div>
+                            <div class="mb-0">
+                                <label for="projectDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="projectDescription" placeholder="Describe your project here!" required></textarea>
+                            </div>
+                            <div class="mb-0">
+                                <label for="projectGoal" class="form-label">Goal</label>
+                                <input type="number" min="0" max="1000000" class="form-control" id="projectGoal" placeholder="E.g., 1500 $" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Popup Form -->

@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 
-import gr.hua.dit.ds.crowdfunding.services.UserService;
+import gr.hua.dit.ds.crowdfunding.services.UserDetailsServiceImpl;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     @Autowired
-    private UserService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

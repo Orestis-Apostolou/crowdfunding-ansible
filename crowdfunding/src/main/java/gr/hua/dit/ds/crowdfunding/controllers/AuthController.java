@@ -47,8 +47,8 @@ public class AuthController {
 
     @PostConstruct
     public void setup() {
-        Role role_user = new Role("USER");
-        Role role_admin = new Role("ADMIN");
+        Role role_user = new Role("ROLE_USER");
+        Role role_admin = new Role("ROLE_ADMIN");
 
         roleRepository.updateOrInsert(role_user);
         roleRepository.updateOrInsert(role_admin);
@@ -108,7 +108,7 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         //Set the default role of user
-        roles.add(roleRepository.findByRoleName("USER").orElseThrow(() -> new RuntimeException("Role does not exist")));
+        roles.add(roleRepository.findByRoleName("ROLE_USER").orElseThrow(() -> new RuntimeException("Role does not exist")));
 
         user.setRoles(roles);
         userRepository.save(user);

@@ -196,7 +196,7 @@ function handleSupport(projectID) {
     //     alert("Please login to check this project's information.");
     //     return;
     // }
-    window.location.href = `../ProjectDisplay/ProjectDisplay.html?id=${projectID}`;
+    window.location.href = `../ProjectDisplay/project_display.html?id=${projectID}`;
 }
 
 // // Function to logout the current user from session
@@ -248,28 +248,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-//? Listeners for upload new project
-document.getElementById('addNewButton').addEventListener('click', () => {
-    const popup = document.getElementById('addNewPopup');
-    popup.classList.add('visible');
-});
+//? Listener for uploading new project
+document.addEventListener("DOMContentLoaded", () => {
+    // Adding new project form submission
+    const addNewForm = document.getElementById('addNewForm');
+    addNewForm.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-document.getElementById('closePopupButton').addEventListener('click', () => {
-    const popup = document.getElementById('addNewPopup');
-    popup.classList.remove('visible');
-});
+        const title = document.getElementById('projectTitle').value;
+        const description = document.getElementById('projectDescription').value;
+        const goal = document.getElementById('projectGoal').value;
 
-// Listener for submit of new project upload
-document.getElementById('addNewForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('projectTitle').value;
-    const description = document.getElementById('projectDescription').value;
-    const goal = document.getElementById('projectGoal').value;
+        alert(`Project Added:\n\nTitle: ${title}\nDescription: ${description}\nGoal: ${goal}`);
 
-    console.log({ title, description, goal });
-    alert('Project added successfully!');
+        // Closing the modal after user submission
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
+        modal.hide();
 
-    // Closing popup and cleaning previously opened form
-    document.getElementById('addNewPopup').classList.remove('visible');
-    document.getElementById('addNewForm').reset();
+        // Clearing the form after sub
+        addNewForm.reset();
+    });
 });

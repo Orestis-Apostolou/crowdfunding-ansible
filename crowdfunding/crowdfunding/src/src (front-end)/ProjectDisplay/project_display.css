@@ -68,3 +68,18 @@ button:hover {
     background-color: var(--input-focus-color);
     transform: scale(1.05);
 }
+
+#reportIssueBtn {
+    background-color: var(--report-btn-color);
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#reportIssueBtn:hover {
+    background-color: var(--report-hoverbtn-color);
+    transform: scale(1.05);
+}
