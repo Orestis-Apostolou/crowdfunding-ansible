@@ -2,6 +2,8 @@ package gr.hua.dit.ds.crowdfunding.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,8 @@ public class Fund {
     @Column
     private Integer fundID;
 
+    @NotBlank
+    @Min(value = 1, message = "Pledges must be at least 1 euro")
     @Column
     private float amount;
 

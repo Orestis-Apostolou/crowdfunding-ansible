@@ -29,7 +29,7 @@ public class Project {
     private float goalAmount;
 
     @Column
-    private float currentAmount;
+    private float currentAmount = 0;
 
     @Column
     private LocalDateTime dateOfCreation;

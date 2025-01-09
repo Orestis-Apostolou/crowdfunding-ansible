@@ -53,10 +53,6 @@ public class User {
     @Column
     private LocalDateTime dateOfRegistration = LocalDateTime.now ();
 
-    @Column(length = 150)
-    @Size(max = 150)
-    private String bio;
-
     // ------------------- Relationships ------------------------------
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
@@ -68,7 +64,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Fund> funds;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable( name = "user_roles",
             joinColumns = @JoinColumn(name = "userID"),
             inverseJoinColumns = @JoinColumn(name = "roleID"))
@@ -77,13 +73,12 @@ public class User {
     // ------------------- Methods -----------------------------------
 
 
-    public User( String username, String firstName, String lastName, String email, String password, LocalDateTime dateOfRegistration, String bio ) {
+    public User( String username, String firstName, String lastName, String email, String password) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.bio = bio;
     }
 
     public User(){
@@ -146,13 +141,6 @@ public class User {
         this.dateOfRegistration = dateOfRegistration;
     }
 
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio( String bio ) {
-        this.bio = bio;
-    }
 
     public Set<Role> getRoles() {
         return roles;
