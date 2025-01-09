@@ -2,6 +2,7 @@ package gr.hua.dit.ds.crowdfunding.services;
 
 import gr.hua.dit.ds.crowdfunding.entities.Project;
 import gr.hua.dit.ds.crowdfunding.entities.Report;
+import gr.hua.dit.ds.crowdfunding.entities.Status;
 import gr.hua.dit.ds.crowdfunding.repositories.ProjectRepository;
 import gr.hua.dit.ds.crowdfunding.repositories.ReportRepository;
 import jakarta.transaction.Transactional;
@@ -35,8 +36,12 @@ public class ReportService {
 
     @Transactional
     public void saveReport(Report report){
-        reportRepository.save ( report );
-        System.out.println ("Report saved in the Database!");
+
+        if (reportRepository.updateOrInsert ( report )){
+            System.out.println ("Report saved in the Database!");
+        } else {
+            System.out.println ("Report was updated!");
+        }
     }
 
     @Transactional
@@ -53,24 +58,39 @@ public class ReportService {
     }
 
     // Assigning a Project to the Report Table
+//    @Transactional
+//    public boolean assignProjectToReport(Integer reportID, Project project){
+//        Optional<Report> report = getReportByID ( reportID );
+//
+//        if (report.isEmpty ()){
+//            return false;
+//        }
+//
+//        Report existingReport = report.get ();
+//        existingReport.setProject ( project );
+//        saveReport ( existingReport );
+//
+//        return true;
+////        System.out.println (report);
+////        System.out.println (report.getProject ());
+////        report.setProject ( project );
+////        System.out.println (report.getProject ());
+////        saveReport ( report );
+//    }
+
+
     @Transactional
     public boolean assignProjectToReport(Integer reportID, Project project){
         Optional<Report> report = getReportByID ( reportID );
 
-        if (report.isEmpty ()){
+        if( report.isEmpty () || !project.getStatus ().equals ( Status.ACTIVE )){
             return false;
         }
 
-        Report existingReport = report.get ();
-        existingReport.setProject ( project );
-        saveReport ( existingReport );
-
+        Report validReport = report.get ();
+        validReport.setProject ( project );
+        saveReport ( validReport );
         return true;
-//        System.out.println (report);
-//        System.out.println (report.getProject ());
-//        report.setProject ( project );
-//        System.out.println (report.getProject ());
-//        saveReport ( report );
     }
 
     @Transactional

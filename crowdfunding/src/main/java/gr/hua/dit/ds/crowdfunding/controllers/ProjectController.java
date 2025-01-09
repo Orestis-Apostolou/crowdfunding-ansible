@@ -83,11 +83,9 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
 
-//TODO: status specific project search
-//
 //    @GetMapping("/{status}")
 //    public ResponseEntity<List<Project>> getPendingProjects(@PathVariable Status status) {
-//        return ResponseEntity.ok(projectService.getProjectsByStatus(status));
+//        return ResponseEntity.ok(projectService.findByStatus ( status ));
 //    }
 
     @Secured("ROLE_USER")

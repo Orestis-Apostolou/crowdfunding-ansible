@@ -59,4 +59,9 @@ public class ProjectService {
             }
         }
     }
+
+   @Transactional
+    public Optional<List<Project>> findByStatus(Status status){
+        return projectRepository.findByStatus ( status );
+   }
 }

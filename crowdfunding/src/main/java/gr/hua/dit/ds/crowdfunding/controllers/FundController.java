@@ -36,7 +36,6 @@ public class FundController {
         }
     }
 
-    //TODO: Add isPublic to Fund entity to separate public and private donations
     //for each loop might be too slow for large data, consider having 2 lists that get organized while attaching funds to projects
     @Secured("ROLE_USER")
     @GetMapping("/{id}/all")
@@ -47,13 +46,10 @@ public class FundController {
         if(project.isPresent()) {
             funds = project.get().getFunds();
 
+            //TODO: ORESTIS
             //If the user is NOT the project's creator filter out 'private' funds
             if(!auth.getUsername().equals(project.get().getOrganizer().getUsername()) ) {
-                for(Fund f : funds) {
-//                    if(!f.getPublic()){
-//                        funds.remove(f);
-//                    }
-                }
+                funds.removeIf ( f -> !f.getPublic () );
             }
 
             return ResponseEntity.ok(funds);
