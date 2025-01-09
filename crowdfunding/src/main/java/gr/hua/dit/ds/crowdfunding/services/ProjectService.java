@@ -6,6 +6,7 @@ import gr.hua.dit.ds.crowdfunding.repositories.ProjectRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public class ProjectService {
 
     @Transactional
     public void saveProject(Project project){
-        projectRepository.save (project );
+        projectRepository.save (project);
         System.out.println ("Project saved in the Database!");
     }
 
@@ -49,16 +50,13 @@ public class ProjectService {
     }
 
     @Transactional
-    public boolean updateStatus(Integer projectID, Status status){
-
-        if (!projectRepository.existsById (projectID)) {
-            System.out.println ( "Project with ID: " + projectID + " doesn't exist" );
-            return false;
+    public void checkProjectDeadlines() {
+        for (Project project : getProjects()) {
+            if(project.getDeadlineForGoal().isAfter(LocalDateTime.now())){
+                project.setStatus(Status.COMPLETED);
+                project.setNextStatus(Status.COMPLETED);
+                projectRepository.save(project);
+            }
         }
-
-        Project project = getProjectById(projectID).get();
-        project.setStatus(status);
-        return true;
     }
-
 }
