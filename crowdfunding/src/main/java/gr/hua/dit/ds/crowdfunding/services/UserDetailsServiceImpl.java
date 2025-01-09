@@ -19,14 +19,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder ) {
+    public UserDetailsServiceImpl( UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -41,14 +41,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User with username: " +username +" not found !");
         else {
             User user = opt.get();
-            return new org.springframework.security.core.userdetails.User(
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getRoles()
-                            .stream()
-                            .map(role-> new SimpleGrantedAuthority (role.toString()))
-                            .collect( Collectors.toSet())
-            );
+            return UserDetailsImpl.build(user);
         }
     }
 
