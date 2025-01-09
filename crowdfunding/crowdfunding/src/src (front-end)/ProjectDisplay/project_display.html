@@ -63,11 +63,13 @@
                     <form id="reportIssueForm">
                         <div class="mb-3">
                             <label for="issueTitle" class="form-label">Issue Summary</label>
-                            <input type="text" class="form-control" id="issueTitle" required>
+                            <input type="text" class="form-control" id="issueTitle" placeholder="E.g., High traffic" required>
                         </div>
                         <div class="mb-3">
                             <label for="issueDescription" class="form-label">Issue Description</label>
-                            <textarea class="form-control" id="issueDescription" rows="3" required></textarea>
+                            <textarea class="form-control" id="issueDescription" 
+                            placeholder="E.g., Some times I use the CrowdFunding Application there probably is high traffic and the payments are getting delayed." 
+                            required></textarea>
                         </div>
                         <button type="submit" class="btn btn-danger">Submit</button>
                     </form>
