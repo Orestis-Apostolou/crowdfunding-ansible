@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 
 @Entity
@@ -60,6 +61,11 @@ public class Project {
     private List<Report> reports;
 
     // ------------------- Methods -----------------------------------
+
+    @AssertTrue
+    public Boolean isValidDeadlineForGoal(){
+        return deadlineForGoal.isAfter ( dateOfCreation.plusMonths ( 1 ) );
+    }
 
     public Project( String title, String description, float goalAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
         this.title = title;
