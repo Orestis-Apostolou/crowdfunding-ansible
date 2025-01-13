@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class Project {
@@ -22,9 +24,15 @@ public class Project {
     @Column
     private String description;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
-    private Status status = Status.ACTIVE;
+    private Status status = Status.PENDING;
 
+    @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    private Status nextStatus = Status.ACTIVE;
+
+    @Min(value = 50, message = "Goal amount must be at least 50 euro")
     @Column
     private float goalAmount;
 
@@ -32,8 +40,9 @@ public class Project {
     private float currentAmount = 0;
 
     @Column
-    private LocalDateTime dateOfCreation;
+    private LocalDateTime dateOfCreation = LocalDateTime.now();
 
+    //@AssertTrue method for deadline to be after creation date (by at least 1 month)
     @Column
     private LocalDateTime deadlineForGoal;
 
@@ -53,11 +62,15 @@ public class Project {
 
     // ------------------- Methods -----------------------------------
 
-    public Project( String title, String description, float goalAmount, float currentAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
+    @AssertTrue
+    public Boolean isValidDeadlineForGoal(){
+        return deadlineForGoal.isAfter ( dateOfCreation.plusMonths ( 1 ) );
+    }
+
+    public Project( String title, String description, float goalAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
         this.title = title;
         this.description = description;
         this.goalAmount = goalAmount;
-        this.currentAmount = currentAmount;
         this.dateOfCreation = dateOfCreation;
         this.deadlineForGoal = deadlineForGoal;
     }
@@ -173,5 +186,13 @@ public class Project {
                 ", funds=" + funds +
                 ", reports=" + reports +
                 '}';
+    }
+
+    public Status getNextStatus() {
+        return nextStatus;
+    }
+
+    public void setNextStatus(Status nextStatus) {
+        this.nextStatus = nextStatus;
     }
 }

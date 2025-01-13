@@ -72,8 +72,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Object getUser(Integer userId) {
-        return userRepository.findByUserID(userId).get();
+    public Optional<User> getUser(Integer userId) {
+        return userRepository.findByUserID(userId);
     }
 
     @Transactional

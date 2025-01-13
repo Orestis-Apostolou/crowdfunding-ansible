@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"userID", "projectID"}))
 public class Report {
 
     // ------------------- Attributes ------------------------------
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

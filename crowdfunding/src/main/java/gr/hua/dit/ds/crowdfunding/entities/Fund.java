@@ -30,6 +30,10 @@ public class Fund {
     @Size(max = 150)
     private String message;
 
+    @Column
+    @NotBlank
+    private Boolean isPublic;
+
     // ------------------- Relationships ------------------------------
 
     @JsonIgnore
@@ -44,10 +48,11 @@ public class Fund {
 
     // ------------------- Methods -----------------------------------
 
-    public Fund( float amount, LocalDateTime dateOfTransaction, String message) {
+
+    public Fund( float amount, String message, Boolean isPublic ) {
         this.amount = amount;
-        this.dateOfTransaction = dateOfTransaction;
         this.message = message;
+        this.isPublic = isPublic;
     }
 
     public Fund( ) {
@@ -99,6 +104,14 @@ public class Fund {
 
     public void setUser( User user ) {
         this.user = user;
+    }
+
+    public Boolean getPublic() {
+        return isPublic;
+    }
+
+    public void setPublic( Boolean cond ) {
+        isPublic = cond;
     }
 
     @Override
