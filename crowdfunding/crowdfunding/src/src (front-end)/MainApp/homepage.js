@@ -1,13 +1,13 @@
 const dummyprojects = [
-    { id: 1, title: "Project #1", description: "This is the description for project #1.", image: "../img/favicon.png", link: "#", goal: 5000, collected: 8730, username: "NikosZap", status: "Active" },
-    { id: 2, title: "Project #2", description: "This is the description for project #2.", image: "../img/favicon.png", link: "#", goal: 7500, collected: 3150,  username: "Mhtsakos", status: "Pending"},
-    { id: 3, title: "Project #3", description: "This is the description for project #3.", image: "../img/favicon.png", link: "#", goal: 12500, collected: 2789, username: "Oratios", status: "Active" },
-    { id: 4, title: "Project #4", description: "This is the description for project #4.", image: "../img/favicon.png", link: "#", goal: 2500, collected: 48, username: "Mhtsakos", status: "Pending" },
-    { id: 5, title: "Project #5", description: "This is the description for project #5.", image: "../img/favicon.png", link: "#", goal: 7000, collected: 3333, username: "Kypraios", status: "Active" },
-    { id: 6, title: "Project #6", description: "This is the description for project #6.", image: "../img/favicon.png", link: "#", goal: 7000, collected: 14570, username: "Milkocup", status: "Active" },
-    { id: 7, title: "Project #7", description: "This is the description for project #7.", image: "../img/favicon.png", link: "#", goal: 27000, collected: 18752, username: "Miltos_Kat", status: "Pending" },
-    { id: 8, title: "Project #8", description: "This is the description for project #8.", image: "../img/favicon.png", link: "#", goal: 50000, collected: 37890, username: "Alex", status: "Pending" },
-    { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "../img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia", status: "Active" }
+    { id: 1, title: "Project #1", description: "This is the description for project #1.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 5000, collected: 8730, username: "NikosZap", status: "Active" },
+    { id: 2, title: "Project #2", description: "This is the description for project #2.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 7500, collected: 3150,  username: "Mhtsakos", status: "Pending"},
+    { id: 3, title: "Project #3", description: "This is the description for project #3.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 2789, username: "Oratios", status: "Active" },
+    { id: 4, title: "Project #4", description: "This is the description for project #4.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 2500, collected: 48, username: "Mhtsakos", status: "Pending" },
+    { id: 5, title: "Project #5", description: "This is the description for project #5.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 3333, username: "Kypraios", status: "Active" },
+    { id: 6, title: "Project #6", description: "This is the description for project #6.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 14570, username: "Milkocup", status: "Active" },
+    { id: 7, title: "Project #7", description: "This is the description for project #7.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 27000, collected: 18752, username: "Miltos_Kat", status: "Pending" },
+    { id: 8, title: "Project #8", description: "This is the description for project #8.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 50000, collected: 37890, username: "Alex", status: "Pending" },
+    { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "/crowdfunding/src/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia", status: "Active" }
 ];
 
 const dummyUsers = {
@@ -182,12 +182,12 @@ function goToPage(page) {
 //? Redirecting functions
 function redirectToLoginPage() {
     // console.log(window.location.href);
-    window.location.href = "../LoginRegister/login_register.html";
+    window.location.href = "./LoginRegister/login_register.html";
 }
 
 function redirectToHomePage() {
     // console.log(window.location.href);
-    window.location.href = "../MainApp/index.html";
+    window.location.href = "/crowdfunding/src/src (front-end)/index.html";
 }
 
 function handleSupport(projectID) {
@@ -196,7 +196,7 @@ function handleSupport(projectID) {
     //     alert("Please login to check this project's information.");
     //     return;
     // }
-    window.location.href = `../ProjectDisplay/project_display.html?id=${projectID}`;
+    window.location.href = `./ProjectDisplay/project_display.html?id=${projectID}`;
 }
 
 // // Function to logout the current user from session
