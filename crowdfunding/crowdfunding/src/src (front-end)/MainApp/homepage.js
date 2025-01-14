@@ -73,6 +73,17 @@ function displayProjects() {
         projectCard.querySelector(".card-img-top").alt = dummyproject.title;
         projectCard.querySelector(".card-title").textContent = dummyproject.title;
 
+        // Adding status circle color-based on project's status
+        const statusCircle = projectCard.querySelector(".status-circle");
+        const statusText = projectCard.querySelector('.status-text');
+        if(dummyproject.status === "Active") {
+            statusCircle.classList.add("green");
+            statusText.textContent = 'Active';
+        }else if(dummyproject.status === "Pending") {
+            statusCircle.classList.add("orange");
+            statusText.textContent = 'Pending';
+        }
+
         const progressPercentage = (dummyproject.collected / dummyproject.goal) * 100;
         const progressBar = projectCard.querySelector(".progress-bar");
         progressBar.style.width = `${progressPercentage}%`;

@@ -83,3 +83,23 @@ button:hover {
     background-color: var(--report-hoverbtn-color);
     transform: scale(1.05);
 }
+
+/* Mouse enter warning for 1 report per project customization */
+.tooltip-custom {
+    position: absolute;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: normal;
+    z-index: 1050;
+    pointer-events: none;
+    transform: translate(10px, -30px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: auto;
+    max-width: 250px;
+    line-height: 1;
+    height: auto;
+    border: 2px solid var(--report-btn-color);
+}

@@ -32,11 +32,47 @@ function displayProjectInfo() {
     const progressBar = document.getElementById('project-progress-bar');
     progressBar.style.width = `${progressPercentage}%`;
     progressBar.setAttribute('aria-valuenow', progressPercentage);
+    
+    // Adding the pulsating circle next to the project title
+    const statusCircle = document.createElement('span');
+    statusCircle.classList.add('status-circle');
+
+    // Set status based on progress
+    if (progressPercentage >= 100) {
+        statusCircle.classList.add('green'); // Fully funded
+    } else if (progressPercentage > 0) {
+        statusCircle.classList.add('orange'); // Pending or in-progress
+    }
+
+    document.getElementById('project-title').insertAdjacentElement('beforebegin', statusCircle);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // console.log("All good with DOM and parsed.");
     displayProjectInfo();
+
+    const reportBtn = document.getElementById('reportIssueBtn');
+    const tooltip = document.getElementById('reportIssueTooltip');
+
+    // Displaying tooltip on hover
+    reportBtn.addEventListener('mouseenter', (event) => {
+        tooltip.classList.remove('d-none');
+        tooltip.style.left = `${event.pageX}px`;
+        tooltip.style.top = `${event.pageY}px`;
+    });
+
+    // Updating tooltip position as the mouse moves
+    reportBtn.addEventListener('mousemove', (event) => {
+        const offsetX = 15;
+        const offsetY = -20;
+
+        tooltip.style.left = `${event.pageX + offsetX}px`;
+        tooltip.style.top = `${event.pageY + offsetY}px`;
+    });
+
+    // Hiding tooltip when mouse leaves the button
+    reportBtn.addEventListener('mouseleave', () => {
+        tooltip.classList.add('d-none');
+    });
 
     // Report Issue Form Submission
     const reportForm = document.getElementById('reportIssueForm');

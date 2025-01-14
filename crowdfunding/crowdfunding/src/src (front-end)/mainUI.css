@@ -16,6 +16,7 @@
     --disabled-text-color: #6c757d;
     --report-btn-color: #dc3545;
     --report-hoverbtn-color: #a71d2a;
+    --pending-status-color: #fd7e14;
 }
 
 html, body {
@@ -144,6 +145,44 @@ html, body {
     background-color: var(--report-hoverbtn-color);
     color: var(--text-color);
     transform: scale(1.05);
+}
+
+/* Pulsive dot for indication of project's status customization */
+.status-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    animation: pulse 1.5s infinite;
+}
+
+.status-text {
+    font-size: 12px;
+    color: var(--text-color) !important;
+}
+
+.status-circle.green {
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--background-color);
+}
+
+.status-circle.orange {
+    background-color: var(--pending-status-color);
+    box-shadow: 0 0 10px var(--background-color);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 ::placeholder {

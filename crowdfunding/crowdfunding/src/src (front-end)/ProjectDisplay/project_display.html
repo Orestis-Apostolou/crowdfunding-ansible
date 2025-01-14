@@ -25,7 +25,11 @@
         <div class="card shadow d-flex">
             <img id="project-image" src="" class="card-img-top" alt="Project Image">
             <div class="card-body">
-                <h1 id="project-title">Project Title</h1>
+                <div class="d-flex align-items-center">
+                    <!-- Pulsing Circle -->
+                    <span id="statusCircle" class="status-circle"></span>
+                    <h1 id="project-title" class="ms-3">Project Title</h1>
+                </div>
                 <span id="project-description">Project Description</span>
                 <p class="collected-info"><strong>Collected:</strong> $<span id="project-collected"></span> / $<span id="project-goal"></span></p>
                 <span><strong>Status:</strong> <span id="project-progress-percentage"></span>% Funded</span>
@@ -45,6 +49,11 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-4">
+            <div id="reportIssueTooltip" class="tooltip-custom d-none">
+                <p><strong>Warning!</strong> You can only have one active report per project.</p>
+                <p>If you submit a new report, it will replace any previous ones for this project. Make sure you're submitting a fresh issue!</p>
+            </div>
+
             <button id="reportIssueBtn" class="btn btn-danger d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
                 Report Issue&nbsp;<i class="fa-solid fa-flag"></i>
             </button>
