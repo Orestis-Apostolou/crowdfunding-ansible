@@ -25,22 +25,17 @@ public class ReportController {
         this.projectService = projectService;
     }
 
-    //TODO: make method work like FundController.addFund()
     @Secured("ROLE_USER")
     @PostMapping("/{id}/new")
     public ResponseEntity<String> reportProject(@PathVariable int id, @Valid @RequestBody Report report){
-        Optional<Project> project = projectService.getProjectById(id);
-
         //Set default value for field without @JsonIgnore
         report.setDateOfReport(LocalDateTime.now());
 
-        if(project.isPresent()){
-            reportService.saveReport(report);
-            reportService.assignProjectToReport(report.getReportID(), project.get());
+        if(reportService.assignProjectToReport(report, id)){
             return ResponseEntity.ok("Report added successfully");
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No active Project found");
     }
 
     @Secured("ROLE_ADMIN")

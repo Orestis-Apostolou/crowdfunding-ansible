@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/project/all",
+                                "/api/project/{status}",
                                 "/actuator/health/**",
                                 "/v3/api-docs/**",
                                 "/v2/api-docs/**",
@@ -65,6 +66,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/fund/**",
                                 "/api/project/new",
+                                "/api/project/{id}/desc-update",
+                                "/api/project/personal",
                                 "/api/report/{id}/new"
                         ).hasRole("USER")
                         .requestMatchers(

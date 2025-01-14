@@ -32,10 +32,11 @@ public class FundController {
         if(fundService.assignProjectToFund(fund, id)) {
             return ResponseEntity.ok("Fund successfully added to project");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to add fund, no ACTIVE project found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to add fund, no active project found");
         }
     }
 
+    //TODO: maybe change Project to have List<Fund> privateFunds and List<Fund> publicFunds
     //for each loop might be too slow for large data, consider having 2 lists that get organized while attaching funds to projects
     @Secured("ROLE_USER")
     @GetMapping("/{id}/all")
