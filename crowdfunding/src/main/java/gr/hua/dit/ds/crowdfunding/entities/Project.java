@@ -42,7 +42,6 @@ public class Project {
     @Column
     private LocalDateTime dateOfCreation = LocalDateTime.now();
 
-    //@AssertTrue method for deadline to be after creation date (by at least 1 month)
     @Column
     private LocalDateTime deadlineForGoal;
 
@@ -54,17 +53,24 @@ public class Project {
     @JoinColumn(name = "userID")
     private User organizer;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Fund> funds;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Report> reports;
 
     // ------------------- Methods -----------------------------------
 
-    @AssertTrue
-    public Boolean isValidDeadlineForGoal(){
-        return deadlineForGoal.isAfter ( dateOfCreation.plusMonths ( 1 ) );
+    @PrePersist
+    @PreUpdate
+    public void isValidDeadlineForGoal(){
+
+        if (deadlineForGoal.isAfter ( dateOfCreation.plusMonths ( 1 ) )){
+            return;
+        }
+
+        setDeadlineForGoal ( LocalDateTime.now ().plusMonths ( 1 ) );
+
     }
 
     public Project( String title, String description, float goalAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
