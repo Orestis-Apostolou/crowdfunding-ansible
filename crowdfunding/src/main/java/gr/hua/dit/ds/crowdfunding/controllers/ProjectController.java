@@ -28,9 +28,10 @@ public class ProjectController {
     FundService fundService;
     UserDetailsServiceImpl userService;
 
-    public ProjectController(ProjectService projectService, FundService fundService) {
+    public ProjectController(ProjectService projectService, FundService fundService, UserDetailsServiceImpl userService) {
         this.projectService = projectService;
         this.fundService = fundService;
+        this.userService = userService;
     }
 
     @GetMapping("/all")
@@ -46,12 +47,13 @@ public class ProjectController {
 
     @Secured("ROLE_USER")
     @PostMapping("/new")
-    public void addNewProject(@Valid @RequestBody Project project) {
+    public void addNewProject(@Valid @RequestBody Project project, @AuthenticationPrincipal UserDetailsImpl auth) {
         //set default values for fields without @JsonIgnore
         project.setStatus(Status.PENDING);
         project.setNextStatus(Status.ACTIVE);
         project.setDateOfCreation(LocalDateTime.now());
         project.setCurrentAmount(0);
+        project.setOrganizer(userService.getUser(auth.getId()).get());
 
         projectService.saveProject(project);
     }
@@ -83,7 +85,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
 
-    @GetMapping("/{status}")
+    @GetMapping("/all/{status}")
     public ResponseEntity<List<Project>> getPendingProjects(@PathVariable Status status) {
         return ResponseEntity.ok(projectService.findByStatus ( status ).get());
     }
@@ -96,7 +98,7 @@ public class ProjectController {
         if(projectOpt.isPresent()){
             Project project = projectOpt.get();
             if(auth.getId().equals(project.getOrganizer().getUserID())){
-                project.setDescription(project.getDescription() + "\n[Update] " +updateText);
+                project.setDescription(project.getDescription() + "\n[Update] " + updateText);
 
                 projectService.saveProject(project);
                 return ResponseEntity.ok("Project updated");

@@ -57,28 +57,6 @@ public class ReportService {
         return true;
     }
 
-    // Assigning a Project to the Report Table
-//    @Transactional
-//    public boolean assignProjectToReport(Integer reportID, Project project){
-//        Optional<Report> report = getReportByID ( reportID );
-//
-//        if (report.isEmpty ()){
-//            return false;
-//        }
-//
-//        Report existingReport = report.get ();
-//        existingReport.setProject ( project );
-//        saveReport ( existingReport );
-//
-//        return true;
-////        System.out.println (report);
-////        System.out.println (report.getProject ());
-////        report.setProject ( project );
-////        System.out.println (report.getProject ());
-////        saveReport ( report );
-//    }
-
-    //TODO: rename to assignAndSaveReport() ?
     @Transactional
     public boolean assignProjectToReport(Report report, Integer projectID){
         Optional<Project> project =  projectService.getProjectById( projectID );
@@ -88,7 +66,7 @@ public class ReportService {
         }
 
         Project validProject = project.get ();
-        validProject.getReports ().add(report);
+        report.setProject( validProject );
         saveReport ( report );
         return true;
     }
@@ -104,12 +82,4 @@ public class ReportService {
         Project existingProject = project.get();
         return Optional.ofNullable(existingProject.getReports());
     }
-
-    // Unassigned a Project to the Fund Table
-//    @Transactional
-//    public void unassignProjectFromReport(Integer reportID){
-//        Report report = getReportByID ( reportID );
-//        report.setProject ( null );
-//        saveReport ( report );
-//    }
 }

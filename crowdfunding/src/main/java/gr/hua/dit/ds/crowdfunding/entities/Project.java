@@ -24,15 +24,15 @@ public class Project {
     @Column
     private String description;
 
-    @JsonIgnore
+    //@JsonIgnore
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
-    @JsonIgnore
+    //@JsonIgnore
     @Enumerated(EnumType.STRING)
     private Status nextStatus = Status.ACTIVE;
 
-    @Min(value = 50, message = "Goal amount must be at least 50 euro")
+    @Min(value = 1000, message = "Goal amount must be at least 1000 euro")
     @Column
     private float goalAmount;
 
@@ -48,7 +48,7 @@ public class Project {
 
     // ------------------- Relationships ------------------------------
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "userID")
     private User organizer;
@@ -64,13 +64,11 @@ public class Project {
     @PrePersist
     @PreUpdate
     public void isValidDeadlineForGoal(){
-
         if (deadlineForGoal.isAfter ( dateOfCreation.plusMonths ( 1 ) )){
             return;
         }
 
         setDeadlineForGoal ( LocalDateTime.now ().plusMonths ( 1 ) );
-
     }
 
     public Project( String title, String description, float goalAmount, LocalDateTime dateOfCreation, LocalDateTime deadlineForGoal ) {
