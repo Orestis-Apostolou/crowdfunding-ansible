@@ -83,10 +83,10 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
     }
 
-//    @GetMapping("/{status}")
-//    public ResponseEntity<List<Project>> getPendingProjects(@PathVariable Status status) {
-//        return ResponseEntity.ok(projectService.findByStatus ( status ));
-//    }
+    @GetMapping("/{status}")
+    public ResponseEntity<List<Project>> getPendingProjects(@PathVariable Status status) {
+        return ResponseEntity.ok(projectService.findByStatus ( status ).get());
+    }
 
     @Secured("ROLE_USER")
     @PutMapping("/{id}/desc-update")
