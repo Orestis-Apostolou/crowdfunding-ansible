@@ -103,3 +103,52 @@ button:hover {
     height: auto;
     border: 2px solid var(--report-btn-color);
 }
+
+/* Admin actions section customization */
+.admin-actions {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--divider-color);
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-actions:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+.admin-actions h5 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.admin-actions .btn {
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--divider-color);
+    padding: 10px 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-actions .btn:hover {
+    background-color: var(--button-hover-color);
+    color: var(--button-hover-bg-color);
+}
+
+/* Custom styling for approve and reject buttons */
+#approveProjectBtn {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+#rejectProjectBtn {
+    border-color: var(--report-btn-color);
+    color: var(--report-btn-color);
+}

@@ -100,7 +100,7 @@ function displayProjects() {
         cardBody.appendChild(createdBy);
 
         const button = projectCard.querySelector("button");
-        button.onclick = () => handleSupport(dummyproject.id);
+        button.onclick = () => handleSupport(dummyproject.id, dummyproject.status);
 
         container.appendChild(projectCard);
     });
@@ -201,13 +201,14 @@ function redirectToHomePage() {
     window.location.href = "/crowdfunding/src/src (front-end)/index.html";
 }
 
-function handleSupport(projectID) {
+function handleSupport(projectID, projectStatus) {
     // alert(`Please login or register to support "${projectTitle}".`);
     // if(!currUser) {
     //     alert("Please login to check this project's information.");
     //     return;
     // }
-    window.location.href = `./ProjectDisplay/project_display.html?id=${projectID}`;
+
+    window.location.href = `./ProjectDisplay/project_display.html?id=${projectID}&status=${projectStatus}`;
 }
 
 // // Function to logout the current user from session

@@ -5,6 +5,8 @@ function getQueryParam(param) {
 
 function displayProjectInfo() {
     const projectId = getQueryParam('id');
+    const projectStatus = getQueryParam('status');
+
     if (!projectId) {
         document.getElementById('project-info').innerHTML = `<p>Project not found!</p>`;
         return;
@@ -45,10 +47,46 @@ function displayProjectInfo() {
     }
 
     document.getElementById('project-title').insertAdjacentElement('beforebegin', statusCircle);
+
+    // Displaying the admin actions based on project status
+    const adminActions = document.getElementById('adminActions');
+    if(projectStatus !== "Pending") {
+        adminActions.classList.add('d-none');
+    }else {
+        adminActions.classList.remove('d-none');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     displayProjectInfo();
+
+    // Admin action buttons
+    const approveBtn = document.getElementById('approveProjectBtn');
+    const rejectBtn = document.getElementById('rejectProjectBtn');
+
+    approveBtn.addEventListener('click', () => {
+        const projectId = getQueryParam('id');
+        
+        if(projectId) {
+            alert(`Project with ID: ${projectId} has been successfully approved.`);
+        } else {
+            alert('Project ID not found.');
+        }
+    });
+
+    rejectBtn.addEventListener('click', () => {
+        const projectId = getQueryParam('id');
+
+        if(projectId) {
+            const reason = prompt('Enter a reason for rejecting the project:');
+            
+            if(reason) {
+                alert(`Project with ID: ${projectId} has been rejected.\nReason given: ${reason}`);
+            }
+        } else {
+            alert('Project ID not found');
+        }
+    });
 
     const reportBtn = document.getElementById('reportIssueBtn');
     const tooltip = document.getElementById('reportIssueTooltip');
