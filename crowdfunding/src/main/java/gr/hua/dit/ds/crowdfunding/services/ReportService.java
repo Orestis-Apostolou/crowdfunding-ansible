@@ -15,11 +15,11 @@ import java.util.Optional;
 public class ReportService {
 
     private ReportRepository reportRepository;
-    private ProjectRepository projectRepository;
+    private ProjectService projectService;
 
-    public ReportService( ReportRepository reportRepository, ProjectRepository projectRepository ) {
+    public ReportService( ReportRepository reportRepository, ProjectService projectService ) {
         this.reportRepository = reportRepository;
-        this.projectRepository = projectRepository;
+        this.projectService = projectService;
     }
 
     // SELECT * FROM REPORT;
@@ -57,45 +57,23 @@ public class ReportService {
         return true;
     }
 
-    // Assigning a Project to the Report Table
-//    @Transactional
-//    public boolean assignProjectToReport(Integer reportID, Project project){
-//        Optional<Report> report = getReportByID ( reportID );
-//
-//        if (report.isEmpty ()){
-//            return false;
-//        }
-//
-//        Report existingReport = report.get ();
-//        existingReport.setProject ( project );
-//        saveReport ( existingReport );
-//
-//        return true;
-////        System.out.println (report);
-////        System.out.println (report.getProject ());
-////        report.setProject ( project );
-////        System.out.println (report.getProject ());
-////        saveReport ( report );
-//    }
-
-
     @Transactional
-    public boolean assignProjectToReport(Integer reportID, Project project){
-        Optional<Report> report = getReportByID ( reportID );
+    public boolean assignProjectToReport(Report report, Integer projectID){
+        Optional<Project> project =  projectService.getProjectById( projectID );
 
-        if( report.isEmpty () || !project.getStatus ().equals ( Status.ACTIVE )){
+        if( project.isEmpty () || !project.get().getStatus ().equals ( Status.ACTIVE )){
             return false;
         }
 
-        Report validReport = report.get ();
-        validReport.setProject ( project );
-        saveReport ( validReport );
+        Project validProject = project.get ();
+        report.setProject( validProject );
+        saveReport ( report );
         return true;
     }
 
     @Transactional
     public Optional<List<Report>> findByProjectID(Integer projectID){
-        Optional<Project> project = projectRepository.findById(projectID);
+        Optional<Project> project = projectService.getProjectById(projectID);
 
         if (project.isEmpty()) {
             return Optional.empty();
@@ -104,12 +82,4 @@ public class ReportService {
         Project existingProject = project.get();
         return Optional.ofNullable(existingProject.getReports());
     }
-
-    // Unassigned a Project to the Fund Table
-//    @Transactional
-//    public void unassignProjectFromReport(Integer reportID){
-//        Report report = getReportByID ( reportID );
-//        report.setProject ( null );
-//        saveReport ( report );
-//    }
 }

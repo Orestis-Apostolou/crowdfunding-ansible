@@ -9,17 +9,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -55,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/project/all",
+                                "/api/project/all/{status}",
                                 "/actuator/health/**",
                                 "/v3/api-docs/**",
                                 "/v2/api-docs/**",
@@ -65,6 +62,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/fund/**",
                                 "/api/project/new",
+                                "/api/project/{id}/desc-update",
+                                "/api/project/personal",
                                 "/api/report/{id}/new"
                         ).hasRole("USER")
                         .requestMatchers(

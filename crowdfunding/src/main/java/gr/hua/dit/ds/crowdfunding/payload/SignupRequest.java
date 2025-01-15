@@ -3,7 +3,6 @@ package gr.hua.dit.ds.crowdfunding.payload;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import java.util.Set;
 
 public class SignupRequest {
     @NotBlank

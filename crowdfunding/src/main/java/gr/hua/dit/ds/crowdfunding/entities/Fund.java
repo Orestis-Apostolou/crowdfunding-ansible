@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class Fund {
     @Column
     private Integer fundID;
 
-    @NotBlank
+    @NotNull
     @Min(value = 1, message = "Pledges must be at least 1 euro")
     @Column
     private float amount;
@@ -31,12 +32,12 @@ public class Fund {
     private String message;
 
     @Column
-    @NotBlank
+    @NotNull
     private Boolean isPublic;
 
     // ------------------- Relationships ------------------------------
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "userID")
     private User user;

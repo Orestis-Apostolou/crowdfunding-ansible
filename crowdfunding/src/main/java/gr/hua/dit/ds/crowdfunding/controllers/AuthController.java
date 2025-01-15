@@ -6,8 +6,11 @@ import gr.hua.dit.ds.crowdfunding.payload.JwtResponse;
 import gr.hua.dit.ds.crowdfunding.repositories.RoleRepository;
 import gr.hua.dit.ds.crowdfunding.repositories.UserRepository;
 import gr.hua.dit.ds.crowdfunding.services.UserDetailsImpl;
+import gr.hua.dit.ds.crowdfunding.services.UserDetailsServiceImpl;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,6 +48,7 @@ public class AuthController {
         this.jwtUtils = jwtUtils;
     }
 
+    @Transactional
     @PostConstruct
     public void setup() {
         Role role_user = new Role("ROLE_USER");
@@ -53,9 +57,18 @@ public class AuthController {
         roleRepository.updateOrInsert(role_user);
         roleRepository.updateOrInsert(role_admin);
 
-//        User admin = new User("admin","Dimitris","Apostolakis","it2022004@hua.gr",encoder.encode("admin"));
-//        admin.setRoles(Set.of(role_user, role_admin));
-//        userRepository.save(admin);
+
+        if(!userRepository.existsByEmail("it2022004@hua.gr")) {
+            User admin = new User("admin","Dimitris","Apostolakis","it2022004@hua.gr",encoder.encode("admin"));
+
+            //Persist user in the database
+            userRepository.save(admin);
+
+            admin.setRoles(Set.of(roleRepository.findByRoleName("ROLE_USER").get(), roleRepository.findByRoleName("ROLE_ADMIN").get()));
+
+            //Update user roles
+            userRepository.save(admin);
+        }
     }
 
     @PostMapping("/signin")

@@ -31,7 +31,7 @@ public class Report {
 
     // ------------------- Relationships ------------------------------
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "userID")
     private User user;

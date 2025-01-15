@@ -1,5 +1,6 @@
 package gr.hua.dit.ds.crowdfunding.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +46,7 @@ public class User {
     @Email
     private String email;
 
+    @JsonIgnore
     @NotBlank
     @Column(length = 90)
     @Size(max = 90)
@@ -55,13 +57,16 @@ public class User {
 
     // ------------------- Relationships ------------------------------
 
-    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "organizer", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Report> reports;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Fund> funds;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
