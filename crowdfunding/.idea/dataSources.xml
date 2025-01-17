@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@dpg-ctgq562lqhvc739os2cg-a.oregon-postgres.render.com" uuid="1159b795-d713-41cf-a629-6f6bfe30015d">
+    <data-source source="LOCAL" name="Distributed Systems" uuid="368deb7a-e1ca-4047-8b1d-9bd53d05b54a">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://dpg-ctgq562lqhvc739os2cg-a.oregon-postgres.render.com:5432/postgres</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="dbcrowdfunding_iqa1@dpg-ctgq562lqhvc739os2cg-a.oregon-postgres.render.com" uuid="356792bb-1f30-4912-9245-0901f1f0a89f">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://dpg-ctgq562lqhvc739os2cg-a.oregon-postgres.render.com:5432/dbcrowdfunding_iqa1</jdbc-url>
-      <jdbc-additional-properties>
-        <property name="com.intellij.clouds.kubernetes.db.host.port" />
-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
-        <property name="com.intellij.clouds.kubernetes.db.container.port" />
-      </jdbc-additional-properties>
+      <jdbc-url>jdbc:postgresql://dpg-cu5885lds78s73e178gg-a.oregon-postgres.render.com:5432/distributed_systems_gwpc</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
