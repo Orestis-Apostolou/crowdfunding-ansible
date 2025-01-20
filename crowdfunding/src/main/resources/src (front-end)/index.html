@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="./mainUI.css">
     <link rel="stylesheet" href="./MainApp/homepage.css"> <!-- /MainApp -->
 </head>
@@ -18,92 +18,74 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
-            
             <a class="navbar-brand text-white" href="./index.html">
                 <img src="./img/favicon.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top" style="border-radius: 50%;">
                 CrowdFunding
             </a>
-            <button class="btn btn-outline-light" onclick="redirectToLoginPage()">Login / Register</button>
+            <button class="btn btn-outline-light" onclick="window.location.href='./LoginRegister/login_register.html'">Login / Register</button>
         </div>
     </nav>
 
-    <!-- Filter and New Project buttons -->
-    <div class="d-flex justify-content-between my-4 ms-4 me-3">
-        <!-- Filter button for MyProjects / All projects display -->
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle custom-filter-btn" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-filter"></i> Filter
+    <!-- Projects display area -->
+    <div class="container my-5">
+        <h1 class="text-center justify-content-center mb-4">Active Projects</h1>
+
+        <!-- Filter and New Project buttons -->
+        <div class="d-flex justify-content-between my-4">
+            <!-- New project -->
+            <button id="addNewButton" class="custom-button" data-bs-toggle="modal" data-bs-target="#addNewModal">
+                <i class="fa-solid fa-book-bookmark"></i> New project
             </button>
-            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="filterDropdown">
-                <li><a class="dropdown-item active" href="#" id="filterAll">All Projects</a></li>
-                <li><a class="dropdown-item" href="#" id="filterMyProjects">My Projects</a></li>
-            </ul>
-        </div>
 
-        <!-- New project -->
-        <button id="addNewButton" class="custom-button" data-bs-toggle="modal" data-bs-target="#addNewModal">
-            <i class="fas fa-plus"></i> Upload Project
-        </button>
+            <!-- Filter button for MyProjects / All projects display -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle custom-filter-btn" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="filterDropdown">
+                    <li><a class="dropdown-item active" href="#" id="filterAll">All Projects</a></li>
+                    <li><a class="dropdown-item" href="#" id="filterMyProjects">My Projects</a></li>
+                </ul>
+            </div>
 
-        <!-- Add new project Modal -->
-        <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addNewModalLabel">Add a new project</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addNewForm">
-                            <div class="mb-0">
-                                <label for="projectTitle" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="projectTitle" placeholder="E.g., CrowdFunding Application" required>
-                            </div>
-                            <div class="mb-0">
-                                <label for="projectDescription" class="form-label">Description</label>
-                                <textarea class="form-control" id="projectDescription" placeholder="Describe your project here!" required></textarea>
-                            </div>
-                            <div class="mb-0">
-                                <label for="projectGoal" class="form-label">Goal</label>
-                                <input type="number" min="1" max="1000000" class="form-control" id="projectGoal" placeholder="E.g., 1500 $" required>
-                            </div>
-                            <button type="submit" class="btn btn-danger">Submit</button>
-                        </form>
+            <!-- Add new project Modal -->
+            <div class="modal fade" id="addNewModal" tabindex="-1" aria-labelledby="addNewModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addNewModalLabel">Add a new project</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addNewForm">
+                                <div class="mb-0">
+                                    <label for="projectTitle" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="projectTitle" placeholder="E.g., CrowdFunding Application" required>
+                                </div>
+                                <div class="mb-0">
+                                    <label for="projectDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="projectDescription" placeholder="Describe your project here!" required></textarea>
+                                </div>
+                                <div class="mb-0">
+                                    <label for="projectGoal" class="form-label">Goal</label>
+                                    <input type="number" min="1" max="1000000" class="form-control" id="projectGoal" placeholder="E.g., 1500 $" required>
+                                </div>
+                                <button type="submit" class="btn btn-danger">Submit</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Popup Form -->
-    <div id="addNewPopup" class="popup hidden">
-        <div class="popup-content">
-            <button id="closePopupButton" class="btn btn-close">&times;</button>
-            <h2>Add New Project</h2>
-            <form id="addNewForm">
-                <div class="mb-3">
-                    <label for="projectTitle" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="projectTitle" required>
-                </div>
-                <div class="mb-3">
-                    <label for="projectDescription" class="form-label">Description</label>
-                    <textarea class="form-control" id="projectDescription" rows="3" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="projectGoal" class="form-label">Goal</label>
-                    <input type="text" class="form-control" id="projectGoal" required>
-                </div>
-                <button type="submit" class="btn btn-success">Submit</button>
-            </form>
-        </div>
-    </div>
 
-    <!-- Projects display area -->
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Active Projects</h1>
         <div class="row" id="projectsContainer">
             <!-- Project Cards will be displayed here parsed by js -->
         </div>
+
+        <!-- Admin Report Button (top right) -->
+        <button class="btn btn-outline-warning custom-report-btn" onclick="window.location.href='./Reports/reports.html'">
+            <i class="fa-solid fa-chart-line"></i> Report Analytics
+        </button>
     </div>
 
     <!-- Template for every single project cards -->

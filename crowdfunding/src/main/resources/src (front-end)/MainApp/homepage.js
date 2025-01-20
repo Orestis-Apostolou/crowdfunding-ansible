@@ -10,10 +10,10 @@ const dummyprojects = [
     { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia", status: "Active" }
 ];
 
-const dummyUsers = {
-    admin: { username: "Admin", email: "admin@localhost.com", password: "admin123@", role: "admin" },
-    user: { username: "User", email: "user@localhost.com", password: "user123@", role: "user"}
-};
+// const dummyUsers = {
+//     admin: { username: "Admin", email: "admin@localhost.com", password: "admin123@", role: "admin" },
+//     user: { username: "User", email: "user@localhost.com", password: "user123@", role: "user"}
+// };
 
 // let currUser = JSON.parse(sessionStorage.getItem('currUser')) || null;
 
@@ -21,30 +21,6 @@ const dummyUsers = {
 let currentFilter = "all";
 let currPage = 1;
 const projectsPerPage = 3;
-
-// Function to check login credentials and log the user in
-// function checkLoginCredentials(event) {
-//     event.preventDefault();
-
-//     const email = document.getElementById('email').value;
-//     const password = document.getElementById('password').value;
-
-//     // Check if the credentials match any of the existing profiles
-//     const user = Object.values(dummyUsers).find(user => user.email === email && user.password === password);
-
-//     if (user) {
-//         // Store user data in sessionStorage for persistent login   
-//         sessionStorage.setItem('currUser', JSON.stringify(user));
-//         currUser = user;
-
-//         window.location.href = "../MainApp/index.html";
-//     } else {
-//         // If login fails, show an error message
-//         alert("Invalid email or password. Please try again.");
-//     }
-// }
-
-// document.getElementById('loginForm').addEventListener('submit', checkLoginCredentials);
 
 //? Function to display all the projects that are currently hosted on DS_crowdfunding app
 function displayProjects() {
@@ -190,41 +166,12 @@ function goToPage(page) {
     // console.log("Navigation to page: ", currPage);
 }
 
-//? Redirecting functions
-function redirectToLoginPage() {
-    // console.log(window.location.href);
-    window.location.href = "./LoginRegister/login_register.html";
-}
-
-function redirectToHomePage() {
-    // console.log(window.location.href);
-    window.location.href = "/src/main/resources/src (front-end)/index.html";
-}
-
+//? handlingSupport function for specific's project information page
 function handleSupport(projectID, projectStatus) {
-    // alert(`Please login or register to support "${projectTitle}".`);
-    // if(!currUser) {
-    //     alert("Please login to check this project's information.");
-    //     return;
-    // }
-
     window.location.href = `./ProjectDisplay/project_display.html?id=${projectID}&status=${projectStatus}`;
 }
 
-// // Function to logout the current user from session
-// function logout() {
-//     sessionStorage.removeItem('currUser');
-//     currUser = null;
-//     window.location.href = "../MainApp/index.html";
-// }
 
-// // Function for admin to check projects
-// function manageProjects() {
-//     alert("Admin Panel: Manage your projects.");
-// }
-
-//Displaying all the projects parsed from db
-displayProjects();
 
 
 //! --- Listeners ---
@@ -247,14 +194,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     filterItems.forEach(item => {
         item.addEventListener("click", function () {
-            // Remove 'active' class from all items
+            // Removing 'active' class from all items
             filterItems.forEach(i => i.classList.remove("active"));
 
-            // Add 'active' class to the clicked item
+            // Adding 'active' class to the clicked item
             this.classList.add("active");
 
-            // Perform any action based on the selection
-            const filterType = this.id; // 'filterAll' or 'filterMyProjects'
+            // Performing any action based on the selection
+            const filterType = this.id;
             console.log(`Selected filter: ${filterType}`);
         });
     });
@@ -277,7 +224,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
         modal.hide();
 
-        // Clearing the form after sub
+        // Cleaning the form after sub
         addNewForm.reset();
     });
 });
+
+//? Displaying all the projects parsed from db on load
+displayProjects();

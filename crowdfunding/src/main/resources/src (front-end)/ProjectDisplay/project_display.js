@@ -1,3 +1,4 @@
+// Function to get project's ID from url
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
@@ -39,7 +40,7 @@ function displayProjectInfo() {
     const statusCircle = document.createElement('span');
     statusCircle.classList.add('status-circle');
 
-    // Set status based on progress
+    // Setting status based on progress
     if (progressPercentage >= 100) {
         statusCircle.classList.add('green'); // Fully funded
     } else if (progressPercentage > 0) {
