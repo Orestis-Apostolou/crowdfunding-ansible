@@ -93,7 +93,7 @@ async function displayProjects() {
 
             // Attach event to the button
             const button = projectCard.querySelector("button");
-            button.textContent = "Support Project";
+            button.textContent = "Check Project's info";
             button.onclick = () => handleSupport(project.projectID, project.status);
 
             // Append the project card to the container

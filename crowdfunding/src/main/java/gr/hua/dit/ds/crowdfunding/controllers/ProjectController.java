@@ -59,6 +59,15 @@ public class ProjectController {
     }
 
     @Secured("ROLE_ADMIN")
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<String> deleteProject(@PathVariable int id) {
+        if(projectService.deleteProject(id)) {
+            return ResponseEntity.ok("Project deleted");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+    }
+
+    @Secured("ROLE_ADMIN")
     @PutMapping("/{id}/update-status")
     public ResponseEntity<String> stopProject(@PathVariable int id) {
         Optional<Project> projectOpt = projectService.getProjectById(id);

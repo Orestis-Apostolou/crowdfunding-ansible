@@ -68,7 +68,8 @@ public class SecurityConfig {
                         ).hasRole("USER")
                         .requestMatchers(
                                 "/api/report/{id}/all",
-                                "/api/project/{id}/update-status"
+                                "/api/project/{id}/update-status",
+                                "/api/project/{id}/delete"
                         ).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/project/{id}").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/project/{id}").hasRole("ADMIN")

@@ -4,60 +4,128 @@ function getQueryParam(param) {
     return urlParams.get(param);
 }
 
-function displayProjectInfo() {
+// Function to display the project's info
+async function displayProjectInfo() {
     const projectId = getQueryParam('id');
-    const projectStatus = getQueryParam('status');
 
     if (!projectId) {
         document.getElementById('project-info').innerHTML = `<p>Project not found!</p>`;
         return;
     }
 
-    const project = dummyprojects.find((p) => p.id === parseInt(projectId));
-    if (!project) {
-        document.getElementById('project-info').innerHTML = `<p>Project not found!</p>`;
-        return;
-    }
+    try {
+        // Fetch project details from the backend
+        const response = await fetch(`http://localhost:8080/api/project/${projectId}`);
+        if (!response.ok) throw new Error('Failed to fetch project details.');
 
-    const progressPercentage = Math.min((project.collected / project.goal) * 100, 500).toFixed(2);
+        const project = await response.json();
 
-    // Populating the placeholders
-    document.getElementById('project-image').src = project.image;
-    document.getElementById('project-image').alt = project.title;
-    document.getElementById('project-title').textContent = project.title;
-    document.getElementById('project-description').textContent = project.description;
-    document.getElementById('project-collected').textContent = project.collected;
-    document.getElementById('project-goal').textContent = project.goal;
-    document.getElementById('project-progress-percentage').textContent = progressPercentage;
-    document.getElementById('project-creator').textContent = project.username;
-    document.getElementById('createdBy-Box').style.textDecoration = "underline";
-    
-    const progressBar = document.getElementById('project-progress-bar');
-    progressBar.style.width = `${progressPercentage}%`;
-    progressBar.setAttribute('aria-valuenow', progressPercentage);
-    
-    // Adding the pulsating circle next to the project title
-    const statusCircle = document.createElement('span');
-    statusCircle.classList.add('status-circle');
+        // Populate project details
+        const progressPercentage = Math.min(
+            (project.currentAmount / project.goalAmount) * 100,
+            100
+        ).toFixed(2);
 
-    // Setting status based on progress
-    if (progressPercentage >= 100) {
-        statusCircle.classList.add('green'); // Fully funded
-    } else if (progressPercentage > 0) {
-        statusCircle.classList.add('orange'); // Pending or in-progress
-    }
+        // Format the deadline date
+        const deadline = new Date(project.deadlineForGoal).toLocaleDateString();
 
-    document.getElementById('project-title').insertAdjacentElement('beforebegin', statusCircle);
+        // Set project details
+        document.getElementById('project-image').src = "../img/favicon.png";
+        document.getElementById('project-image').alt = project.title;
+        document.getElementById('project-title').textContent = project.title;
+        document.getElementById('project-description').textContent = project.description;
+        document.getElementById('project-collected').textContent = project.currentAmount;
+        document.getElementById('project-goal').textContent = project.goalAmount;
+        document.getElementById('project-progress-percentage').textContent = progressPercentage;
+        document.getElementById('project-creator').textContent = `${project.organizer.firstName} ${project.organizer.lastName}`;
 
-    // Displaying the admin actions based on project status
-    const adminActions = document.getElementById('adminActions');
-    if(projectStatus !== "Pending") {
-        adminActions.classList.add('d-none');
-    }else {
-        adminActions.classList.remove('d-none');
+        // Add deadline to the UI
+        const deadlineElement = document.createElement('p');
+        deadlineElement.id = 'project-deadline';
+        deadlineElement.classList.add('text-white', 'mt-2');
+        deadlineElement.textContent = `Deadline: ${deadline}`;
+        document.getElementById('project-description').insertAdjacentElement('afterend', deadlineElement);
+
+        const progressBar = document.getElementById('project-progress-bar');
+        progressBar.style.width = `${progressPercentage}%`;
+        progressBar.setAttribute('aria-valuenow', progressPercentage);
+
+        // Add status indicator
+        const statusCircle = document.createElement('span');
+        statusCircle.classList.add('status-circle');
+        if (project.status === 'ACTIVE') {
+            statusCircle.classList.add('green');
+        } else if (project.status === 'PENDING') {
+            statusCircle.classList.add('orange');
+        } else {
+            statusCircle.classList.add('red');
+        }
+        document.getElementById('project-title').insertAdjacentElement('beforebegin', statusCircle);
+
+        // Show admin actions if the project is pending
+        const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+        const adminActions = document.getElementById('adminActions');
+        if (isAdmin && project.status === 'PENDING') {
+            adminActions.classList.remove('d-none');
+        } else {
+            adminActions.classList.add('d-none');
+        }
+
+    } catch (error) {
+        console.error('Error fetching project details:', error);
+        document.getElementById('project-info').innerHTML = `<p>Failed to load project details. Please try again later.</p>`;
     }
 }
 
+// Function to approve a project
+async function approveProject(projectId) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/project/${projectId}/update-status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+
+        if (response.ok) {
+            alert('Project approved successfully.');
+            window.location.reload(); // Reload the page to reflect the status change
+        } else {
+            const error = await response.json();
+            alert(`Failed to approve project: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error approving project:', error);
+        alert('An error occurred while approving the project.');
+    }
+}
+
+// Function to reject a project
+async function rejectProject(projectId) {
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/project/${projectId}/delete`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+
+        if (response.ok) {
+            alert('Project rejected and deleted successfully.');
+            window.location.href = '../index.html'; // Redirect to the homepage
+        } else {
+            const error = await response.json();
+            alert(`Failed to reject project: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error rejecting project:', error);
+        alert('An error occurred while rejecting the project.');
+    }
+}
+
+//? DOM listener
 document.addEventListener('DOMContentLoaded', () => {
     displayProjectInfo();
 
@@ -65,30 +133,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const approveBtn = document.getElementById('approveProjectBtn');
     const rejectBtn = document.getElementById('rejectProjectBtn');
 
+    // Approve button click handler
     approveBtn.addEventListener('click', () => {
         const projectId = getQueryParam('id');
-        
-        if(projectId) {
-            alert(`Project with ID: ${projectId} has been successfully approved.`);
+        if (projectId) {
+            approveProject(projectId); // Calling the approveProject function
         } else {
             alert('Project ID not found.');
         }
     });
 
+    // Reject button click handler
     rejectBtn.addEventListener('click', () => {
         const projectId = getQueryParam('id');
-
-        if(projectId) {
-            const reason = prompt('Enter a reason for rejecting the project:');
-            
-            if(reason) {
-                alert(`Project with ID: ${projectId} has been rejected.\nReason given: ${reason}`);
-            }
+        if (projectId) {
+            rejectProject(projectId); // Calling the rejectProject function
         } else {
-            alert('Project ID not found');
+            alert('Project ID not found.');
         }
     });
 
+    // Tooltip functionality for report issue button
     const reportBtn = document.getElementById('reportIssueBtn');
     const tooltip = document.getElementById('reportIssueTooltip');
 
