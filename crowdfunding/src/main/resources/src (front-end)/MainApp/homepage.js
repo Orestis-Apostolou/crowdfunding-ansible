@@ -1,21 +1,15 @@
-const dummyprojects = [
-    { id: 1, title: "Project #1", description: "This is the description for project #1.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 5000, collected: 8730, username: "NikosZap", status: "Active" },
-    { id: 2, title: "Project #2", description: "This is the description for project #2.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7500, collected: 3150,  username: "Mhtsakos", status: "Pending"},
-    { id: 3, title: "Project #3", description: "This is the description for project #3.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 2789, username: "Oratios", status: "Active" },
-    { id: 4, title: "Project #4", description: "This is the description for project #4.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 2500, collected: 48, username: "Mhtsakos", status: "Pending" },
-    { id: 5, title: "Project #5", description: "This is the description for project #5.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 3333, username: "Kypraios", status: "Active" },
-    { id: 6, title: "Project #6", description: "This is the description for project #6.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 14570, username: "Milkocup", status: "Active" },
-    { id: 7, title: "Project #7", description: "This is the description for project #7.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 27000, collected: 18752, username: "Miltos_Kat", status: "Pending" },
-    { id: 8, title: "Project #8", description: "This is the description for project #8.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 50000, collected: 37890, username: "Alex", status: "Pending" },
-    { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia", status: "Active" }
-];
+// const dummyprojects = [
+//     { id: 1, title: "Project #1", description: "This is the description for project #1.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 5000, collected: 8730, username: "NikosZap", status: "Active" },
+//     { id: 2, title: "Project #2", description: "This is the description for project #2.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7500, collected: 3150,  username: "Mhtsakos", status: "Pending"},
+//     { id: 3, title: "Project #3", description: "This is the description for project #3.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 2789, username: "Oratios", status: "Active" },
+//     { id: 4, title: "Project #4", description: "This is the description for project #4.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 2500, collected: 48, username: "Mhtsakos", status: "Pending" },
+//     { id: 5, title: "Project #5", description: "This is the description for project #5.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 3333, username: "Kypraios", status: "Active" },
+//     { id: 6, title: "Project #6", description: "This is the description for project #6.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 14570, username: "Milkocup", status: "Active" },
+//     { id: 7, title: "Project #7", description: "This is the description for project #7.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 27000, collected: 18752, username: "Miltos_Kat", status: "Pending" },
+//     { id: 8, title: "Project #8", description: "This is the description for project #8.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 50000, collected: 37890, username: "Alex", status: "Pending" },
+//     { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia", status: "Active" }
+// ];
 
-// const dummyUsers = {
-//     admin: { username: "Admin", email: "admin@localhost.com", password: "admin123@", role: "admin" },
-//     user: { username: "User", email: "user@localhost.com", password: "user123@", role: "user"}
-// };
-
-// let currUser = JSON.parse(sessionStorage.getItem('currUser')) || null;
 
 //? Globals for pagination and filter usage
 let currentFilter = "all";
@@ -31,7 +25,7 @@ async function displayProjects() {
     try {
         let endpoint;
 
-        // Determine endpoint based on filter type
+        // Determining endpoint based on filter type
         if (currentFilter === "myProjects") {
             endpoint = "http://localhost:8080/api/project/personal";
         } else if (currentFilter === "Pending") {
@@ -59,22 +53,22 @@ async function displayProjects() {
             ? projects.filter(project => project.organizer.username === username)
             : projects;
 
-        // Calculate pagination
+        // Calculating pagination
         const startIndex = (currPage - 1) * projectsPerPage;
         const endIndex = currPage * projectsPerPage;
 
-        // Clear the container and pagination
+        // Cleaning the container and pagination
         container.innerHTML = "";
         pagination.innerHTML = "";
 
-        // Get the projects to display on the current page
+        // Getting the projects to display on the current page
         const projectsToDisplay = filteredProjects.slice(startIndex, endIndex);
 
-        // Populate the project cards
+        // Populating the project cards
         projectsToDisplay.forEach(project => {
             const projectCard = template.cloneNode(true);
 
-            // Populate the template with project data
+            // Populating the template with project data
             projectCard.querySelector(".card-img-top").src = "/src/main/resources/src (front-end)/img/favicon.png";
             projectCard.querySelector(".card-img-top").alt = project.title;
             projectCard.querySelector(".card-title").textContent = project.title;
@@ -96,14 +90,14 @@ async function displayProjects() {
                 statusText.textContent = "Completed";
             }
 
-            // Calculate and display the progress percentage
+            // Calculating and display the progress percentage
             const progressPercentage = (project.currentAmount / project.goalAmount) * 100;
             const progressBar = projectCard.querySelector(".progress-bar");
             progressBar.style.width = `${progressPercentage}%`;
             progressBar.setAttribute("aria-valuenow", progressPercentage);
             projectCard.querySelector(".progress-text").textContent = `${progressPercentage.toFixed(1)}% Funded`;
 
-            // Add "Created by" text
+            // Adding "Created by" text
             const cardBody = projectCard.querySelector(".card-body");
             const createdBy = document.createElement("p");
             createdBy.classList.add("mt-3", "text-center");
@@ -113,16 +107,16 @@ async function displayProjects() {
             createdBy.textContent = `Created by: ${project.organizer.username}`;
             cardBody.appendChild(createdBy);
 
-            // Attach event to the button
+            // Attaching event to the button
             const button = projectCard.querySelector("button");
             button.textContent = "Check Project's Info";
             button.onclick = () => handleSupport(project.projectID, project.status);
 
-            // Append the project card to the container
+            // Appending the project card to the container
             container.appendChild(projectCard);
         });
 
-        // Initialize pagination
+        // Initializing pagination
         paginationInitialization(pagination, filteredProjects.length);
     } catch (error) {
         console.error("Error displaying projects:", error);
@@ -220,7 +214,7 @@ function handleSupport(projectID, projectStatus) {
 
 //? Handling logout
 function handleLogout() {
-    // Clear sessionsStorage
+    // Cleaning sessionsStorage on logout
     sessionStorage.clear();
 
     //Redirecting to homepage
@@ -235,40 +229,40 @@ function handleLogout() {
 //? Filter functionality listeners
 document.getElementById("filterAll").addEventListener("click", () => {
     currentFilter = "all";
-    currPage = 1; // Reseting to the first page
+    currPage = 1; // Resetting to the first page
     displayProjects();
 });
 
 document.getElementById("filterMyProjects").addEventListener("click", () => {
     currentFilter = "myProjects";
-    currPage = 1; // Reseting to the first page
+    currPage = 1; // Resetting to the first page
     displayProjects();
 });
 
 //? DOM listener
 document.addEventListener("DOMContentLoaded", function () {
-    // Check if the user is logged in
+    // Checking if the user is logged in
     const accessToken = sessionStorage.getItem("token");
     const username = sessionStorage.getItem("username");
     const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
-    // Get filter button and dropdown elements
+    // Getting filter button and dropdown elements
     const filterButtonContainer = document.querySelector(".dropdown");
     const filterDropdown = document.getElementById("filterDropdown");
     const filterAll = document.getElementById("filterAll");
     const filterMyProjects = document.getElementById("filterMyProjects");
 
     if (!username || !accessToken) {
-        // Hide the filter button if no user is logged in
+        // Hiding the filter button if no user is logged in
         if (filterButtonContainer) {
             filterButtonContainer.style.display = "none";
         }
     } else {
-        // Show the filter button if the user is logged in
+        // Showing the filter button if the user is logged in
         if (filterButtonContainer) {
             filterButtonContainer.style.display = "block";
 
-            // Update filter options based on user role
+            // Updating filter options based on user role
             if (isAdmin) {
                 // Admin: Active Projects / Pending Verification
                 filterAll.textContent = "All Projects";
@@ -285,50 +279,50 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Handle Dropdown Item Clicks
+    // Handling Dropdown Item Clicks
     const filterItems = document.querySelectorAll(".dropdown-item");
 
     filterItems.forEach(item => {
         item.addEventListener("click", function () {
-            // Remove 'active' class from all items
+            // Removing 'active' class from all items
             filterItems.forEach(i => i.classList.remove("active"));
 
-            // Add 'active' class to the clicked item
+            // Adding 'active' class to the clicked item
             this.classList.add("active");
 
-            // Update filter logic
+            // Updating filter logic
             const filterType = this.id;
             if (filterType === "filterAll" || filterType === "filterActive") {
-                currentFilter = "all"; // Show all projects (Active)
+                currentFilter = "all"; // Showing all projects (Active)
             } else if (filterType === "filterMyProjects") {
-                currentFilter = "myProjects"; // Show user-specific projects
+                currentFilter = "myProjects"; // Showing user-specific projects
             } else if (filterType === "filterPending") {
-                currentFilter = "Pending"; // Show projects pending verification
+                currentFilter = "Pending"; // Showing projects pending verification
             }
-            currPage = 1; // Reset to the first page
-            displayProjects(); // Refresh the displayed projects
+            currPage = 1; // Resetting to the first page
+            displayProjects(); // Refreshing the displayed projects
         });
     });
 
-    // Handle New Project Form Submission
+    // Handling New Project Form Submission
     const addNewForm = document.getElementById('addNewForm');
     if (addNewForm) {
         addNewForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            // Check if the user is logged in
+            // Checking if the user is logged in
             if (!username || !accessToken) {
                 alert("Please log in to create a new project.");
                 return;
             }
 
-            // Collect form data
+            // Collecting form data
             const title = document.getElementById('projectTitle').value.trim();
             const description = document.getElementById('projectDescription').value.trim();
             const goalAmount = parseFloat(document.getElementById('projectGoal').value);
             const deadlineForGoal = document.getElementById('projectDeadline').value;
 
-            // Validate inputs
+            // Validating inputs
             if (!title || !description || !goalAmount || !deadlineForGoal) {
                 alert("Please fill in all fields.");
                 return;
@@ -337,7 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Converting deadline into localdatetime
             const deadlineForGoalConv = `${deadlineForGoal}T00:00:00`
 
-            // Prepare the request body
+            // Preparing the request body
             const newProject = {
                 title,
                 description,
@@ -359,14 +353,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     alert("Project created successfully!");
 
-                    // Close the modal
+                    // Closing the modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
                     modal.hide();
 
-                    // Reset the form
+                    // Resetting the form
                     addNewForm.reset();
 
-                    // Refresh the project display
+                    // Refreshing the project display
                     displayProjects();
                 } else {
                     const error = await response.json();
@@ -379,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Handle Navbar Content
+    // Handling Navbar Content
     const headerRightContent = document.querySelector("#headerRightContent");
 
     if (accessToken && username) {
@@ -396,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
         headerRightContent.appendChild(welcomeMessage);
         headerRightContent.appendChild(logoutButton);
 
-        // Show admin-specific buttons
+        // Showing admin-specific buttons
         const reportButton = document.querySelector(".custom-report-btn");
         if (isAdmin && reportButton) {
             reportButton.style.display = "block";
@@ -410,14 +404,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         headerRightContent.appendChild(loginRegisterButton);
 
-        // Hide admin-specific buttons
+        // Hiding admin-specific buttons
         const reportButton = document.querySelector(".custom-report-btn");
         if (reportButton) {
             reportButton.style.display = "none";
         }
     }
 
-    // Display projects on page load
+    // Displaying projects on page load
     displayProjects();
 });
 

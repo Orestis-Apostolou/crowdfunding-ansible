@@ -14,22 +14,22 @@ async function displayProjectInfo() {
     }
 
     try {
-        // Fetch project details from the backend
+        // Fetching project details from the backend
         const response = await fetch(`http://localhost:8080/api/project/${projectId}`);
         if (!response.ok) throw new Error('Failed to fetch project details.');
 
         const project = await response.json();
 
-        // Populate project details
+        // Populating project details
         const progressPercentage = Math.min(
             (project.currentAmount / project.goalAmount) * 100,
             100
         ).toFixed(2);
 
-        // Format the deadline date
+        // Formatting the deadline date
         const deadline = new Date(project.deadlineForGoal).toLocaleDateString();
 
-        // Set project details
+        // Setting project details
         document.getElementById('project-image').src = "../img/favicon.png";
         document.getElementById('project-image').alt = project.title;
         document.getElementById('project-title').textContent = project.title;
@@ -39,7 +39,7 @@ async function displayProjectInfo() {
         document.getElementById('project-progress-percentage').textContent = progressPercentage;
         document.getElementById('project-creator').textContent = `${project.organizer.firstName} ${project.organizer.lastName}`;
 
-        // Add deadline to the UI
+        // Adding deadline to the UI
         const deadlineElement = document.createElement('p');
         deadlineElement.id = 'project-deadline';
         deadlineElement.classList.add('text-white', 'mt-2');
@@ -50,7 +50,7 @@ async function displayProjectInfo() {
         progressBar.style.width = `${progressPercentage}%`;
         progressBar.setAttribute('aria-valuenow', progressPercentage);
 
-        // Add status indicator
+        // Adding status indicator
         const statusCircle = document.createElement('span');
         statusCircle.classList.add('status-circle');
         if (project.status === 'ACTIVE') {
@@ -62,7 +62,7 @@ async function displayProjectInfo() {
         }
         document.getElementById('project-title').insertAdjacentElement('beforebegin', statusCircle);
 
-        // Show admin actions if the project is pending
+        // Showing admin actions if the project is pending
         const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
         const adminActions = document.getElementById('adminActions');
         if (isAdmin && project.status === 'PENDING') {
@@ -90,7 +90,7 @@ async function approveProject(projectId) {
 
         if (response.ok) {
             alert('Project approved successfully.');
-            window.location.reload(); // Reload the page to reflect the status change
+            window.location.reload(); // Reloading the page to reflect the status change
         } else {
             const error = await response.json();
             alert(`Failed to approve project: ${error.message}`);
@@ -114,7 +114,7 @@ async function rejectProject(projectId) {
 
         if (response.ok) {
             alert('Project rejected and deleted successfully.');
-            window.location.href = '../index.html'; // Redirect to the homepage
+            window.location.href = '../index.html'; // Redirecting to the homepage
         } else {
             const error = await response.json();
             alert(`Failed to reject project: ${error.message}`);
