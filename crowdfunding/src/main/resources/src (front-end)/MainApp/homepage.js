@@ -196,11 +196,6 @@ function paginationInitialization(pagination, totalProjects) {
 }
 
 function goToPage(page) {
-    const filteredProjects = currentFilter === "all" ? dummyprojects : dummyprojects.filter(project => project.status === "Pending");
-    const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
-
-    if (page < 1 || page > totalPages) return;
-
     currPage = page;
     displayProjects();
 
