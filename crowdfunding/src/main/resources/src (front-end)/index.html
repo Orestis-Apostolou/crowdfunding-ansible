@@ -22,7 +22,7 @@
                 <img src="./img/favicon.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top" style="border-radius: 50%;">
                 CrowdFunding
             </a>
-            <button class="btn btn-outline-light" onclick="window.location.href='./LoginRegister/login_register.html'">Login / Register</button>
+            <div id="headerRightContent" class="d-flex align-items-center"></div>
         </div>
     </nav>
 
@@ -58,17 +58,28 @@
                         </div>
                         <div class="modal-body">
                             <form id="addNewForm">
-                                <div class="mb-0">
+                                <!-- Title -->
+                                <div class="mb-3">
                                     <label for="projectTitle" class="form-label">Title</label>
-                                    <input type="text" class="form-control" id="projectTitle" placeholder="E.g., CrowdFunding Application" required>
+                                    <input type="text" class="form-control" id="projectTitle" placeholder="Project Title" required>
                                 </div>
-                                <div class="mb-0">
+
+                                <!-- Description -->
+                                <div class="mb-3">
                                     <label for="projectDescription" class="form-label">Description</label>
-                                    <textarea class="form-control" id="projectDescription" placeholder="Describe your project here!" required></textarea>
+                                    <textarea class="form-control" id="projectDescription" placeholder="Project Description" rows="3" required></textarea>
                                 </div>
-                                <div class="mb-0">
-                                    <label for="projectGoal" class="form-label">Goal</label>
-                                    <input type="number" min="1" max="1000000" class="form-control" id="projectGoal" placeholder="E.g., 1500 $" required>
+
+                                <!-- Goal Amount -->
+                                <div class="mb-3">
+                                    <label for="projectGoal" class="form-label">Goal Amount ($)</label>
+                                    <input type="number" class="form-control" id="projectGoal" min="1" placeholder="Goal Amount" required>
+                                </div>
+
+                                <!-- Deadline -->
+                                <div class="mb-3">
+                                    <label for="projectDeadline" class="form-label">Deadline</label>
+                                    <input type="date" class="form-control" id="projectDeadline" required>
                                 </div>
                                 <button type="submit" class="btn btn-danger">Submit</button>
                             </form>
@@ -83,7 +94,7 @@
         </div>
 
         <!-- Admin Report Button (top right) -->
-        <button class="btn btn-outline-warning custom-report-btn" onclick="window.location.href='./Reports/reports.html'">
+        <button class="btn btn-outline-warning custom-report-btn" style="display: none;" onclick="window.location.href='./Reports/reports.html'">
             <i class="fa-solid fa-chart-line"></i> Report Analytics
         </button>
     </div>
