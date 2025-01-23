@@ -432,4 +432,3 @@ document.addEventListener("DOMContentLoaded", function () {
     // Displaying projects on page load
     displayProjects();
 });
-
