@@ -4,6 +4,16 @@ function getQueryParam(param) {
     return urlParams.get(param);
 }
 
+// Function to handle the "Report Analytics" redirection
+function redirectToReports(projectId) {
+    if (!projectId) {
+        alert("Project ID not found.");
+        return;
+    }
+    // Redirecting to the reports page with the project ID in the URL
+    window.location.href = `../Reports/reports.html?id=${projectId}`;
+}
+
 // Function to display the project's info
 async function displayProjectInfo() {
     const projectId = getQueryParam('id');
@@ -205,6 +215,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tooltip functionality for report issue button
     const reportBtn = document.getElementById('reportIssueBtn');
     const tooltip = document.getElementById('reportIssueTooltip');
+    const reportAnalyticsBtn = document.getElementById('adminReportBtn');
+
+    // Report Analytics button handler
+    reportAnalyticsBtn.addEventListener("click", () => {
+        const projectId = getQueryParam("id");
+        redirectToReports(projectId);
+    });
 
     // Displaying tooltip on hover
     reportBtn.addEventListener('mouseenter', (event) => {
@@ -242,10 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         submitReport(projectId, issueTitle, issueDescription);
-        // alert(`Issue Reported:\n\nTitle: ${issueTitle}\nDescription: ${issueDescription}`);
-
-        // // Closing modal after submission
-        // const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
         modal.hide();
     });
 });
