@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Project {
@@ -17,6 +18,10 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Integer projectID;
+
+    @Column
+    @Lob
+    private String image;
 
     @Column
     private String title;
@@ -190,6 +195,14 @@ public class Project {
                 ", funds=" + funds +
                 ", reports=" + reports +
                 '}';
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage( String image ) {
+        this.image = image;
     }
 
     public Status getNextStatus() {
