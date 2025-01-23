@@ -24,14 +24,15 @@ async function displayProjects() {
 
     try {
         let endpoint;
+        const username = sessionStorage.getItem("username"); // Logged-in user's username
+        const isAdmin = sessionStorage.getItem("isAdmin") === "true"; // Check if the user is an admin
+        const isLoggedIn = Boolean(username); // Check if a user is logged in
 
-        // Determining endpoint based on filter type
+        // Determining the endpoint based on the filter type
         if (currentFilter === "myProjects") {
             endpoint = "http://localhost:8080/api/project/personal";
-        } else if (currentFilter === "Pending") {
+        } else if (currentFilter === "Pending" && isAdmin) {
             endpoint = "http://localhost:8080/api/project/all/PENDING";
-        } else if (currentFilter === "Active") {
-            endpoint = "http://localhost:8080/api/project/all/ACTIVE";
         } else {
             endpoint = "http://localhost:8080/api/project/all";
         }
@@ -39,7 +40,7 @@ async function displayProjects() {
         // Fetching projects from the endpoint
         const response = await fetch(endpoint, {
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
             }
         });
 
@@ -47,11 +48,33 @@ async function displayProjects() {
 
         const projects = await response.json();
 
-        // For "My Projects," filter by the logged-in user's username
-        const username = sessionStorage.getItem("username");
-        let filteredProjects = currentFilter === "myProjects"
-            ? projects.filter(project => project.organizer.username === username)
-            : projects;
+        // Applying filtering logic based on user role and filter type
+        let filteredProjects;
+
+        if (isAdmin) {
+            // Admin behavior
+            if (currentFilter === "Pending") {
+                // Displaying only pending projects in "Pending Verification"
+                filteredProjects = projects.filter(project => project.status === "PENDING");
+            } else {
+                // Displaying all projects (Active, Pending, Stopped, Completed) in "All Projects"
+                filteredProjects = projects;
+            }
+        } else if (isLoggedIn) {
+            // User behavior
+            if (currentFilter === "myProjects") {
+                // Displaying all projects created by the user in "My Projects"
+                filteredProjects = projects.filter(project => project.organizer.username === username);
+            } else {
+                // Displaying only Active, Stopped, and Completed projects in "All Projects"
+                filteredProjects = projects.filter(
+                    project => project.status === "ACTIVE" || project.status === "STOPPED" || project.status === "COMPLETED"
+                );
+            }
+        } else {
+            // For non-logged-in users, display all projects (fallback behavior)
+            filteredProjects = projects.filter(project => project.status === "ACTIVE");
+        }
 
         // Calculating pagination
         const startIndex = (currPage - 1) * projectsPerPage;

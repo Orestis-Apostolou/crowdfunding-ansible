@@ -65,10 +65,30 @@ async function displayProjectInfo() {
         // Showing admin actions if the project is pending
         const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
         const adminActions = document.getElementById('adminActions');
-        if (isAdmin && project.status === 'PENDING') {
-            adminActions.classList.remove('d-none');
+        const adminReportBtn = document.getElementById('adminReportBtn');
+        const reportIssueBtn = document.getElementById('reportIssueBtn');
+
+        // General display if
+        if(!(project.status === "ACTIVE")) {
+            reportIssueBtn.classList.add('d-none');
+        }else {
+            reportIssueBtn.classList.remove('d-none');
+        }
+
+        // If cases for admin display
+        if (isAdmin) {
+            // Showing Admin Actions
+            if (project.status === 'PENDING') {
+                adminActions.classList.remove('d-none');
+            } else {
+                // Showing Admin Report Button
+                adminReportBtn.style.display = 'block';
+                adminActions.classList.add('d-none');
+            }
         } else {
+            // Hiding Admin-specific elements
             adminActions.classList.add('d-none');
+            adminReportBtn.style.display = 'none';
         }
 
     } catch (error) {
@@ -122,6 +142,35 @@ async function rejectProject(projectId) {
     } catch (error) {
         console.error('Error rejecting project:', error);
         alert('An error occurred while rejecting the project.');
+    }
+}
+
+// Function to submit a report
+async function submitReport(projectId, title, description) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/report/${projectId}/new`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            },
+            body: JSON.stringify({
+                title,
+                description
+            })
+        });
+
+        if (response.ok) {
+            alert('Report submitted successfully.');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
+            modal.hide();
+        } else {
+            const error = await response.json();
+            alert(`Failed to submit report: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error submitting report:', error);
+        alert('An error occurred while submitting the report.');
     }
 }
 
@@ -183,13 +232,20 @@ document.addEventListener('DOMContentLoaded', () => {
     reportForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
+        const projectId = getQueryParam('id');
         const issueTitle = document.getElementById('issueTitle').value;
         const issueDescription = document.getElementById('issueDescription').value;
 
-        alert(`Issue Reported:\n\nTitle: ${issueTitle}\nDescription: ${issueDescription}`);
+        if(!projectId) {
+            alert('Project ID not found.');
+            return;
+        }
 
-        // Closing modal after submission
-        const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
+        submitReport(projectId, issueTitle, issueDescription);
+        // alert(`Issue Reported:\n\nTitle: ${issueTitle}\nDescription: ${issueDescription}`);
+
+        // // Closing modal after submission
+        // const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
         modal.hide();
     });
 });
