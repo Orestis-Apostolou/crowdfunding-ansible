@@ -29,16 +29,35 @@ async function displayProjects() {
     const template = document.getElementById("projectCardTemplate").content;
 
     try {
-        // Fetching projects from the backend
-        const response = await fetch("http://localhost:8080/api/project/all");
+        let endpoint;
+
+        // Determine endpoint based on filter type
+        if (currentFilter === "myProjects") {
+            endpoint = "http://localhost:8080/api/project/personal";
+        } else if (currentFilter === "Pending") {
+            endpoint = "http://localhost:8080/api/project/all/PENDING";
+        } else if (currentFilter === "Active") {
+            endpoint = "http://localhost:8080/api/project/all/ACTIVE";
+        } else {
+            endpoint = "http://localhost:8080/api/project/all";
+        }
+
+        // Fetching projects from the endpoint
+        const response = await fetch(endpoint, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });
+
         if (!response.ok) throw new Error("Failed to fetch projects.");
 
-        const projects = await response.json(); // Parse the response into JSON
+        const projects = await response.json();
 
-        // Filter projects based on the current filter
-        let filteredProjects = currentFilter === "all"
-            ? projects
-            : projects.filter(project => project.status === (currentFilter === "Pending" ? "PENDING" : "ACTIVE"));
+        // For "My Projects," filter by the logged-in user's username
+        const username = sessionStorage.getItem("username");
+        let filteredProjects = currentFilter === "myProjects"
+            ? projects.filter(project => project.organizer.username === username)
+            : projects;
 
         // Calculate pagination
         const startIndex = (currPage - 1) * projectsPerPage;
@@ -69,9 +88,12 @@ async function displayProjects() {
             } else if (project.status === "PENDING") {
                 statusCircle.style.backgroundColor = "orange";
                 statusText.textContent = "Pending";
-            } else {
+            } else if (project.status === "STOPPED") {
                 statusCircle.style.backgroundColor = "red";
-                statusText.textContent = "Unknown";
+                statusText.textContent = "Stopped";
+            } else if (project.status === "COMPLETED") {
+                statusCircle.style.backgroundColor = "blue";
+                statusText.textContent = "Completed";
             }
 
             // Calculate and display the progress percentage
@@ -93,7 +115,7 @@ async function displayProjects() {
 
             // Attach event to the button
             const button = projectCard.querySelector("button");
-            button.textContent = "Check Project's info";
+            button.textContent = "Check Project's Info";
             button.onclick = () => handleSupport(project.projectID, project.status);
 
             // Append the project card to the container
@@ -107,6 +129,7 @@ async function displayProjects() {
         alert("Failed to load projects. Please try again later.");
     }
 }
+
 
 //? Pagination Function
 function paginationInitialization(pagination, totalProjects) {
@@ -248,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Update filter options based on user role
             if (isAdmin) {
                 // Admin: Active Projects / Pending Verification
-                filterAll.textContent = "Active Projects";
+                filterAll.textContent = "All Projects";
                 filterAll.id = "filterActive"; // Change ID for clarity
                 filterMyProjects.textContent = "Pending Verification";
                 filterMyProjects.id = "filterPending"; // Change ID for clarity
