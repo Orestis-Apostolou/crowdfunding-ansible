@@ -409,11 +409,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     justify-content: center;
     align-items: center;
     width: 150px;
-    height: 80px;
+    height: 100px;
     border: 2px dashed var(--disabled-text-color);
     border-radius: 15px;
     text-align: center;
-    color: #6c757d;
+    color: var(--disabled-text-color);
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;

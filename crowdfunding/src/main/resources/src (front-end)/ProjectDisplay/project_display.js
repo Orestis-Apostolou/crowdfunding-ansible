@@ -32,8 +32,7 @@ async function displayProjectInfo() {
 
         // Populating project details
         const progressPercentage = Math.min(
-            (project.currentAmount / project.goalAmount) * 100,
-            100
+            (project.currentAmount / project.goalAmount) * 100
         ).toFixed(2);
 
         // Formatting the deadline date
@@ -43,7 +42,7 @@ async function displayProjectInfo() {
         if(project.image) {
             document.getElementById('project-image').src = `data:image/png;base64,${project.image}`;
         }else {
-            document.getElementById('project-image').src = "/src/main/resources/src (front-end)/img/favicon.png";
+            document.getElementById('project-image').src = "../img/favicon.png";
         }
         document.getElementById('project-image').alt = project.title;
         document.getElementById('project-title').textContent = project.title;

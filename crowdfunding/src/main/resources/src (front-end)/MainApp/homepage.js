@@ -83,7 +83,7 @@ async function displayProjects() {
             if(project.image) {
                 imageElement.src = `data:image/png;base64,${project.image}`;
             }else {
-                imageElement.src = "/src/main/resources/src (front-end)/img/favicon.png";
+                imageElement.src = "./img/favicon.png";
             }
             projectCard.querySelector(".card-img-top").alt = project.title;
             projectCard.querySelector(".card-title").textContent = project.title;
@@ -444,3 +444,5 @@ document.addEventListener("DOMContentLoaded", function () {
     // Displaying projects on page load
     displayProjects();
 });
+
+console.log(window.location.href);

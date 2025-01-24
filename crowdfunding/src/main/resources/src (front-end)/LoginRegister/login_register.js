@@ -90,3 +90,5 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         alert('An error occured while registering.');
     }
 });
+
+console.log(window.location.href);
