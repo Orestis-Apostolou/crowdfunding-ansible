@@ -44,7 +44,8 @@
                         aria-valuemax="100">
                     </div>
                 </div>
-                <button class="mt-4" onclick="alert('Support functionality will be added!')">Support This Project</button>
+                <!-- Fund This Project Button -->
+                <button id="fundProjectBtn" class="btn btn-primary mt-3">Fund This Project</button>
                 <span class="mt-2" id="createdBy-Box"><strong>Created by:</strong> <span id="project-creator"></span></span>
             </div>
         </div>
@@ -58,6 +59,32 @@
             <button id="reportIssueBtn" class="btn btn-danger d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#reportIssueModal">
                 Report Issue&nbsp;<i class="fa-solid fa-flag"></i>
             </button>
+        </div>
+    </div>
+
+    <!-- Modal Section -->
+    <!-- Fund Project Modal -->
+    <div class="modal fade" id="fundProjectModal" tabindex="-1" aria-labelledby="fundProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fundProjectModalLabel">Fund This Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fundProjectForm">
+                        <div class="mb-3">
+                            <label for="fundAmount" class="form-label">Funding Amount</label>
+                            <input type="number" class="form-control" id="fundAmount" placeholder="Enter amount" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fundMessage" class="form-label">Message (Optional)</label>
+                            <textarea class="form-control" id="fundMessage" placeholder="Write a message (optional)"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 

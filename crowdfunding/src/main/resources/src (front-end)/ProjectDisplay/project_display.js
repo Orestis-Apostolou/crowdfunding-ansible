@@ -159,6 +159,42 @@ async function rejectProject(projectId) {
     }
 }
 
+// Function to handle funding a project
+async function fundProject(projectId, amount, message) {
+    if (!amount || isNaN(amount) || amount < 1) {
+        alert('Please provide a valid funding amount.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/fund/${projectId}/new`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`, // Using token if required
+            },
+            body: JSON.stringify({
+                amount: parseFloat(amount),
+                message: message.trim(),
+                public: true
+            }),
+        });
+
+        if (response.ok) {
+            alert('Funding submitted successfully!');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('fundProjectModal'));
+            modal.hide(); // Closing the modal
+            window.location.reload(); // Reloading to update funding progress
+        } else {
+            const error = await response.json();
+            alert(`Failed to fund project: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error funding project:', error);
+        alert('An error occurred while submitting the funding.');
+    }
+}
+
 // Function to submit a report
 async function submitReport(projectId, title, description) {
     try {
@@ -191,6 +227,32 @@ async function submitReport(projectId, title, description) {
 //? DOM listener
 document.addEventListener('DOMContentLoaded', () => {
     displayProjectInfo();
+
+    // Funding Project Button and Form
+    const fundProjectBtn = document.getElementById('fundProjectBtn');
+    const fundProjectForm = document.getElementById('fundProjectForm');
+    const fundProjectModal = new bootstrap.Modal(document.getElementById('fundProjectModal'));
+
+    // Showing modal on button click
+    fundProjectBtn.addEventListener('click', () => {
+        fundProjectModal.show();
+    });
+
+    // Handling form submission
+    fundProjectForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const projectId = getQueryParam('id');
+        const amount = document.getElementById('fundAmount').value;
+        const message = document.getElementById('fundMessage').value;
+
+        if (!projectId) {
+            alert('Project ID not found.');
+            return;
+        }
+
+        fundProject(projectId, amount, message); // Calling funding function
+    });
 
     // Admin action buttons
     const approveBtn = document.getElementById('approveProjectBtn');
