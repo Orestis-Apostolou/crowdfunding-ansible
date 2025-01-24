@@ -1,16 +1,3 @@
-// const dummyprojects = [
-//     { id: 1, title: "Project #1", description: "This is the description for project #1.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 5000, collected: 8730, username: "NikosZap", status: "Active" },
-//     { id: 2, title: "Project #2", description: "This is the description for project #2.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7500, collected: 3150,  username: "Mhtsakos", status: "Pending"},
-//     { id: 3, title: "Project #3", description: "This is the description for project #3.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 2789, username: "Oratios", status: "Active" },
-//     { id: 4, title: "Project #4", description: "This is the description for project #4.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 2500, collected: 48, username: "Mhtsakos", status: "Pending" },
-//     { id: 5, title: "Project #5", description: "This is the description for project #5.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 3333, username: "Kypraios", status: "Active" },
-//     { id: 6, title: "Project #6", description: "This is the description for project #6.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 7000, collected: 14570, username: "Milkocup", status: "Active" },
-//     { id: 7, title: "Project #7", description: "This is the description for project #7.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 27000, collected: 18752, username: "Miltos_Kat", status: "Pending" },
-//     { id: 8, title: "Project #8", description: "This is the description for project #8.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 50000, collected: 37890, username: "Alex", status: "Pending" },
-//     { id: 9, title: "Project #9", description: "This is the description for project #9.", image: "/src/main/resources/src (front-end)/img/favicon.png", link: "#", goal: 12500, collected: 12490, username: "Sia", status: "Active" }
-// ];
-
-
 //? Globals for pagination and filter usage
 let currentFilter = "all";
 let currPage = 1;
@@ -25,8 +12,8 @@ async function displayProjects() {
     try {
         let endpoint;
         const username = sessionStorage.getItem("username"); // Logged-in user's username
-        const isAdmin = sessionStorage.getItem("isAdmin") === "true"; // Check if the user is an admin
-        const isLoggedIn = Boolean(username); // Check if a user is logged in
+        const isAdmin = sessionStorage.getItem("isAdmin") === "true"; // Checking if the user is an admin
+        const isLoggedIn = Boolean(username); // Checking if a user is logged in
 
         // Determining the endpoint based on the filter type
         if (currentFilter === "myProjects") {
@@ -92,7 +79,12 @@ async function displayProjects() {
             const projectCard = template.cloneNode(true);
 
             // Populating the template with project data
-            projectCard.querySelector(".card-img-top").src = "/src/main/resources/src (front-end)/img/favicon.png";
+            const imageElement = projectCard.querySelector(".card-img-top");
+            if(project.image) {
+                imageElement.src = `data:image/png;base64,${project.image}`;
+            }else {
+                imageElement.src = "/src/main/resources/src (front-end)/img/favicon.png";
+            }
             projectCard.querySelector(".card-img-top").alt = project.title;
             projectCard.querySelector(".card-title").textContent = project.title;
 
@@ -335,6 +327,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             // Collecting form data
+            const imageFile = document.getElementById('projectImage').files[0];
             const title = document.getElementById('projectTitle').value.trim();
             const description = document.getElementById('projectDescription').value.trim();
             const goalAmount = parseFloat(document.getElementById('projectGoal').value);
@@ -346,6 +339,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // Encoding image (base64)
+            let base64Image = null;
+            if(imageFile) {
+                const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+                if (imageFile.size > maxSize) {
+                    alert("The selected image exceeds the maximum allowed size of 5 MB. Please upload a smaller image.");
+                    return; // Stopping processing if the file is too large
+                }
+
+                // Encoding the image to Base64
+                const reader = new FileReader();
+                base64Image = await new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result.split(',')[1]); // Extracting Base64 data
+                    reader.onerror = () => reject(new Error("Failed to read image file"));
+                    reader.readAsDataURL(imageFile);
+                });
+            }
+
             // Converting deadline into localdatetime
             const deadlineForGoalConv = `${deadlineForGoal}T00:00:00`
 
@@ -354,7 +365,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 title,
                 description,
                 goalAmount,
-                deadlineForGoal: deadlineForGoalConv
+                deadlineForGoal: deadlineForGoalConv,
+                image: base64Image
             };
 
             try {

@@ -40,7 +40,11 @@ async function displayProjectInfo() {
         const deadline = new Date(project.deadlineForGoal).toLocaleDateString();
 
         // Setting project details
-        document.getElementById('project-image').src = "../img/favicon.png";
+        if(project.image) {
+            document.getElementById('project-image').src = `data:image/png;base64,${project.image}`;
+        }else {
+            document.getElementById('project-image').src = "/src/main/resources/src (front-end)/img/favicon.png";
+        }
         document.getElementById('project-image').alt = project.title;
         document.getElementById('project-title').textContent = project.title;
         document.getElementById('project-description').textContent = project.description;
