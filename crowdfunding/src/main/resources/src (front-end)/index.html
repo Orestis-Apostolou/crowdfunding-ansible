@@ -59,9 +59,11 @@
                         <div class="modal-body">
                             <form id="addNewForm">
                                 <!-- Image -->
-                                <div class="mb-3">
-                                    <label for="projectImage" class="form-label">Project Image</label>
-                                    <input type="file" class="form-control" id="projectImage" accept="image/*">
+                                <div class="custom-file-input-wrapper">
+                                    <label for="projectImage" class="custom-file-input mt-4">
+                                        <i class="fa-solid fa-upload"></i><br>Upload a photo
+                                        <input type="file" class="form-control visually-hidden" id="projectImage" accept="image/*">
+                                    </label>
                                 </div>
                                 
                                 <!-- Title -->
