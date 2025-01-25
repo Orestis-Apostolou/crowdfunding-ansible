@@ -15,14 +15,14 @@ async function displayProjects() {
         const isAdmin = sessionStorage.getItem("isAdmin") === "true"; // Checking if the user is an admin
         const isLoggedIn = Boolean(username); // Checking if a user is logged in
 
-        // Determining the endpoint based on the filter type
-        if (currentFilter === "myProjects") {
-            endpoint = "http://localhost:8080/api/project/personal";
-        } else if (currentFilter === "Pending" && isAdmin) {
-            endpoint = "http://localhost:8080/api/project/all/PENDING";
-        } else {
-            endpoint = "http://localhost:8080/api/project/all";
-        }
+        // Determining the endpoint based on the filter type [Optimized]
+        const endpoints = {
+            myProjects: "http://localhost:8080/api/project/personal",
+            Pending: isAdmin ? "http://localhost:8080/api/project/all/PENDING" : null,
+            all: "http://localhost:8080/api/project/all"
+        };
+        endpoint = endpoints[currentFilter] || endpoints.all;
+
 
         // Fetching projects from the endpoint
         const response = await fetch(endpoint, {
@@ -35,33 +35,16 @@ async function displayProjects() {
 
         const projects = await response.json();
 
-        // Applying filtering logic based on user role and filter type
-        let filteredProjects;
-
-        if (isAdmin) {
-            // Admin behavior
-            if (currentFilter === "Pending") {
-                // Displaying only pending projects in "Pending Verification"
-                filteredProjects = projects.filter(project => project.status === "PENDING");
-            } else {
-                // Displaying all projects (Active, Pending, Stopped, Completed) in "All Projects"
-                filteredProjects = projects;
-            }
-        } else if (isLoggedIn) {
-            // User behavior
-            if (currentFilter === "myProjects") {
-                // Displaying all projects created by the user in "My Projects"
-                filteredProjects = projects.filter(project => project.organizer.username === username);
-            } else {
-                // Displaying only Active, Stopped, and Completed projects in "All Projects"
-                filteredProjects = projects.filter(
-                    project => project.status === "ACTIVE" || project.status === "STOPPED" || project.status === "COMPLETED"
-                );
-            }
-        } else {
-            // For non-logged-in users, display all projects (fallback behavior)
-            filteredProjects = projects.filter(project => project.status === "ACTIVE");
-        }
+        // Applying filtering logic based on user role and filter type [Optimized]
+        let filteredProjects = projects.filter(project => 
+        isAdmin 
+            ? (currentFilter === "Pending" ? project.status === "PENDING" : true)
+            : isLoggedIn 
+                ? (currentFilter === "myProjects" 
+                    ? project.organizer.username === username 
+                    : ["ACTIVE", "STOPPED", "COMPLETED"].includes(project.status))
+                : project.status === "ACTIVE"
+        );
 
         // Calculating pagination
         const startIndex = (currPage - 1) * projectsPerPage;
@@ -78,32 +61,26 @@ async function displayProjects() {
         projectsToDisplay.forEach(project => {
             const projectCard = template.cloneNode(true);
 
-            // Populating the template with project data
+            // Populating the template with project data [Optimized]
             const imageElement = projectCard.querySelector(".card-img-top");
-            if(project.image) {
-                imageElement.src = `data:image/png;base64,${project.image}`;
-            }else {
-                imageElement.src = "./img/favicon.png";
-            }
+            imageElement.src = project.image 
+                ? `data:image/png;base64,${project.image}` 
+                : "./img/favicon.png";
+
             projectCard.querySelector(".card-img-top").alt = project.title;
             projectCard.querySelector(".card-title").textContent = project.title;
 
-            // Adding status circle color based on the project's status
-            const statusCircle = projectCard.querySelector(".status-circle");
-            const statusText = projectCard.querySelector(".status-text");
-            if (project.status === "ACTIVE") {
-                statusCircle.style.backgroundColor = "green";
-                statusText.textContent = "Active";
-            } else if (project.status === "PENDING") {
-                statusCircle.style.backgroundColor = "orange";
-                statusText.textContent = "Pending";
-            } else if (project.status === "STOPPED") {
-                statusCircle.style.backgroundColor = "red";
-                statusText.textContent = "Stopped";
-            } else if (project.status === "COMPLETED") {
-                statusCircle.style.backgroundColor = "blue";
-                statusText.textContent = "Completed";
-            }
+            // Adding status circle color based on the project's status [Optimized]
+            const statusMap = {
+                "ACTIVE": { color: "green", text: "Active" },
+                "PENDING": { color: "orange", text: "Pending" },
+                "STOPPED": { color: "red", text: "Stopped" },
+                "COMPLETED": { color: "blue", text: "Completed" }
+            };
+
+            const { color = "white", text = "Unknown" } = statusMap[project.status] || {};
+            projectCard.querySelector(".status-circle").style.backgroundColor = color;
+            projectCard.querySelector(".status-text").textContent = text;
 
             // Calculating and display the progress percentage
             const progressPercentage = (project.currentAmount / project.goalAmount) * 100;
@@ -140,73 +117,53 @@ async function displayProjects() {
 }
 
 
-//? Pagination Function
+//? Pagination Function [Optimized]
 function paginationInitialization(pagination, totalProjects) {
-    // Calculating the total number of pages based on the filtered projects
+    // Calculating total pages based on global vars
     const totalPages = Math.ceil(totalProjects / projectsPerPage);
 
-    // Creating pagination items (Bootstrap)
+    // Preventing going beyond the available pages
+    if (currPage > totalPages) {
+        currPage = totalPages; // Going to the last page
+    }
+
+    // Creating pagination container (Bootstrap)
     const ul = document.createElement("ul");
     ul.classList.add("pagination");
 
-    // Previous button {Logic}
-    const prevItem = document.createElement("li");
-    prevItem.classList.add("page-item");
-    if (currPage === 1) {
-        prevItem.classList.add("disabled");
-    }
+    // Helper function to create pagination items
+    const createPageItem = (text, page, isDisabled = false, isActive = false) => {
+        const item = document.createElement("li");
+        item.classList.add("page-item");
+        if (isDisabled) item.classList.add("disabled");
+        if (isActive) item.classList.add("active");
 
-    const prevLink = document.createElement("a");
-    prevLink.classList.add("page-link");
-    prevLink.href = "#";
-    prevLink.textContent = "Previous";
-    prevLink.onclick = (e) => {
-        e.preventDefault();
-        goToPage(currPage - 1);
-    };
-    prevItem.appendChild(prevLink);
-    ul.appendChild(prevItem);
+        const link = document.createElement("a");
+        link.classList.add("page-link");
+        link.href = "#";
+        link.textContent = text;
 
-    // Page number {buttons}
-    for (let i = 1; i <= totalPages; i++) {
-        const pageItem = document.createElement("li");
-        pageItem.classList.add("page-item");
-        if (i === currPage) {
-            pageItem.classList.add("active");
-        }
-
-        const pageLink = document.createElement("a");
-        pageLink.classList.add("page-link");
-        pageLink.href = "#";
-        pageLink.textContent = i;
-        pageLink.onclick = (e) => {
+        link.onclick = (e) => {
             e.preventDefault();
-            goToPage(i);
+            if (!isDisabled) goToPage(page);
         };
-        pageItem.appendChild(pageLink);
 
-        ul.appendChild(pageItem);
-    }
-
-    // Next button {Logic}
-    const nextItem = document.createElement("li");
-    nextItem.classList.add("page-item");
-    if (currPage === totalPages) {
-        nextItem.classList.add("disabled");
-    }
-
-    const nextLink = document.createElement("a");
-    nextLink.classList.add("page-link");
-    nextLink.href = "#";
-    nextLink.textContent = "Next";
-    nextLink.onclick = (e) => {
-        e.preventDefault();
-        goToPage(currPage + 1);
+        item.appendChild(link);
+        return item;
     };
-    nextItem.appendChild(nextLink);
-    ul.appendChild(nextItem);
 
-    // Adding the pagination to the page
+    // Adding Previous button
+    ul.appendChild(createPageItem("Previous", currPage - 1, currPage === 1));
+
+    // Adding page number buttons
+    for (let i = 1; i <= totalPages; i++) {
+        ul.appendChild(createPageItem(i, i, false, i === currPage));
+    }
+
+    // Adding Next button
+    ul.appendChild(createPageItem("Next", currPage + 1, currPage === totalPages));
+
+    // Attaching the pagination container to the page
     pagination.appendChild(ul);
 }
 
@@ -249,133 +206,117 @@ document.getElementById("filterMyProjects").addEventListener("click", () => {
     displayProjects();
 });
 
-//? DOM listener
+//? DOM listener [Optimized]
 document.addEventListener("DOMContentLoaded", function () {
-    // Checking if the user is logged in
+    // Helper function to toggle element display
+    const toggleDisplay = (element, show) => {
+        if (element) element.style.display = show ? "block" : "none";
+    };
+
+    // Retrieving session data
     const accessToken = sessionStorage.getItem("token");
     const username = sessionStorage.getItem("username");
     const isAdmin = sessionStorage.getItem("isAdmin") === "true";
 
-    // Getting filter button and dropdown elements
+    // Filtering button and dropdown elements
     const filterButtonContainer = document.querySelector(".dropdown");
-    const filterDropdown = document.getElementById("filterDropdown");
     const filterAll = document.getElementById("filterAll");
     const filterMyProjects = document.getElementById("filterMyProjects");
 
-    if (!username || !accessToken) {
-        // Hiding the filter button if no user is logged in
-        if (filterButtonContainer) {
-            filterButtonContainer.style.display = "none";
-        }
-    } else {
-        // Showing the filter button if the user is logged in
-        if (filterButtonContainer) {
-            filterButtonContainer.style.display = "block";
+    // Setting filter visibility based on login state
+    toggleDisplay(filterButtonContainer, !!username && !!accessToken);
 
-            // Updating filter options based on user role
-            if (isAdmin) {
-                // Admin: Active Projects / Pending Verification
-                filterAll.textContent = "All Projects";
-                filterAll.id = "filterActive"; // Change ID for clarity
-                filterMyProjects.textContent = "Pending Verification";
-                filterMyProjects.id = "filterPending"; // Change ID for clarity
-            } else {
-                // User: All Projects / My Projects
-                filterAll.textContent = "All Projects";
-                filterAll.id = "filterAll"; // Reset ID
-                filterMyProjects.textContent = "My Projects";
-                filterMyProjects.id = "filterMyProjects"; // Reset ID
-            }
-        }
+    if (filterButtonContainer && username && accessToken) {
+        // Updating filter options based on user role
+        const isAdminFilter = isAdmin;
+        filterAll.textContent = isAdminFilter ? "All Projects" : "All Projects";
+        filterAll.id = isAdminFilter ? "filterActive" : "filterAll";
+        filterMyProjects.textContent = isAdminFilter ? "Pending Verification" : "My Projects";
+        filterMyProjects.id = isAdminFilter ? "filterPending" : "filterMyProjects";
     }
 
-    // Handling Dropdown Item Clicks
-    const filterItems = document.querySelectorAll(".dropdown-item");
-
-    filterItems.forEach(item => {
+    // Adding eventlisteners to dropdown items
+    document.querySelectorAll(".dropdown-item").forEach(item => {
         item.addEventListener("click", function () {
-            // Removing 'active' class from all items
-            filterItems.forEach(i => i.classList.remove("active"));
-
-            // Adding 'active' class to the clicked item
+            // Updating active filter
+            document.querySelectorAll(".dropdown-item").forEach(i => i.classList.remove("active"));
             this.classList.add("active");
 
-            // Updating filter logic
-            const filterType = this.id;
-            if (filterType === "filterAll" || filterType === "filterActive") {
-                currentFilter = "all"; // Showing all projects (Active)
-            } else if (filterType === "filterMyProjects") {
-                currentFilter = "myProjects"; // Showing user-specific projects
-            } else if (filterType === "filterPending") {
-                currentFilter = "Pending"; // Showing projects pending verification
-            }
-            currPage = 1; // Resetting to the first page
-            displayProjects(); // Refreshing the displayed projects
+            // Determining filter type and apply changes
+            currentFilter = {
+                filterAll: "all",
+                filterActive: "all",
+                filterMyProjects: "myProjects",
+                filterPending: "Pending"
+            }[this.id] || "all";
+
+            currPage = 1; // Resetting page to the first
+            displayProjects(); // Refreshing project display
         });
     });
 
-    // Handling New Project Form Submission
-    const addNewForm = document.getElementById('addNewForm');
+    // New Project Form Submission
+    const addNewForm = document.getElementById("addNewForm");
     if (addNewForm) {
-        addNewForm.addEventListener('submit', async (event) => {
+        addNewForm.addEventListener("submit", async (event) => {
             event.preventDefault();
 
-            // Checking if the user is logged in
             if (!username || !accessToken) {
                 showAlert("Please log in to create a new project.", "warning", 3000);
                 return;
             }
 
-            // Collecting form data
-            const imageFile = document.getElementById('projectImage').files[0];
-            const title = document.getElementById('projectTitle').value.trim();
-            const description = document.getElementById('projectDescription').value.trim();
-            const goalAmount = parseFloat(document.getElementById('projectGoal').value);
-            const deadlineForGoal = document.getElementById('projectDeadline').value;
+            // Forming data validation
+            const formElements = {
+                imageFile: document.getElementById("projectImage").files[0],
+                title: document.getElementById("projectTitle").value.trim(),
+                description: document.getElementById("projectDescription").value.trim(),
+                goalAmount: parseFloat(document.getElementById("projectGoal").value),
+                deadlineForGoal: document.getElementById("projectDeadline").value
+            };
 
-            // Validating inputs
+            const { imageFile, title, description, goalAmount, deadlineForGoal } = formElements;
+
             if (!title || !description || !goalAmount || !deadlineForGoal) {
                 showAlert("Please fill in all fields.", "warning", 3000);
                 return;
             }
 
-            // Encoding image (base64)
-            let base64Image = null;
-            if(imageFile) {
-                const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
-                if (imageFile.size > maxSize) {
-                    showAlert("The selected image exceeds the maximum allowed size of 5 MB. Please upload a smaller image.", "info", 3000);
-                    return; // Stopping processing if the file is too large
-                }
+            if(goalAmount < 1000) {
+                showAlert("The amount you provide as a goal must be at least 1000$.", "warning", 3000);
+                return;
+            }
 
-                // Encoding the image to Base64
-                const reader = new FileReader();
+            // Encode image as Base64 if provided
+            let base64Image = null;
+            if (imageFile) {
+                if (imageFile.size > 5 * 1024 * 1024) {
+                    showAlert("The selected image exceeds 5 MB. Please upload a smaller image.", "info", 3000);
+                    return;
+                }
                 base64Image = await new Promise((resolve, reject) => {
-                    reader.onload = () => resolve(reader.result.split(',')[1]); // Extracting Base64 data
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(",")[1]);
                     reader.onerror = () => reject(new Error("Failed to read image file"));
                     reader.readAsDataURL(imageFile);
                 });
             }
 
-            // Converting deadline into localdatetime
-            const deadlineForGoalConv = `${deadlineForGoal}T00:00:00`
-
-            // Preparing the request body
+            // Preparing project data and send request
             const newProject = {
                 title,
                 description,
                 goalAmount,
-                deadlineForGoal: deadlineForGoalConv,
+                deadlineForGoal: `${deadlineForGoal}T00:00:00`,
                 image: base64Image
             };
 
             try {
-                // Sending the data to the API
-                const response = await fetch('http://localhost:8080/api/project/new', {
-                    method: 'POST',
+                const response = await fetch("http://localhost:8080/api/project/new", {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}` // Including the access token for authentication
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`
                     },
                     body: JSON.stringify(newProject)
                 });
@@ -383,69 +324,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     showAlert("Project created successfully!", "success", 3000);
 
-                    // Closing the modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
-                    modal.hide();
-
-                    // Resetting the form
+                    // Closing modal and reset form
+                    bootstrap.Modal.getInstance(document.getElementById("addNewModal")).hide();
                     addNewForm.reset();
-
-                    // Refreshing the project display
                     displayProjects();
                 } else {
                     const error = await response.json();
                     showAlert(`Error creating project: ${error.message}`, "danger", 3000);
                 }
-            } catch (error) {
+            } catch {
                 console.error("Error creating project:", error);
                 showAlert("An error occurred while creating the project.", "danger", 3000);
             }
         });
     }
 
-    // Handling Navbar Content
+    // Navbar Content
     const headerRightContent = document.querySelector("#headerRightContent");
+    const reportButton = document.querySelector(".custom-report-btn");
 
     if (accessToken && username) {
-        // User is logged in
-        const welcomeMessage = document.createElement("span");
-        welcomeMessage.textContent = `Welcome, ${username}`;
-        welcomeMessage.classList.add("text-white", "me-3");
-
-        const logoutButton = document.createElement("button");
-        logoutButton.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket"></i>';
-        logoutButton.classList.add("btn", "btn-outline-light");
-        logoutButton.onclick = handleLogout;
-
-        headerRightContent.appendChild(welcomeMessage);
-        headerRightContent.appendChild(logoutButton);
-
-        // Showing admin-specific buttons
-        const reportButton = document.querySelector(".custom-report-btn");
-        if (isAdmin && reportButton) {
-            reportButton.style.display = "block";
-        }
+        // User logged in
+        headerRightContent.innerHTML = `
+            <span class="text-white me-3">Welcome, ${username}</span>
+            <button class="btn btn-outline-light" onclick="handleLogout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        `;
+        toggleDisplay(reportButton, isAdmin);
     } else {
-        // User is not logged in
-        const loginRegisterButton = document.createElement("button");
-        loginRegisterButton.textContent = "Login / Register";
-        loginRegisterButton.classList.add("btn", "btn-outline-light");
-        loginRegisterButton.onclick = () => (window.location.href = "./LoginRegister/login_register.html");
-
-        headerRightContent.appendChild(loginRegisterButton);
-
-        // Hiding admin-specific buttons
-        const reportButton = document.querySelector(".custom-report-btn");
-        if (reportButton) {
-            reportButton.style.display = "none";
-        }
+        // User not logged in
+        headerRightContent.innerHTML = `
+            <button class="btn btn-outline-light" onclick="window.location.href='./LoginRegister/login_register.html'">
+                Login / Register
+            </button>
+        `;
+        toggleDisplay(reportButton, false);
     }
 
-    // Displaying projects on page load
+    // Initializing project display
     displayProjects();
 });
-
-console.log(window.location.href);
 
 //! ShowAlert logic for custom notifications
 /**
