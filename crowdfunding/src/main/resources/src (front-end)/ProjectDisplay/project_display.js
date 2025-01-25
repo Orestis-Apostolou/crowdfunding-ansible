@@ -7,7 +7,7 @@ function getQueryParam(param) {
 // Function to handle the "Report Analytics" redirection
 function redirectToReports(projectId) {
     if (!projectId) {
-        alert("Project ID not found.");
+        showAlert("Project ID not found.", "info", 3000);
         return;
     }
     // Redirecting to the reports page with the project ID in the URL
@@ -122,15 +122,15 @@ async function approveProject(projectId) {
         });
 
         if (response.ok) {
-            alert('Project approved successfully.');
+            showAlert('Project approved successfully.', "success", 3000);
             window.location.reload(); // Reloading the page to reflect the status change
         } else {
             const error = await response.json();
-            alert(`Failed to approve project: ${error.message}`);
+            showAlert(`Failed to approve project: ${error.message}`, "danger", 3000);
         }
     } catch (error) {
         console.error('Error approving project:', error);
-        alert('An error occurred while approving the project.');
+        showAlert('An error occurred while approving the project.', "danger", 3000);
     }
 }
 
@@ -146,22 +146,22 @@ async function rejectProject(projectId) {
         });
 
         if (response.ok) {
-            alert('Project rejected and deleted successfully.');
+            showAlert('Project rejected and deleted successfully.', "success", 3000);
             window.location.href = '../index.html'; // Redirecting to the homepage
         } else {
             const error = await response.json();
-            alert(`Failed to reject project: ${error.message}`);
+            showAlert(`Failed to reject project: ${error.message}`, "danger", 3000);
         }
     } catch (error) {
         console.error('Error rejecting project:', error);
-        alert('An error occurred while rejecting the project.');
+        showAlert('An error occurred while rejecting the project.', "danger", 3000);
     }
 }
 
 // Function to handle funding a project
 async function fundProject(projectId, amount, message) {
     if (!amount || isNaN(amount) || amount < 1) {
-        alert('Please provide a valid funding amount.');
+        showAlert('Please provide a valid funding amount.', "info", 3000);
         return;
     }
 
@@ -180,17 +180,16 @@ async function fundProject(projectId, amount, message) {
         });
 
         if (response.ok) {
-            alert('Funding submitted successfully!');
+            showAlert('Funding submitted successfully!', "success", 3000);
             const modal = bootstrap.Modal.getInstance(document.getElementById('fundProjectModal'));
             modal.hide(); // Closing the modal
-            window.location.reload(); // Reloading to update funding progress
         } else {
             const error = await response.json();
-            alert(`Failed to fund project: ${error.message}`);
+            showAlert(`Failed to fund project: ${error.message}`, "danger", 3000);
         }
     } catch (error) {
         console.error('Error funding project:', error);
-        alert('An error occurred while submitting the funding.');
+        showAlert('An error occurred while submitting the funding.', "danger", 3000);
     }
 }
 
@@ -210,16 +209,16 @@ async function submitReport(projectId, title, description) {
         });
 
         if (response.ok) {
-            alert('Report submitted successfully.');
+            showAlert('Report submitted successfully.', "success", 3000);
             const modal = bootstrap.Modal.getInstance(document.getElementById('reportIssueModal'));
             modal.hide();
         } else {
             const error = await response.json();
-            alert(`Failed to submit report: ${error.message}`);
+            showAlert(`Failed to submit report: ${error.message}`, "danger", 3000);
         }
     } catch (error) {
         console.error('Error submitting report:', error);
-        alert('An error occurred while submitting the report.');
+        showAlert('An error occurred while submitting the report.', "danger", 3000);
     }
 }
 
@@ -246,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = document.getElementById('fundMessage').value;
 
         if (!projectId) {
-            alert('Project ID not found.');
+            showAlert('Project ID not found.', "warning", 3000);
             return;
         }
 
@@ -263,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (projectId) {
             approveProject(projectId); // Calling the approveProject function
         } else {
-            alert('Project ID not found.');
+            showAlert('Project ID not found.', "warning", 3000);
         }
     });
 
@@ -273,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (projectId) {
             rejectProject(projectId); // Calling the rejectProject function
         } else {
-            alert('Project ID not found.');
+            showAlert('Project ID not found.', "warning", 3000);
         }
     });
 
@@ -319,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const issueDescription = document.getElementById('issueDescription').value;
 
         if(!projectId) {
-            alert('Project ID not found.');
+            showAlert('Project ID not found.', "warning", 3000);
             return;
         }
 

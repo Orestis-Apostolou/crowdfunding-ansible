@@ -34,18 +34,18 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 const isAdmin = data.roles.includes("ROLE_ADMIN"); // Checking if roles array contains ROLE_ADMIN
                 sessionStorage.setItem('isAdmin', isAdmin);
 
-                alert('Login successful');
+                showAlert('Login successful', "success", 3000);
                 window.location.href = "../index.html"; // Redirect to homepage
             } else {
-                alert('Login failed: No access token received from the server.');
+                showAlert('Login failed: No access token received from the server.', "warning", 3000);
             }
         }else {
             const error = await response.json();
-            alert(`Login failed: ${error.message || 'Invalid creds.'}`);
+            showAlert(`Login failed: ${error.message || 'Invalid credentials.'}`, "info", 3000);
         }
     } catch {
         console.error('Error logging in:', error);
-        alert('An error occurred while logging in.');
+        showAlert('An error occurred while logging in.', "danger", 3000);
     }
 });
 
@@ -77,17 +77,17 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         });
 
         if(response.ok) {
-            alert('Registration successful! Please log in.');
+            showAlert('Registration successful! Please log in.', "success", 3000);
 
             // Flipping the card to the login
             document.querySelector('.card-flip').classList.toggle('flipped');
         }else {
             const error = await response.json();
-            alert(`Registration failed: ${error.message || 'Invalid input'}`);
+            showAlert(`Registration failed: ${error.message || 'Invalid input'}`, "info", 3000);
         }
     } catch {
         console.error('Error registering:', error);
-        alert('An error occured while registering.');
+        showAlert('An error occured while registering.', "warning", 3000);
     }
 });
 

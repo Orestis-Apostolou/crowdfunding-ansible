@@ -135,7 +135,7 @@ async function displayProjects() {
         paginationInitialization(pagination, filteredProjects.length);
     } catch (error) {
         console.error("Error displaying projects:", error);
-        alert("Failed to load projects. Please try again later.");
+        showAlert("Failed to load projects. Please try again later.", "danger", 3000);
     }
 }
 
@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Checking if the user is logged in
             if (!username || !accessToken) {
-                alert("Please log in to create a new project.");
+                showAlert("Please log in to create a new project.", "warning", 3000);
                 return;
             }
 
@@ -335,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Validating inputs
             if (!title || !description || !goalAmount || !deadlineForGoal) {
-                alert("Please fill in all fields.");
+                showAlert("Please fill in all fields.", "warning", 3000);
                 return;
             }
 
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if(imageFile) {
                 const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
                 if (imageFile.size > maxSize) {
-                    alert("The selected image exceeds the maximum allowed size of 5 MB. Please upload a smaller image.");
+                    showAlert("The selected image exceeds the maximum allowed size of 5 MB. Please upload a smaller image.", "info", 3000);
                     return; // Stopping processing if the file is too large
                 }
 
@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (response.ok) {
-                    alert("Project created successfully!");
+                    showAlert("Project created successfully!", "success", 3000);
 
                     // Closing the modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('addNewModal'));
@@ -394,11 +394,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     displayProjects();
                 } else {
                     const error = await response.json();
-                    alert(`Error creating project: ${error.message}`);
+                    showAlert(`Error creating project: ${error.message}`, "danger", 3000);
                 }
             } catch (error) {
                 console.error("Error creating project:", error);
-                alert("An error occurred while creating the project.");
+                showAlert("An error occurred while creating the project.", "danger", 3000);
             }
         });
     }
@@ -446,3 +446,41 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 console.log(window.location.href);
+
+//! ShowAlert logic for custom notifications
+/**
+ * Displays a Bootstrap alert in the specified container.
+ * 
+ * @param {string} message - The alert message to display.
+ * @param {string} type - The alert type ('success', 'danger', 'warning', 'info', etc.).
+ * @param {number} duration - Time in milliseconds to automatically dismiss the alert.
+ */
+function showAlert(message, type = 'info', duration = 5000) {
+    const alertContainer = document.getElementById('alertContainer');
+    if (!alertContainer) {
+        console.error("Alert container not found. Add an element with id='alertContainer' in your HTML.");
+        return;
+    }
+
+    // Creating the alert div
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.role = 'alert';
+
+    // Setting the alert message
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    // Appending the alert to the container
+    alertContainer.appendChild(alertDiv);
+
+    // Automatically dismissing the alert after the specified duration (if provided)
+    if (duration > 0) {
+        setTimeout(() => {
+            const alert = bootstrap.Alert.getOrCreateInstance(alertDiv);
+            alert.close();
+        }, duration);
+    }
+}
