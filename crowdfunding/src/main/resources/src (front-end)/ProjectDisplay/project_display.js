@@ -84,7 +84,18 @@ async function displayProjectInfo() {
         const adminReportBtn = document.getElementById('adminReportBtn');
         const reportIssueBtn = document.getElementById('reportIssueBtn');
 
-        // General display if
+        // Checking if the user is logged in and project is ACTIVE [else I don't provide a fund project button]
+        const isLoggedIn = sessionStorage.getItem('token') || sessionStorage.getItem('username');
+        const fundProjectBtn = document.getElementById('fundProjectBtn');
+
+        // Displaying or hiding the "Fund Project"
+        if(project.status === "ACTIVE" && isLoggedIn) {
+            fundProjectBtn.style.display = "block";
+        }else {
+            fundProjectBtn.style.display = "none";
+        }
+
+        // General display for report Button
         if(!(project.status === "ACTIVE")) {
             reportIssueBtn.classList.add('d-none');
         }else {

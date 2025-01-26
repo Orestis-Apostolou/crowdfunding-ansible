@@ -1,4 +1,4 @@
-// Flipping the card between login and register forms
+//? Flipping the card between login and register forms
 document.querySelectorAll('.flip-button').forEach(button => {
     button.addEventListener('click', () => {
         const cardFlip = document.querySelector('.card-flip');
@@ -6,7 +6,7 @@ document.querySelectorAll('.flip-button').forEach(button => {
     });
 });
 
-// Handling Login Form Submission
+//? Handling Login Form Submission
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
