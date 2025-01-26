@@ -152,3 +152,7 @@ button:hover {
     border-color: var(--report-btn-color);
     color: var(--report-btn-color);
 }
+
+#toggleStatusBtn {
+    display: none;
+}

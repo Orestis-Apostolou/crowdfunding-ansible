@@ -3,6 +3,9 @@ let currentFilter = "all";
 let currPage = 1;
 const projectsPerPage = 3;
 
+//? Attribute for date validation
+document.getElementById('projectDeadline').setAttribute('min', new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString().split('T')[0]);
+
 //? Function to display all the projects that are currently hosted on DS_crowdfunding app
 async function displayProjects() {
     const container = document.getElementById("projectsContainer");
@@ -42,7 +45,7 @@ async function displayProjects() {
             : isLoggedIn 
                 ? (currentFilter === "myProjects" 
                     ? project.organizer.username === username 
-                    : ["ACTIVE", "STOPPED", "COMPLETED"].includes(project.status))
+                    : ["ACTIVE", "COMPLETED"].includes(project.status))
                 : project.status === "ACTIVE"
         );
 
@@ -74,7 +77,7 @@ async function displayProjects() {
             const statusMap = {
                 "ACTIVE": { color: "green", text: "Active" },
                 "PENDING": { color: "orange", text: "Pending" },
-                "STOPPED": { color: "red", text: "Stopped" },
+                "STOPPED": { color: "red", text: "Deactivated" },
                 "COMPLETED": { color: "blue", text: "Completed" }
             };
 
@@ -119,19 +122,14 @@ async function displayProjects() {
 
 //? Pagination Function [Optimized]
 function paginationInitialization(pagination, totalProjects) {
-    // Calculating total pages based on global vars
     const totalPages = Math.ceil(totalProjects / projectsPerPage);
 
-    // Preventing going beyond the available pages
-    if (currPage > totalPages) {
-        currPage = totalPages; // Going to the last page
-    }
+    // Ensuring currPage stays within bounds
+    currPage = Math.min(Math.max(currPage, 1), totalPages);
 
-    // Creating pagination container (Bootstrap)
     const ul = document.createElement("ul");
     ul.classList.add("pagination");
 
-    // Helper function to create pagination items
     const createPageItem = (text, page, isDisabled = false, isActive = false) => {
         const item = document.createElement("li");
         item.classList.add("page-item");
@@ -142,28 +140,47 @@ function paginationInitialization(pagination, totalProjects) {
         link.classList.add("page-link");
         link.href = "#";
         link.textContent = text;
-
         link.onclick = (e) => {
             e.preventDefault();
-            if (!isDisabled) goToPage(page);
+            if (!isDisabled && page !== null) goToPage(page);
         };
-
         item.appendChild(link);
         return item;
     };
 
-    // Adding Previous button
+    // Addnig "Previous" button
     ul.appendChild(createPageItem("Previous", currPage - 1, currPage === 1));
 
-    // Adding page number buttons
-    for (let i = 1; i <= totalPages; i++) {
+    // Always showing the first page
+    ul.appendChild(createPageItem(1, 1, false, currPage === 1));
+
+    if (currPage > 3) {
+        // Adding ellipses if there's a gap between the first page and the visible range
+        ul.appendChild(createPageItem("...", null, true));
+    }
+
+    // Determining the range of middle pages to display
+    const startPage = Math.max(2, currPage - 1);
+    const endPage = Math.min(totalPages - 1, currPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
         ul.appendChild(createPageItem(i, i, false, i === currPage));
     }
 
-    // Adding Next button
+    if (currPage < totalPages - 2) {
+        // Adding ellipses if there's a gap between the visible range and the last page
+        ul.appendChild(createPageItem("...", null, true));
+    }
+
+    // Always showing the last page
+    if (totalPages > 1) {
+        ul.appendChild(createPageItem(totalPages, totalPages, false, currPage === totalPages));
+    }
+
+    // Adding "Next" button
     ul.appendChild(createPageItem("Next", currPage + 1, currPage === totalPages));
 
-    // Attaching the pagination container to the page
+    // Appending the pagination to the container
     pagination.appendChild(ul);
 }
 

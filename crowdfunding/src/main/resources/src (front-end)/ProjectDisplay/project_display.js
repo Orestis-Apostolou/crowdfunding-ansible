@@ -1,10 +1,10 @@
-// Function to get project's ID from url
+//? Function to get project's ID from url
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 }
 
-// Function to handle the "Report Analytics" redirection
+//? Function to handle the "Report Analytics" redirection
 function redirectToReports(projectId) {
     if (!projectId) {
         showAlert("Project ID not found.", "info", 3000);
@@ -14,7 +14,7 @@ function redirectToReports(projectId) {
     window.location.href = `../Reports/reports.html?id=${projectId}`;
 }
 
-// Function to display the project's info
+//? Function to display the project's info
 async function displayProjectInfo() {
     const projectId = getQueryParam('id');
 
@@ -30,6 +30,16 @@ async function displayProjectInfo() {
 
         const project = await response.json();
 
+        // Defining status colors and descriptions
+        const statusMap = {
+            "ACTIVE": { color: "green", text: "Active" },
+            "PENDING": { color: "orange", text: "Pending" },
+            "STOPPED": { color: "red", text: "Deactivated" },
+            "COMPLETED": { color: "blue", text: "Completed" }
+        };
+
+        const { color = "gray", text = "Unknown" } = statusMap[project.status] || {};
+
         // Populating project details
         const progressPercentage = Math.min(
             (project.currentAmount / project.goalAmount) * 100
@@ -39,11 +49,8 @@ async function displayProjectInfo() {
         const deadline = new Date(project.deadlineForGoal).toLocaleDateString();
 
         // Setting project details
-        if(project.image) {
-            document.getElementById('project-image').src = `data:image/png;base64,${project.image}`;
-        }else {
-            document.getElementById('project-image').src = "../img/favicon.png";
-        }
+        const projectImage = document.getElementById('project-image');
+        projectImage.src = project.image ? `data:image/png;base64,${project.image}` : "../img/favicon.png";
         document.getElementById('project-image').alt = project.title;
         document.getElementById('project-title').textContent = project.title;
         document.getElementById('project-description').textContent = project.description;
@@ -63,17 +70,13 @@ async function displayProjectInfo() {
         progressBar.style.width = `${progressPercentage}%`;
         progressBar.setAttribute('aria-valuenow', progressPercentage);
 
-        // Adding status indicator
+        // Adding status circle and text
         const statusCircle = document.createElement('span');
         statusCircle.classList.add('status-circle');
-        if (project.status === 'ACTIVE') {
-            statusCircle.classList.add('green');
-        } else if (project.status === 'PENDING') {
-            statusCircle.classList.add('orange');
-        } else {
-            statusCircle.classList.add('red');
-        }
-        document.getElementById('project-title').insertAdjacentElement('beforebegin', statusCircle);
+        statusCircle.style.backgroundColor = color;
+
+        const titleContainer = document.getElementById('project-title');
+        titleContainer.insertAdjacentElement('beforebegin', statusCircle);
 
         // Showing admin actions if the project is pending
         const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
@@ -90,18 +93,32 @@ async function displayProjectInfo() {
 
         // If cases for admin display
         if (isAdmin) {
-            // Showing Admin Actions
-            if (project.status === 'PENDING') {
-                adminActions.classList.remove('d-none');
-            } else {
-                // Showing Admin Report Button
-                adminReportBtn.style.display = 'block';
-                adminActions.classList.add('d-none');
-            }
+            adminActions.classList.toggle('d-none', project.status !== 'PENDING');
+            adminReportBtn.style.display = project.status === 'PENDING' ? 'none' : 'block';
         } else {
-            // Hiding Admin-specific elements
             adminActions.classList.add('d-none');
             adminReportBtn.style.display = 'none';
+        }
+
+        // Configuring the toggle status button
+        const toggleStatusBtn = document.getElementById('toggleStatusBtn');
+
+        // Showing the button only if isAdmin is true and the project's status is either ACTIVE or STOPPED
+        toggleStatusBtn.style.display = (isAdmin && (project.status === 'ACTIVE' || project.status === 'STOPPED')) ? 'block' : 'none';
+        if (toggleStatusBtn.style.display === 'block') {
+            toggleStatusBtn.style.position = 'absolute';
+            toggleStatusBtn.style.right = '10px';
+            toggleStatusBtn.style.bottom = '10px';
+
+            // Button configuration based on project status
+            const isActive = project.status === 'ACTIVE';
+            toggleStatusBtn.textContent = isActive ? "Stop" : "Activate";
+            toggleStatusBtn.classList.toggle('btn-success', !isActive);
+            toggleStatusBtn.classList.toggle('btn-danger', isActive);
+            toggleStatusBtn.style.backgroundColor = isActive ? 'red' : 'green';
+            toggleStatusBtn.innerHTML = `<i class="fa-solid fa-${isActive ? 'pause' : 'play'}"></i>&nbsp; ${isActive ? 'Stop' : 'Activate'}`;
+
+            toggleStatusBtn.onclick = () => toggleProjectStatus(projectId, project.status);
         }
 
     } catch (error) {
@@ -110,7 +127,7 @@ async function displayProjectInfo() {
     }
 }
 
-// Function to approve a project
+//? Function to approve a project
 async function approveProject(projectId) {
     try {
         const response = await fetch(`http://localhost:8080/api/project/${projectId}/update-status`, {
@@ -134,7 +151,7 @@ async function approveProject(projectId) {
     }
 }
 
-// Function to reject a project
+//? Function to reject a project
 async function rejectProject(projectId) {
 
     try {
@@ -158,7 +175,32 @@ async function rejectProject(projectId) {
     }
 }
 
-// Function to handle funding a project
+//? Function to toggle project status
+async function toggleProjectStatus(projectId, currentStatus) {
+    try {
+        // Calling the update-status endpoint
+        const response = await fetch(`http://localhost:8080/api/project/${projectId}/update-status`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}` // Use token if needed
+            }
+        });
+
+        if (response.ok) {
+            // Reloading the project info after successful status change
+            showAlert(`Project status updated successfully.`, "success", 3000);
+            displayProjectInfo();
+        } else {
+            const error = await response.json();
+            showAlert(`Failed to update project status: ${error.message}`, "danger", 3000);
+        }
+    } catch (error) {
+        console.error("Error toggling project status:", error);
+        showAlert("An error occurred while updating the project status.", "danger", 3000);
+    }
+}
+
+//? Function to handle funding a project
 async function fundProject(projectId, amount, message) {
     if (!amount || isNaN(amount) || amount < 1) {
         showAlert('Please provide a valid funding amount.', "info", 3000);
@@ -193,7 +235,7 @@ async function fundProject(projectId, amount, message) {
     }
 }
 
-// Function to submit a report
+//? Function to submit a report
 async function submitReport(projectId, title, description) {
     try {
         const response = await fetch(`http://localhost:8080/api/report/${projectId}/new`, {
