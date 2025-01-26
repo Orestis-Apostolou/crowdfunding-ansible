@@ -17,8 +17,8 @@ public class ProjectScheduler {
 
     @Scheduled(cron = "0 */5 * * * *")
     public void checkDeadline(){
-        System.out.println("[" + LocalDateTime.now() + "] Checking project deadlines");
+            System.out.println("[" + LocalDateTime.now() + "] Checking project deadlines");
 
-        projectService.checkProjectDeadlines();
+            projectService.checkProjectDeadlines();
     }
 }
