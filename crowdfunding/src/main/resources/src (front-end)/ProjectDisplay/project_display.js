@@ -14,7 +14,7 @@ function redirectToReports(projectId) {
     window.location.href = `../Reports/reports.html?id=${projectId}`;
 }
 
-//? Function to display the project's info
+//? Function to display the project's info [optimized]
 async function displayProjectInfo() {
     const projectId = getQueryParam('id');
 
@@ -30,7 +30,6 @@ async function displayProjectInfo() {
 
         const project = await response.json();
 
-        // Defining status colors and descriptions
         const statusMap = {
             "ACTIVE": { color: "green", text: "Active" },
             "PENDING": { color: "orange", text: "Pending" },
@@ -39,13 +38,10 @@ async function displayProjectInfo() {
         };
 
         const { color = "gray", text = "Unknown" } = statusMap[project.status] || {};
-
-        // Populating project details
         const progressPercentage = Math.min(
             (project.currentAmount / project.goalAmount) * 100
         ).toFixed(2);
 
-        // Formatting the deadline date
         const deadline = new Date(project.deadlineForGoal).toLocaleDateString();
 
         // Setting project details
@@ -59,18 +55,11 @@ async function displayProjectInfo() {
         document.getElementById('project-progress-percentage').textContent = progressPercentage;
         document.getElementById('project-creator').textContent = `${project.organizer.firstName} ${project.organizer.lastName}`;
 
-        // Adding deadline to the UI
-        const deadlineElement = document.createElement('p');
-        deadlineElement.id = 'project-deadline';
-        deadlineElement.classList.add('text-white', 'mt-2');
-        deadlineElement.textContent = `Deadline: ${deadline}`;
-        document.getElementById('project-description').insertAdjacentElement('afterend', deadlineElement);
-
         const progressBar = document.getElementById('project-progress-bar');
         progressBar.style.width = `${progressPercentage}%`;
         progressBar.setAttribute('aria-valuenow', progressPercentage);
 
-        // Adding status circle and text
+        // Status circle
         const statusCircle = document.createElement('span');
         statusCircle.classList.add('status-circle');
         statusCircle.style.backgroundColor = color;
@@ -78,59 +67,39 @@ async function displayProjectInfo() {
         const titleContainer = document.getElementById('project-title');
         titleContainer.insertAdjacentElement('beforebegin', statusCircle);
 
-        // Showing admin actions if the project is pending
+        // Admin actions and buttons
         const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
         const adminActions = document.getElementById('adminActions');
+        const approveBtn = document.getElementById('approveProjectBtn');
+        const rejectBtn = document.getElementById('rejectProjectBtn');
         const adminReportBtn = document.getElementById('adminReportBtn');
         const reportIssueBtn = document.getElementById('reportIssueBtn');
 
-        // Checking if the user is logged in and project is ACTIVE [else I don't provide a fund project button]
-        const isLoggedIn = sessionStorage.getItem('token') || sessionStorage.getItem('username');
-        const fundProjectBtn = document.getElementById('fundProjectBtn');
-
-        // Displaying or hiding the "Fund Project"
-        if(project.status === "ACTIVE" && isLoggedIn) {
-            fundProjectBtn.style.display = "block";
-        }else {
-            fundProjectBtn.style.display = "none";
-        }
-
-        // General display for report Button
-        if(!(project.status === "ACTIVE")) {
-            reportIssueBtn.classList.add('d-none');
-        }else {
-            reportIssueBtn.classList.remove('d-none');
-        }
-
-        // If cases for admin display
-        if (isAdmin) {
-            adminActions.classList.toggle('d-none', project.status !== 'PENDING');
-            adminReportBtn.style.display = project.status === 'PENDING' ? 'none' : 'block';
+        // Showing/hiding admin actions based on status
+        if (isAdmin && project.status === 'PENDING') {
+            adminActions.style.display = 'block';
+            approveBtn.style.display = 'block';
+            rejectBtn.style.display = 'block';
+            adminReportBtn.style.display = 'none';
+        } else if (isAdmin && project.status !== 'PENDING') {
+            adminActions.style.display = 'none';
+            approveBtn.style.display = 'none';
+            rejectBtn.style.display = 'none';
+            adminReportBtn.style.display = 'block';
         } else {
-            adminActions.classList.add('d-none');
+            adminActions.style.display = 'none';
+            approveBtn.style.display = 'none';
+            rejectBtn.style.display = 'none';
             adminReportBtn.style.display = 'none';
         }
 
-        // Configuring the toggle status button
-        const toggleStatusBtn = document.getElementById('toggleStatusBtn');
+        // Showing/hiding "Fund Project" button
+        const isLoggedIn = sessionStorage.getItem('token') || sessionStorage.getItem('username');
+        const fundProjectBtn = document.getElementById('fundProjectBtn');
+        fundProjectBtn.style.display = project.status === "ACTIVE" && isLoggedIn ? "block" : "none";
 
-        // Showing the button only if isAdmin is true and the project's status is either ACTIVE or STOPPED
-        toggleStatusBtn.style.display = (isAdmin && (project.status === 'ACTIVE' || project.status === 'STOPPED')) ? 'block' : 'none';
-        if (toggleStatusBtn.style.display === 'block') {
-            toggleStatusBtn.style.position = 'absolute';
-            toggleStatusBtn.style.right = '10px';
-            toggleStatusBtn.style.bottom = '10px';
-
-            // Button configuration based on project status
-            const isActive = project.status === 'ACTIVE';
-            toggleStatusBtn.textContent = isActive ? "Stop" : "Activate";
-            toggleStatusBtn.classList.toggle('btn-success', !isActive);
-            toggleStatusBtn.classList.toggle('btn-danger', isActive);
-            toggleStatusBtn.style.backgroundColor = isActive ? 'red' : 'green';
-            toggleStatusBtn.innerHTML = `<i class="fa-solid fa-${isActive ? 'pause' : 'play'}"></i>&nbsp; ${isActive ? 'Stop' : 'Activate'}`;
-
-            toggleStatusBtn.onclick = () => toggleProjectStatus(projectId, project.status);
-        }
+        // Showing/hiding report issue button
+        reportIssueBtn.style.display = project.status === "ACTIVE" ? "block" : "none";
 
     } catch (error) {
         console.error('Error fetching project details:', error);

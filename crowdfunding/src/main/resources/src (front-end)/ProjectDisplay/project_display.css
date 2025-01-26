@@ -106,6 +106,7 @@ button:hover {
 
 /* Admin actions section customization */
 .admin-actions {
+    display: none;
     background-color: var(--card-bg-color);
     border: 1px solid var(--divider-color);
     border-radius: 8px;
@@ -142,13 +143,19 @@ button:hover {
     color: var(--button-hover-bg-color);
 }
 
+#adminReportBtn {
+    display: none;
+}
+
 /* Custom styling for approve and reject buttons */
 #approveProjectBtn {
+    display: none;
     border-color: var(--primary-color);
     color: var(--primary-color);
 }
 
 #rejectProjectBtn {
+    display: none;
     border-color: var(--report-btn-color);
     color: var(--report-btn-color);
 }
