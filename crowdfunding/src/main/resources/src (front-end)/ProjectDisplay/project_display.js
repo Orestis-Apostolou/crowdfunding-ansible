@@ -50,6 +50,7 @@ async function displayProjectInfo() {
         document.getElementById('project-image').alt = project.title;
         document.getElementById('project-title').textContent = project.title;
         document.getElementById('project-description').textContent = project.description;
+        document.getElementById('project-deadline').textContent = deadline;
         document.getElementById('project-collected').textContent = project.currentAmount;
         document.getElementById('project-goal').textContent = project.goalAmount;
         document.getElementById('project-progress-percentage').textContent = progressPercentage;

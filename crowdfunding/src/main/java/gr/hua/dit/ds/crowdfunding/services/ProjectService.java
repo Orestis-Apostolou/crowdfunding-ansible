@@ -52,7 +52,7 @@ public class ProjectService {
     @Transactional
     public void checkProjectDeadlines() {
         for (Project project : getProjects()) {
-            if(project.getDeadlineForGoal().isAfter(LocalDateTime.now())){
+            if(project.getDeadlineForGoal().isBefore(LocalDateTime.now())){
                 project.setStatus(Status.COMPLETED);
                 project.setNextStatus(Status.COMPLETED);
                 projectRepository.save(project);
