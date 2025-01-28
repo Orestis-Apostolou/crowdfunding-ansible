@@ -54,7 +54,7 @@ async function displayProjectInfo() {
         document.getElementById('project-collected').textContent = project.currentAmount;
         document.getElementById('project-goal').textContent = project.goalAmount;
         document.getElementById('project-progress-percentage').textContent = progressPercentage;
-        document.getElementById('project-creator').textContent = `${project.organizer.firstName} ${project.organizer.lastName}`;
+        document.getElementById('project-creator').textContent = `${project.organizer.username}`;
 
         const progressBar = document.getElementById('project-progress-bar');
         progressBar.style.width = `${progressPercentage}%`;

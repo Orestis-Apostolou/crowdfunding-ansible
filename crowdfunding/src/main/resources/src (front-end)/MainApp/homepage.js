@@ -11,6 +11,11 @@ async function displayProjects() {
     const container = document.getElementById("projectsContainer");
     const pagination = document.getElementById("pagination");
     const template = document.getElementById("projectCardTemplate").content;
+    const loadingSpinner = document.getElementById("loadingSpinner");
+    const noProjectsMessage = document.getElementById("noProjectsMessage");
+
+    loadingSpinner.style.display = "block";
+    noProjectsMessage.style.display = "none";
 
     try {
         let endpoint;
@@ -48,6 +53,15 @@ async function displayProjects() {
                     : ["ACTIVE", "COMPLETED"].includes(project.status))
                 : project.status === "ACTIVE"
         );
+
+        // Hiding loading spinner
+        loadingSpinner.style.display = "none";
+
+        // If no projects are available, displaying "No projects" message
+        if (filteredProjects.length === 0) {
+            noProjectsMessage.style.display = "block";
+            return;
+        }
 
         // Calculating pagination
         const startIndex = (currPage - 1) * projectsPerPage;
