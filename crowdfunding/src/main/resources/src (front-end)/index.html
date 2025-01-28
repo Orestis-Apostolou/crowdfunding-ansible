@@ -97,8 +97,27 @@
             </div>
         </div>
 
+        <!-- Loading spinner [Customized] -->
+        <div id="loadingSpinner" class="text-center my-5" style="display: none;">
+            <div class="custom-spinner" role="status">
+                <i class="fa-solid fa-spinner"></i>
+            </div>
+        </div>
+
+        <!-- No projects loaded -->
+        <div id="noProjectsMessage" class="text-center my-5" style="display: none;">
+            <h5>No projects currently on <strong style="color: var(--primary-color);">CrowdFunding</strong>. Stay tuned!</h5>
+            <p>Always remember to check your email for new project recommendations <i class="fa-solid fa-inbox"></i></p>
+        </div>
+
         <div class="row" id="projectsContainer">
             <!-- Project Cards will be displayed here parsed by js -->
+        </div>
+
+        <div id="pagination" class="d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                <!-- Pagination of projects -->
+            </ul>
         </div>
     </div>
 
@@ -127,11 +146,7 @@
         </div>
     </template>
     
-    <div id="pagination" class="d-flex justify-content-center mt-4">
-        <ul class="pagination">
-            <!-- Pagination of projects -->
-        </ul>
-    </div>
+    
 
     <!-- Notification container -->
     <div id="alertContainer" class="container my-3"></div>
