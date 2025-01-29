@@ -143,6 +143,25 @@ button:hover {
     color: var(--button-hover-bg-color);
 }
 
+.toggle-status-btn {
+    color: var(--background-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    position: absolute;
+    bottom: 15px;
+    right: 0;
+    margin-right: 15px;
+}
+
+.toggle-status-btn:hover {
+    background-color: var(--button-hover-color);
+    transform: scale(1.05);
+}
+
 #adminReportBtn {
     display: none;
 }

@@ -75,6 +75,22 @@ async function displayProjectInfo() {
         const rejectBtn = document.getElementById('rejectProjectBtn');
         const adminReportBtn = document.getElementById('adminReportBtn');
         const reportIssueBtn = document.getElementById('reportIssueBtn');
+        //? Show "Activate/Deactivate" button only for Admins & when status is ACTIVE or STOPPED
+        const toggleStatusBtn = document.getElementById("toggleStatusBtn");
+
+        if (isAdmin && (project.status === "ACTIVE" || project.status === "STOPPED")) {
+            toggleStatusBtn.style.display = "block"; 
+            toggleStatusBtn.textContent = project.status === "ACTIVE" ? "Deactivate" : "Activate";
+
+            toggleStatusBtn.style.backgroundColor = project.status === "ACTIVE"
+            ? "var(--secondary-color)"
+            : "var(--primary-color)";
+
+            // Adding event listener to toggle project status
+            toggleStatusBtn.onclick = () => toggleProjectStatus(projectId, project.status);
+        } else {
+            toggleStatusBtn.style.display = "none";
+        }
 
         // Showing/hiding admin actions based on status
         if (isAdmin && project.status === 'PENDING') {
