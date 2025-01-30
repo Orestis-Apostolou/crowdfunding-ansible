@@ -179,7 +179,7 @@ async function toggleProjectStatus(projectId, currentStatus) {
         const response = await fetch(`http://localhost:8080/api/project/${projectId}/update-status`, {
             method: 'PUT',
             headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}` // Use token if needed
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             }
         });
 
@@ -209,7 +209,7 @@ async function fundProject(projectId, amount, message) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`, // Using token if required
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
             },
             body: JSON.stringify({
                 amount: parseFloat(amount),
@@ -364,4 +364,67 @@ document.addEventListener('DOMContentLoaded', () => {
         submitReport(projectId, issueTitle, issueDescription);
         modal.hide();
     });
+
+    // Chat functionality
+    const chatToggleBtn = document.getElementById("chatToggleBtn");
+    const chatPanel = document.getElementById("chatPanel");
+    const closeChatBtn = document.getElementById("closeChatBtn");
+    const chatMessagesContainer = document.getElementById("chatMessages");
+
+    // Listener for Toggling Chat Panel
+    chatToggleBtn.addEventListener("click", () => {
+        chatPanel.style.display = chatPanel.style.display === "flex" ? "none" : "flex";
+        if (chatPanel.style.display === "flex") {
+            loadFundMessages();
+        }
+    });
+
+    // Closing Chat Panel
+    closeChatBtn.addEventListener("click", () => {
+        chatPanel.style.display = "none";
+    });
+
+    // Function to fetch and display funders' messages
+    async function loadFundMessages() {
+        const projectId = getQueryParam("id");
+        if (!projectId) {
+            console.warn("Project ID is missing from URL parameters");
+            return;
+        }
+
+        try {
+            console.log(`Fetching fund messages for project ID: ${projectId}`);
+            const response = await fetch(`http://localhost:8080/api/project/${projectId}`);
+
+            if (!response.ok) {
+                throw new Error(`Failed to load project data: ${response.status}`);
+            }
+
+            const project = await response.json();
+            const funders = project.funds;
+
+            chatMessagesContainer.innerHTML = ""; // Cleaning previous messages
+
+            if (!funders || funders.length === 0) {
+                chatMessagesContainer.innerHTML = "<p>No donations yet.</p>";
+                return;
+            }
+
+            funders.forEach(fund => {
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("chat-message");
+                messageElement.innerHTML = `
+                    <strong>${fund.user.username}</strong> has donated <strong>$${fund.amount}</strong>!<br>
+                    <i>"${fund.message}"</i>
+                `;
+                chatMessagesContainer.appendChild(messageElement);
+            });
+
+            console.log("Messages loaded successfully");
+
+        } catch (error) {
+            console.error("Error loading fund messages:", error);
+            chatMessagesContainer.innerHTML = "<p>Could not load messages.</p>";
+        }
+    }
 });
