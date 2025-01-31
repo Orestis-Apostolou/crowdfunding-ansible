@@ -30,6 +30,9 @@ async function displayProjectInfo() {
 
         const project = await response.json();
 
+        // Storing funding data in localStorage so I dont have to call 2nd time the endpoint
+        localStorage.setItem(`funds_${projectId}`, JSON.stringify(project.funds || []));
+
         const statusMap = {
             "ACTIVE": { color: "green", text: "Active" },
             "PENDING": { color: "orange", text: "Pending" },
@@ -384,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatPanel.style.display = "none";
     });
 
-    // Function to fetch and display funders' messages
+    //? Function to fetch and display funders' messages
     async function loadFundMessages() {
         const projectId = getQueryParam("id");
         if (!projectId) {
@@ -392,39 +395,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        try {
-            console.log(`Fetching fund messages for project ID: ${projectId}`);
-            const response = await fetch(`http://localhost:8080/api/project/${projectId}`);
+        // Retrieving funding data from localStorage
+        const storedFunds = JSON.parse(localStorage.getItem(`funds_${projectId}`)) || [];
 
-            if (!response.ok) {
-                throw new Error(`Failed to load project data: ${response.status}`);
-            }
+        const chatMessagesContainer = document.getElementById("chatMessages");
+        chatMessagesContainer.innerHTML = ""; // Cleaning previous messages
 
-            const project = await response.json();
-            const funders = project.funds;
-
-            chatMessagesContainer.innerHTML = ""; // Cleaning previous messages
-
-            if (!funders || funders.length === 0) {
-                chatMessagesContainer.innerHTML = "<p>No donations yet.</p>";
-                return;
-            }
-
-            funders.forEach(fund => {
-                const messageElement = document.createElement("div");
-                messageElement.classList.add("chat-message");
-                messageElement.innerHTML = `
-                    <strong>${fund.user.username}</strong> has donated <strong>$${fund.amount}</strong>!<br>
-                    <i>"${fund.message}"</i>
-                `;
-                chatMessagesContainer.appendChild(messageElement);
-            });
-
-            console.log("Messages loaded successfully");
-
-        } catch (error) {
-            console.error("Error loading fund messages:", error);
-            chatMessagesContainer.innerHTML = "<p>Could not load messages.</p>";
+        if (storedFunds.length === 0) {
+            chatMessagesContainer.innerHTML = "<p>No donations yet.</p>";
+            return;
         }
+
+        storedFunds.forEach(fund => {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("chat-message");
+            messageElement.innerHTML = `
+                <strong>${fund.user.username}</strong> has donated <strong>$${fund.amount}</strong>!<br>
+                <i>"${fund.message}"</i>
+            `;
+            chatMessagesContainer.appendChild(messageElement);
+        });
     }
 });
