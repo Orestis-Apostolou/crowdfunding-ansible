@@ -17,6 +17,7 @@ async function displayProjects() {
     loadingSpinner.style.display = "block";
     noProjectsMessage.style.display = "none";
 
+    // TODO: How to fix the personal 403 forbidden error on network [Down in the listeners where I assign "currentFilter" I accidentaly assign "MyProjects" if the second button of filter is pressed]
     try {
         let endpoint;
         const username = sessionStorage.getItem("username"); // Logged-in user's username
@@ -232,7 +233,9 @@ document.getElementById("filterAll").addEventListener("click", () => {
 });
 
 document.getElementById("filterMyProjects").addEventListener("click", () => {
-    currentFilter = "myProjects";
+    const isAdmin = sessionStorage.getItem("isAdmin") === "true";
+    
+    currentFilter = isAdmin ? "Pending" : "myProjects";
     currPage = 1; // Resetting to the first page
     displayProjects();
 });
