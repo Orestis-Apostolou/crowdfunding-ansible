@@ -12,11 +12,17 @@
 
 **Το συγκεκριμένο repository DS_crowdfunding ήταν private έως και τις 15/01/2025 και έγινε public καθαρά και μόνο για να έχετε πρόσβαση.**
 
-# ***COMMANDS***
+# ***COMMANDS [Backend]***
     - Εντολές εκτέλεσης παραδοτέου
         - mvn clean package
         - java -jar .\target\crowdfunding-0.0.1-SNAPSHOT.jar [start]
         - Ctrl + C [Stop]
+
+# ***COMMANDS [Frontend]***
+    - Εντολές εκτέλεσης
+        - npm init -y
+        - npm install [or npm install express cors (specified)]
+        - node serverInit.js
 
 # Βασικές παραδοχές εργασίας
 1. Κάθε έργο (fundraiser) έχει ακριβώς έναν δημιουργό.
