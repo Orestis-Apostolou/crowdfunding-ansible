@@ -1,0 +1,26 @@
+---
+  - name: install spring boot application
+    hosts: backend
+
+    tasks:
+      - name: install java version 21
+        apt:
+          name: openjdk-21-jdk
+          state: present
+          update-cache: yes
+        become: yes
+
+      - name: clone git repository
+        git:
+          repo: 'https://github.com/Orestis-Apostolou/crowdfunding-ansible.git'
+          dest: "{{ ansible_env.HOME }}/src"
+          version: main
+          force: yes
+
+      - name: copy backend folder on repo root to ansible vm root
+        command: mv {{ ansible_env.HOME }}/src/backend {{ ansible_env.HOME }}/backend
+
+      - name: remove the rest of the repository
+        file:
+          path: "{{ ansible_env.HOME }}/src"
+          state: absent
