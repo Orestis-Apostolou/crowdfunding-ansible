@@ -3,3 +3,5 @@ azure-hosts:
   hosts:
     backend:
       ansible_host: az-devops
+    frontend:
+      ansible_host: az-devops
