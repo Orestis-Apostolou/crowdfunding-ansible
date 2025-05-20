@@ -45,25 +45,61 @@
         community.general.npm:
           path: "{{ app_dir }}"
 
-      - name: "Install forever (to run Node.js app)."
+      # PM2 SECTION
+
+      - name: "Install PM2 globally"
         npm:
-          name: forever
+          name: pm2
           global: yes
-          state: present
         become: yes
+
+      - name: "Check list of PM2 apps running"
+        command: pm2 list
+        register: pm2_list
+        changed_when: false
+
+      - name: "Start example Node.js app with PM2 if not already running"
+        command: "pm2 start {{ app_dir }}/serverInit.js --name frontend"
+        args:
+          chdir: "{{ app_dir }}"
+        when: "'frontend' not in pm2_list.stdout"
+
+        # command: pm2 setup
+
+      - name: Setup PM2 startup
+        command: >
+          sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_env.USER }} --hp {{ ansible_env.HOME }}
+        become: yes
+
+      - name: Save current PM2 process list
+        command: pm2 save
+
+      # AN THES NA TREXEI APLA KANTO COMMENT
+
+      - name: "Stop the frontend app with PM2"
+        command: pm2 stop frontend
+
+      # FOREVER SECTION
+
+      # - name: "Install forever (to run Node.js app)."
+      #   npm:
+      #     name: forever
+      #     global: yes
+      #     state: present
+      #   become: yes
 
       # - name: Show the app_dir path
       #   debug:
       #     var: app_dir
 
-      - name: "Check list of Node.js apps running."
-        command: forever list
-        register: forever_list
-        changed_when: false
+      # - name: "Check list of Node.js apps running."
+      #   command: forever list
+      #   register: forever_list
+      #   changed_when: false
 
-      - name: "Start example Node.js app if not already running."
-        command: "forever start {{ app_dir }}/serverInit.js"
-        when: app_dir + '/serverInit.js' not in forever_list.stdout
+      # - name: "Start example Node.js app if not already running."
+      #   command: "forever start {{ app_dir }}/serverInit.js"
+      #   when: app_dir + '/serverInit.js' not in forever_list.stdout
 
       # - name: "Stop the app server with forever"
       #   command: "forever stop {{ app_dir }}/serverInit.js"
