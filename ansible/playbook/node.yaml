@@ -65,8 +65,10 @@
         command: "forever start {{ app_dir }}/serverInit.js"
         when: app_dir + '/serverInit.js' not in forever_list.stdout
 
-      - name: "Stop the app server with forever"
-        command: "forever stop {{ app_dir }}/serverInit.js"
+      # - name: "Stop the app server with forever"
+      #   command: "forever stop {{ app_dir }}/serverInit.js"
+
+      #source: https://stackoverflow.com/questions/20919222/ansible-hangs-when-starting-node-js-server
 
 
 
