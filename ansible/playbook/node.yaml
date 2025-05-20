@@ -1,7 +1,6 @@
 ---
   - name: Frontend process
     hosts: frontend
-    become: yes
 
     vars:
       app_dir: "{{ ansible_env.HOME }}/frontend"
@@ -20,7 +19,7 @@
           state: absent
 
       - name: copy frontend folder on repo root to ansible vm root
-        command: mv {{ ansible_env.HOME }}/src/frontend {{ ansible_env.HOME }}/frontend
+        command: mv {{ ansible_env.HOME }}/src/frontend {{ app_dir }}
 
       - name: remove the rest of the repository
         file:
@@ -34,6 +33,7 @@
             - npm
           state: present
           update_cache: yes
+        become: yes
 
       - name: Running `npm init -y`
         ansible.builtin.command: npm init -y
@@ -45,8 +45,13 @@
         community.general.npm:
           path: "{{ app_dir }}"
 
-      - name: Running node script (In a different process)
-        ansible.builtin.command:
-          cmd: nohup node serverInit.js > /dev/null 2>&1 &
+      - name: install pm2 for node management
+        npm:
+          name: pm2
+          global: yes
+      
+      - name: start frontend with pm2
+        shell:  pm2 start serverInit.js --name frontend
+        args:
           chdir: "{{ app_dir }}"
 
