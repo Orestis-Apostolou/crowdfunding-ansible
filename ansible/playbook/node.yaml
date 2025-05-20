@@ -51,7 +51,7 @@
           global: yes
       
       - name: start frontend with pm2
-        shell:  pm2 start serverInit.js --name frontend
+        shell:  pm2 start npm --name frontend -- start
         args:
           chdir: "{{ app_dir }}"
 
