@@ -45,13 +45,28 @@
         community.general.npm:
           path: "{{ app_dir }}"
 
-      - name: install pm2 for node management
+      - name: "Install forever (to run Node.js app)."
         npm:
-          name: pm2
+          name: forever
           global: yes
-      
-      - name: start frontend with pm2
-        shell:  pm2 start npm --name frontend -- start
-        args:
-          chdir: "{{ app_dir }}"
+          state: present
+        become: yes
+
+      # - name: Show the app_dir path
+      #   debug:
+      #     var: app_dir
+
+      - name: "Check list of Node.js apps running."
+        command: forever list
+        register: forever_list
+        changed_when: false
+
+      - name: "Start example Node.js app if not already running."
+        command: "forever start {{ app_dir }}/serverInit.js"
+        when: app_dir + '/serverInit.js' not in forever_list.stdout
+
+      - name: "Stop the app server with forever"
+        command: "forever stop {{ app_dir }}/serverInit.js"
+
+
 
