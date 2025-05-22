@@ -1,29 +1,26 @@
 ---
   - name: Frontend process
     hosts: frontend
-
-    vars:
-      app_dir: "{{ ansible_env.HOME }}/frontend"
     
     tasks:
       - name: clone git repository
         git:
           repo: 'https://github.com/Orestis-Apostolou/crowdfunding-ansible.git'
-          dest: "{{ ansible_env.HOME }}/src"
+          dest: "{{ clonedir }}"
           version: main
           force: yes
 
       - name: remove frontend folder from vm root if it exists
         file:
-          path: "{{ app_dir }}"
+          path: "{{ appdir }}"
           state: absent
 
       - name: copy frontend folder on repo root to ansible vm root
-        command: mv {{ ansible_env.HOME }}/src/frontend {{ app_dir }}
+        command: mv {{ clonedir }}/frontend {{ appdir }}
 
       - name: remove the rest of the repository
         file:
-          path: "{{ ansible_env.HOME }}/src"
+          path: "{{ clonedir }}"
           state: absent
 
       - name: Install Node.js and npm
@@ -38,12 +35,12 @@
       - name: Running `npm init -y`
         ansible.builtin.command: npm init -y
         args:
-          chdir: "{{ app_dir }}"
-          creates: "{{ app_dir }}/package.json"
+          chdir: "{{ appdir }}"
+          creates: "{{ appdir }}/package.json"
 
       - name: Running npm install
         community.general.npm:
-          path: "{{ app_dir }}"
+          path: "{{ appdir }}"
 
       # PM2 SECTION
 
@@ -61,7 +58,7 @@
       - name: "start node.js app with PM2 if not already running"
         command: "pm2 npm start --name frontend -- start"
         args:
-          chdir: "{{ app_dir }}"
+          chdir: "{{ appdir }}"
         when: "'frontend' not in pm2_list.stdout"
 
         # command: pm2 setup

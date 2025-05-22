@@ -1,7 +1,10 @@
 ---
-azure-hosts:
+backend:
   hosts:
     backend:
       ansible_host: az-devops
+
+frontend:
+  hosts:
     frontend:
       ansible_host: az-devops

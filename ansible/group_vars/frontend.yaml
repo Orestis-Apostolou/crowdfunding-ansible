@@ -1,0 +1,1 @@
+  appdir: "{{ ansible_user_dir }}/frontend"
