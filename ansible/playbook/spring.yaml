@@ -48,8 +48,6 @@
         command: "./mvnw package -Dmaven.test.skip"
         args:
           chdir: "{{ appdir }}"
-        become: yes
-        become_user: root
 
       - name: run java application
         command: "java -jar target/crowdfunding-0.0.1-SNAPSHOT.jar"
