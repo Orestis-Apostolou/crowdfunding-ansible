@@ -71,10 +71,40 @@
       - name: Save current PM2 process list
         command: pm2 save
 
-      # AN THES NA TREXEI APLA KANTO COMMENT
+      - name: install nginx
+        apt:
+          name: nginx
+          update_cache: yes
+        become: yes
 
-          #- name: "Stop the frontend app with PM2"
-          #command: pm2 stop frontend
+      - name: copy nginx config
+        template:
+          src: ../files/nginx.http.j2
+          dest: "/etc/nginx/sites-available/spring"
+        become: yes
+      
+      - name: enable spring site in nginx
+        file: 
+          src: "/etc/nginx/sites-available/spring"
+          dest: "/etc/nginx/sites-enabled/spring"
+          state: link
+        become: yes
+        notify: restart nginx
+
+      - name: disable nginx default site
+        file:
+          path: /etc/nginx/sites-enabled/default
+          state: absent
+        become: yes
+        notify: restart nginx
+
+    handlers:
+      - name: restart nginx
+        service:
+          name: nginx
+          state: restarted
+        become: yes
+
 
       # FOREVER SECTION
 
