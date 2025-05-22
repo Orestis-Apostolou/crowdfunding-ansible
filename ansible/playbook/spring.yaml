@@ -38,8 +38,20 @@
           state: present
         with_items:
           - "{{ app.env | dict2items}}"
+      
+      - name: Ensure mvnw is executable
+        file:
+          path: "{{ appdir }}/mvnw"
+          mode: '0755'
 
       - name: build maven project
         command: "./mvnw package -Dmaven.test.skip"
+        args:
+          chdir: "{{ appdir }}"
+        become: yes
+        become_user: root
+
+      - name: run java application
+        command: "java -jar target/crowdfunding-0.0.1-SNAPSHOT.jar"
         args:
           chdir: "{{ appdir }}"
