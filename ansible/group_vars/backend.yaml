@@ -1,4 +1,6 @@
   appdir: "{{ ansible_user_dir }}/backend"  
+  appuser: "{{ ansible_user_id }}"
+  appgroup: "{{ ansible_user_gid }}"
 
   app:
     env:
