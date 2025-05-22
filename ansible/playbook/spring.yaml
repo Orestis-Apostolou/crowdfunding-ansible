@@ -29,3 +29,17 @@
         file:
           path: "{{ clonedir }}"
           state: absent
+
+      - name: add database connection details to application.properties
+        lineinfile:
+          dest: "{{ appdir }}/src/main/resources/application.properties"
+          regex: "^{{ item.key }}="
+          line: "{{ item.key }}={{item.value}}"
+          state: present
+        with_items:
+          - "{{ app.env | dict2items}}"
+
+      - name: build maven project
+        command: "./mvnw package -Dmaven.test.skip"
+        args:
+          chdir: "{{ appdir }}"
