@@ -14,7 +14,7 @@
         git:
           repo: 'https://github.com/Orestis-Apostolou/crowdfunding-ansible.git'
           dest: "{{ clonedir }}"
-          version: main
+          version: test
           force: yes
 
       - name: remove backend folder from vm root if it exists
