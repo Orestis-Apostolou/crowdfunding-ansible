@@ -31,9 +31,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("Request: " + request.getRequestURI());
+
         String path = request.getRequestURI();
         if (path.equals("/api/project/all")) {
             filterChain.doFilter(request, response); // skip token logic
+
+            System.out.println("SKIPPED AUTH FOR REQUEST: " + path);
             return;
         }
 
