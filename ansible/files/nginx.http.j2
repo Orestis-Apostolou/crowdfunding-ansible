@@ -5,7 +5,7 @@ server {
     server_name _;
 
     location / {
-      root {{ appdir }};
+      root {{ appdir }}/frontend;
       index index.html;
       try_files $uri $uri/ /index.html;
     }

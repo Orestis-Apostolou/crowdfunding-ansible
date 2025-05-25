@@ -12,11 +12,11 @@
 
       - name: remove frontend folder from vm root if it exists
         file:
-          path: "{{ appdir }}"
+          path: "{{ appdir }}/frontend"
           state: absent
         become: yes
 
-      - name: copy frontend folder on repo root to ansible vm root
+      - name: copy frontend folder on clone directory to nginx default
         command: mv {{ clonedir }}/frontend {{ appdir }}
         become: yes
 
