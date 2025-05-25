@@ -14,9 +14,11 @@
         file:
           path: "{{ appdir }}"
           state: absent
+        become: yes
 
       - name: copy frontend folder on repo root to ansible vm root
         command: mv {{ clonedir }}/frontend {{ appdir }}
+        become: yes
 
       - name: remove the rest of the repository
         file:
