@@ -10,14 +10,13 @@ services:
       - POSTGRES_PASSWORD=WYAbOw0HJYjHCZHXjs7VSxkS2Hz3llwZ
       - POSTGRES_DB=database_1_kxko
     healthcheck:
-      test:
-        - CMD-SHELL
-        - pg_isready -U postgres
+      test: ["CMD-SHELL", "pg_isready -U batman -d database_1_kxko"]      
       interval: 30s
       timeout: 30s
       retries: 3
     volumes:
-      - 'dslabdb:/var/lib/postgresql/data/'
+      - dslabdb:/var/lib/postgresql/data/
+
   backend:
     image: sp
     build:
@@ -38,19 +37,20 @@ services:
       timeout: 30s
       retries: 3
 
-    # frontend:
-    # #image: front
-    # build: 
-    #   #context: ./frontend
-    #   #dockerfile: node.Dockerfile
-    # #    environment:
-    # #      - VITE_BACKEND=http://spring:9090
-    # ports:
-    #   - 9000:80
-    # depends_on:
-    #   spring:
-    #     condition: service_healthy
-
+  frontend:
+    image: front
+    build: 
+      context: ./frontend
+      dockerfile: node.Dockerfile
+      args:
+        VITE_BACKEND: http://backend:8080
+    environment:
+      - VITE_BACKEND=http://backend:8080
+    ports:
+      - "9000:7000"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   dslabdb:
