@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:16
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=batman
+      - POSTGRES_PASSWORD=WYAbOw0HJYjHCZHXjs7VSxkS2Hz3llwZ
+      - POSTGRES_DB=database_1_kxko
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    volumes:
+      - 'dslabdb:/var/lib/postgresql/data/'
+  backend:
+    image: sp
+    build:
+      context: ./backend
+      dockerfile: nonroot-multistage.Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-d0ne3b1r0fns738ua1f0-a.oregon-postgres.render.com:5432/database_1_kxko
+      - SPRING_DATASOURCE_USERNAME=batman
+      - SPRING_DATASOURCE_PASSWORD=WYAbOw0HJYjHCZHXjs7VSxkS2Hz3llwZ
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+    # frontend:
+    # #image: front
+    # build: 
+    #   #context: ./frontend
+    #   #dockerfile: node.Dockerfile
+    # #    environment:
+    # #      - VITE_BACKEND=http://spring:9090
+    # ports:
+    #   - 9000:80
+    # depends_on:
+    #   spring:
+    #     condition: service_healthy
+
+
+volumes:
+  dslabdb:
