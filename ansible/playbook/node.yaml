@@ -7,16 +7,18 @@
         git:
           repo: 'https://github.com/Orestis-Apostolou/crowdfunding-ansible.git'
           dest: "{{ clonedir }}"
-          version: main
+          version: test
           force: yes
 
       - name: remove frontend folder from vm root if it exists
         file:
-          path: "{{ appdir }}"
+          path: "{{ appdir }}/frontend"
           state: absent
+        become: yes
 
-      - name: copy frontend folder on repo root to ansible vm root
+      - name: copy frontend folder on clone directory to nginx default
         command: mv {{ clonedir }}/frontend {{ appdir }}
+        become: yes
 
       - name: remove the rest of the repository
         file:
@@ -44,32 +46,32 @@
 
       # PM2 SECTION
 
-      - name: "install PM2 globally"
-        npm:
-          name: pm2
-          global: yes
-        become: yes
+      # - name: "install PM2 globally"
+      #   npm:
+      #     name: pm2
+      #     global: yes
+      #   become: yes
 
-      - name: "check list of PM2 apps running"
-        command: pm2 list
-        register: pm2_list
-        changed_when: false
+      # - name: "check list of PM2 apps running"
+      #   command: pm2 list
+      #   register: pm2_list
+      #   changed_when: false
 
-      - name: "start node.js app with PM2 if not already running"
-        command: "pm2 npm start --name frontend -- start"
-        args:
-          chdir: "{{ appdir }}"
-        when: "'frontend' not in pm2_list.stdout"
+      # - name: "start node.js app with PM2 if not already running"
+      #   command: "pm2 npm start --name frontend -- start"
+      #   args:
+      #     chdir: "{{ appdir }}"
+      #   when: "'frontend' not in pm2_list.stdout"
 
-        # command: pm2 setup
+      #   # command: pm2 setup
 
-      - name: Setup PM2 startup
-        command: >
-          sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_env.USER }} --hp {{ ansible_env.HOME }}
-        become: yes
+      # - name: Setup PM2 startup
+      #   command: >
+      #     sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_env.USER }} --hp {{ ansible_env.HOME }}
+      #   become: yes
 
-      - name: Save current PM2 process list
-        command: pm2 save
+      # - name: Save current PM2 process list
+      #   command: pm2 save
 
       - name: install nginx
         apt:
