@@ -1,22 +1,4 @@
 services:
-  db:
-    image: postgres:16
-    expose:
-      - 5432
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=batman
-      - POSTGRES_PASSWORD=WYAbOw0HJYjHCZHXjs7VSxkS2Hz3llwZ
-      - POSTGRES_DB=database_1_kxko
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U batman -d database_1_kxko"]      
-      interval: 30s
-      timeout: 30s
-      retries: 3
-    volumes:
-      - dslabdb:/var/lib/postgresql/data/
-
   backend:
     image: sp
     build:
@@ -24,9 +6,6 @@ services:
       dockerfile: nonroot-multistage.Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-d0ne3b1r0fns738ua1f0-a.oregon-postgres.render.com:5432/database_1_kxko
       - SPRING_DATASOURCE_USERNAME=batman
@@ -47,7 +26,7 @@ services:
     environment:
       - VITE_BACKEND=http://backend:8080
     ports:
-      - "9000:7000"
+      - "7000:7000"
     depends_on:
       backend:
         condition: service_healthy
