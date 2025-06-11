@@ -16,15 +16,6 @@
           state: absent
         become: yes
 
-      - name: copy frontend folder on clone directory to nginx default
-        command: mv {{ clonedir }}/frontend {{ appdir }}
-        become: yes
-
-      - name: remove the rest of the repository
-        file:
-          path: "{{ clonedir }}"
-          state: absent
-
       - name: Install Node.js and npm
         ansible.builtin.apt:
           name:
@@ -79,6 +70,10 @@
           update_cache: yes
         become: yes
 
+      - name: copy frontend folder on clone directory to nginx default
+        command: mv {{ clonedir }}/frontend {{ appdir }}
+        become: yes
+
       - name: copy nginx config
         template:
           src: ../files/nginx.http.j2
@@ -99,6 +94,11 @@
           state: absent
         become: yes
         notify: restart nginx
+
+      - name: remove the rest of the repository
+        file:
+          path: "{{ clonedir }}"
+          state: absent
 
     handlers:
       - name: restart nginx
