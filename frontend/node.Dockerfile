@@ -1,14 +1,12 @@
-FROM node:20-bullseye
+FROM node:18-alpine
 
 WORKDIR /app
 
-ARG VITE_BACKEND
-ENV VITE_BACKEND=$VITE_BACKEND
-
 COPY package.json ./
-
 RUN npm install
 
 COPY . .
+
+EXPOSE 7000
 
 CMD ["node", "serverInit.js"]
