@@ -5,7 +5,6 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-
 # Stage 2: Create the runtime image
 FROM eclipse-temurin:21-alpine-3.21
 

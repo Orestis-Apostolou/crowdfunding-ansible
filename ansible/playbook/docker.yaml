@@ -1,51 +1,39 @@
 ---
-- hosts: all
+  - name: Frontend process
+    hosts: frontend
+    
+    tasks:
+      - name: clone git repository
+        git:
+          repo: 'https://github.com/Orestis-Apostolou/crowdfunding-ansible.git'
+          dest: "{{ clonedir }}"
+          version: main
+          force: yes
 
-  tasks:
-    - name: Install basic packages
-      apt:
-        name: "{{item}}"
-        state: present
-        update_cache: true
-      loop:
-        - software-properties-common
-        - curl
-        - apt-transport-https
-        - ca-certificates
-      become: yes
+      - name: install docker-compose
+        apt:
+          name: 
+            - docker-compose
+            - docker.io
+          state: present
+          update_cache: yes
+        become: yes
 
-    - name: get key
-      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
-      #ignore_errors: yes
-      become: yes
+      - name: render nginx config from j2 template
+        template:
+          src: ../files/nginx.http.j2
+          dest: "{{ clonedir }}"
+        become: yes
 
-    - name: Add docker ppa
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
-        state: present
-        update_cache: yes
-      become: yes
+      - name: ensure docker service is running
+        service:
+          name: docker
+          state: started
+          enabled: yes
+        become: yes
 
-    - name: install docker
-      apt:
-        name: "{{item}}"
-        state: present
-        update_cache: true
-      loop:
-        - docker-ce
-        - docker-compose
-      become: yes
-
-    - name: start docker service
-      service:
-        name: docker
-        state: started
-        enabled: true
-      become: yes
-
-    - name: adding existing user to group docker
-      user:
-        name: "{{  ansible_user_id }}"
-        groups: docker
-        append: yes
-      become: yes
+      - name: run docker compose up 
+        command: docker-compose up -d 
+        # args:
+        #   chdir: "{{ clonedir }}"
+        become: yes

@@ -7,7 +7,7 @@
         git:
           repo: 'https://github.com/Orestis-Apostolou/crowdfunding-ansible.git'
           dest: "{{ clonedir }}"
-          version: test
+          version: main
           force: yes
 
       - name: remove frontend folder from vm root if it exists
@@ -81,7 +81,7 @@
         become: yes
       
       - name: enable spring site in nginx
-        file: 
+        file:
           src: "/etc/nginx/sites-available/spring"
           dest: "/etc/nginx/sites-enabled/spring"
           state: link
