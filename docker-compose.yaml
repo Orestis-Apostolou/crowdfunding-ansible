@@ -4,9 +4,9 @@ services:
       context: ./backend
       dockerfile: nonroot-multistage.Dockerfile
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-d0ne3b1r0fns738ua1f0-a.oregon-postgres.render.com:5432/database_1_kxko
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-d1ba8deuk2gs739hpvmg-a.oregon-postgres.render.com:5432/gotham_c6ry
       SPRING_DATASOURCE_USERNAME: batman
-      SPRING_DATASOURCE_PASSWORD: WYAbOw0HJYjHCZHXjs7VSxkS2Hz3llwZ
+      SPRING_DATASOURCE_PASSWORD: adwMC1t49HbHiMeFfEOdJHRWlAAqzcIF
     ports:
       - "8080:8080"
     healthcheck:
