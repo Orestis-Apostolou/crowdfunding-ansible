@@ -14,12 +14,9 @@ services:
       retries: 3
 
   nginx:
-    image: nginx:stable-alpine
+    image: ghcr.io/orestis-apostolou/crowdfunding-ansible:frontend-352b8b7
     ports:
       - "80:80"
-    volumes:
-      - ./frontend:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       backend:
         condition: service_healthy
