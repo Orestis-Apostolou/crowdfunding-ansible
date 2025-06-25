@@ -19,11 +19,11 @@
           update_cache: yes
         become: yes
 
-      - name: render nginx config from j2 template
-        template:
-          src: ../files/nginx.http.j2
-          dest: "{{ clonedir }}"
-        become: yes
+      # - name: render nginx config from j2 template
+      #   template:
+      #     src: ../files/nginx.http.j2
+      #     dest: "{{ clonedir }}"
+      #   become: yes
 
       - name: ensure docker service is running
         service:
@@ -33,7 +33,7 @@
         become: yes
 
       - name: run docker compose up 
-        command: docker-compose up -d 
+        command: docker-compose up -d
         args:
           chdir: "{{ clonedir }}"
         become: yes

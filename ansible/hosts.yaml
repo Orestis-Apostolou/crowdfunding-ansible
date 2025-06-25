@@ -7,4 +7,4 @@ backend:
 frontend:
   hosts:
     front-vm-1:
-      ansible_host: az-devops
+      ansible_host: kubernetes
