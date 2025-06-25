@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/orestis-apostolou/backend:2c62823 
+    image: ghcr.io/orestis-apostolou/crowdfunding-ansible:backend-0a052d7 
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-d1ba8deuk2gs739hpvmg-a.oregon-postgres.render.com:5432/gotham_c6ry
       SPRING_DATASOURCE_USERNAME: batman
