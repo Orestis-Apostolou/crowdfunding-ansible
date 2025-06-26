@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  spring-deployment
+  name:  backend-deployment
   namespace: default
   labels:
-    app: spring
+    app: backend
 spec:
   selector:
     matchLabels:
-      app: spring
+      app: backend
   replicas: 1
   template:
     metadata:
       labels:
-        app: spring
+        app: backend
     spec:
       containers:
-      - name:  spring
+      - name:  backend
         image:  ghcr.io/orestis-apostolou/crowdfunding-ansible:backend-0a052d7
         livenessProbe:
           httpGet:
@@ -48,6 +48,6 @@ spec:
           value: adwMC1t49HbHiMeFfEOdJHRWlAAqzcIF
         ports:
         - containerPort:  8080
-          name:  spring
+          name:  backend
       # imagePullSecrets:
       # - name: registry-credentials

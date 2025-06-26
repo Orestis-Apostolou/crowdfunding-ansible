@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  frontend
+  name:  frontend-deployment
   namespace: default
   labels:
     app: frontend
@@ -28,5 +28,5 @@ spec:
         ports:
         - containerPort: 80
           name:  frontend
-      imagePullSecrets:
-      - name: registry-credentials
+      # imagePullSecrets:
+      # - name: registry-credentials
