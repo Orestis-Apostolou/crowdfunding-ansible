@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: vue-ingress
+  name: frontend-ingress
 spec:
   rules:
   - http:
@@ -10,6 +10,6 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: vue-svc
+            name: frontend-svc
             port:
-              name: vue
+              name: frontend
