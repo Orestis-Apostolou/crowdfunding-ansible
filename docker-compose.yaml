@@ -13,7 +13,7 @@ services:
       timeout: 30s
       retries: 3
 
-  nginx:
+  frontend:
     image: ghcr.io/orestis-apostolou/crowdfunding-ansible:frontend-352b8b7
     ports:
       - "80:80"
