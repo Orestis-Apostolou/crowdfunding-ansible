@@ -16,24 +16,24 @@
           state: absent
         become: yes
 
-      - name: Install Node.js and npm
-        ansible.builtin.apt:
-          name:
-            - nodejs
-            - npm
-          state: present
-          update_cache: yes
-        become: yes
+      # - name: Install Node.js and npm
+      #   ansible.builtin.apt:
+      #     name:
+      #       - nodejs
+      #       - npm
+      #     state: present
+      #     update_cache: yes
+      #   become: yes
 
-      - name: Running `npm init -y`
-        ansible.builtin.command: npm init -y
-        args:
-          chdir: "{{ appdir }}"
-          creates: "{{ appdir }}/package.json"
+      # - name: Running `npm init -y`
+      #   ansible.builtin.command: npm init -y
+      #   args:
+      #     chdir: "{{ appdir }}"
+      #     creates: "{{ appdir }}/package.json"
 
-      - name: Running npm install
-        community.general.npm:
-          path: "{{ appdir }}"
+      # - name: Running npm install
+      #   community.general.npm:
+      #     path: "{{ appdir }}"
 
       # PM2 SECTION
 
