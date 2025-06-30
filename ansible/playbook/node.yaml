@@ -16,54 +16,6 @@
           state: absent
         become: yes
 
-      # - name: Install Node.js and npm
-      #   ansible.builtin.apt:
-      #     name:
-      #       - nodejs
-      #       - npm
-      #     state: present
-      #     update_cache: yes
-      #   become: yes
-
-      # - name: Running `npm init -y`
-      #   ansible.builtin.command: npm init -y
-      #   args:
-      #     chdir: "{{ appdir }}"
-      #     creates: "{{ appdir }}/package.json"
-
-      # - name: Running npm install
-      #   community.general.npm:
-      #     path: "{{ appdir }}"
-
-      # PM2 SECTION
-
-      # - name: "install PM2 globally"
-      #   npm:
-      #     name: pm2
-      #     global: yes
-      #   become: yes
-
-      # - name: "check list of PM2 apps running"
-      #   command: pm2 list
-      #   register: pm2_list
-      #   changed_when: false
-
-      # - name: "start node.js app with PM2 if not already running"
-      #   command: "pm2 npm start --name frontend -- start"
-      #   args:
-      #     chdir: "{{ appdir }}"
-      #   when: "'frontend' not in pm2_list.stdout"
-
-      #   # command: pm2 setup
-
-      # - name: Setup PM2 startup
-      #   command: >
-      #     sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u {{ ansible_env.USER }} --hp {{ ansible_env.HOME }}
-      #   become: yes
-
-      # - name: Save current PM2 process list
-      #   command: pm2 save
-
       - name: install nginx
         apt:
           name: nginx
@@ -80,7 +32,7 @@
           dest: "/etc/nginx/sites-available/spring"
         become: yes
       
-      - name: enable spring site in nginx
+      - name: enable site in nginx
         file:
           src: "/etc/nginx/sites-available/spring"
           dest: "/etc/nginx/sites-enabled/spring"
@@ -106,34 +58,3 @@
           name: nginx
           state: restarted
         become: yes
-
-
-      # FOREVER SECTION
-
-      # - name: "Install forever (to run Node.js app)."
-      #   npm:
-      #     name: forever
-      #     global: yes
-      #     state: present
-      #   become: yes
-
-      # - name: Show the app_dir path
-      #   debug:
-      #     var: app_dir
-
-      # - name: "Check list of Node.js apps running."
-      #   command: forever list
-      #   register: forever_list
-      #   changed_when: false
-
-      # - name: "Start example Node.js app if not already running."
-      #   command: "forever start {{ app_dir }}/serverInit.js"
-      #   when: app_dir + '/serverInit.js' not in forever_list.stdout
-
-      # - name: "Stop the app server with forever"
-      #   command: "forever stop {{ app_dir }}/serverInit.js"
-
-      #source: https://stackoverflow.com/questions/20919222/ansible-hangs-when-starting-node-js-server
-
-
-
